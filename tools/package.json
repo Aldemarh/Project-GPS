@@ -1,0 +1,2 @@
+{ "name": "ja-tech-tools", "private": true, "type": "module",
+  "dependencies": { "@gltf-transform/core": "*", "@gltf-transform/extensions": "*", "@gltf-transform/functions": "*", "meshoptimizer": "*", "draco3dgltf": "*" } }
