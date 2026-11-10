@@ -325,11 +325,15 @@ html:not(.film-on) .pu{display:none}
 .phone-notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:35%;height:28px;background:#000;border-radius:0 0 24px 24px;z-index:10;box-shadow:0 0 15px rgba(0,0,0,.9)}
 .phone-screen{position:absolute;inset:0;border-radius:40px;overflow:hidden;display:flex;flex-direction:column}
 .app-preview{width:100%;height:100%;background:linear-gradient(180deg,#0e131d 0%,#080c15 100%);display:flex;flex-direction:column;padding:20px 12px;color:var(--ice)}
-.app-header{font:700 14px var(--disp);text-transform:uppercase;color:var(--cy);padding-top:12px;margin-bottom:8px}
-.app-map{flex:1;background:radial-gradient(circle at 60% 40%,rgba(47,230,255,.15),transparent);border-radius:12px;margin:8px 0;border:1px solid var(--line)}
-.app-vehicle-info{padding:12px;background:rgba(47,230,255,.08);border-radius:12px;border:1px solid var(--cy);display:grid;gap:4px}
-.vehicle-name{font:600 13px var(--body);color:var(--ice)}
-.vehicle-status{font:400 11px var(--body);color:var(--steel)}
+.app-header{font:700 14px var(--disp);text-transform:uppercase;color:var(--cy);padding:8px 12px;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between}
+.app-map-container{flex:1;background:linear-gradient(135deg,rgba(8,12,21,.9),rgba(14,19,29,.8));border-radius:8px;margin:6px 0;overflow:hidden;position:relative}
+.app-map-svg{width:100%;height:100%;display:block}
+.app-vehicle-info{padding:8px 12px;background:rgba(47,230,255,.08);border-radius:8px;border:1px solid var(--cy);display:grid;gap:2px;font-size:12px}
+.vehicle-name{font:600 12px var(--body);color:var(--ice);margin:0}
+.vehicle-status{font:400 10px var(--body);color:var(--steel);margin:0}
+.app-monitoring-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}
+.app-btn{background:rgba(47,230,255,.15);border:1px solid var(--cy);color:var(--ice);border-radius:6px;padding:6px;cursor:pointer;font-size:16px;transition:all .2s;display:flex;align-items:center;justify-content:center;min-height:32px}
+.app-btn:hover{background:rgba(47,230,255,.3)}
 .phone-home{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:100px;height:4px;background:#fff;border-radius:2px;opacity:.6}
 .app-features{display:flex;flex-direction:column}
 .app-features h3{font:700 clamp(1.6rem,2.5vw,2.2rem)/.95 var(--disp);text-transform:uppercase;margin-bottom:clamp(1.5rem,3vh,2.5rem)}
@@ -656,11 +660,61 @@ html:not(.film-on) .pu{display:none}
         <div class="phone-notch"></div>
         <div class="phone-screen">
           <div class="app-preview">
-            <div class="app-header">J&A GPS</div>
-            <div class="app-map"></div>
+            <div class="app-header">
+              <span style="font-size:.8rem">J&A GPS</span>
+            </div>
+
+            <!-- Mapa con ubicación -->
+            <div class="app-map-container">
+              <svg class="app-map-svg" viewBox="0 0 300 280" preserveAspectRatio="xMidYMid slice">
+                <!-- Grid de mapa -->
+                <defs>
+                  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(47,230,255,.1)" stroke-width="0.5"/>
+                  </pattern>
+                </defs>
+                <rect width="300" height="280" fill="rgba(8,12,21,.8)"/>
+                <rect width="300" height="280" fill="url(#grid)"/>
+
+                <!-- Calles -->
+                <line x1="0" y1="100" x2="300" y2="100" stroke="rgba(47,230,255,.2)" stroke-width="3"/>
+                <line x1="150" y1="0" x2="150" y2="280" stroke="rgba(47,230,255,.2)" stroke-width="3"/>
+
+                <!-- Zonas -->
+                <circle cx="80" cy="60" r="25" fill="rgba(255,176,32,.15)" stroke="rgba(255,176,32,.3)" stroke-width="1" stroke-dasharray="3,3"/>
+                <circle cx="220" cy="220" r="30" fill="rgba(255,76,76,.15)" stroke="rgba(255,76,76,.3)" stroke-width="1" stroke-dasharray="3,3"/>
+
+                <!-- Vehículo (carro) -->
+                <g transform="translate(150, 140)">
+                  <!-- Carro simplificado -->
+                  <rect x="-20" y="-8" width="40" height="16" rx="2" fill="#2fe6ff" opacity="0.9"/>
+                  <!-- Ruedas -->
+                  <circle cx="-12" cy="8" r="3" fill="#2fe6ff"/>
+                  <circle cx="12" cy="8" r="3" fill="#2fe6ff"/>
+                  <!-- Punto de ubicación -->
+                  <circle cx="0" cy="0" r="6" fill="none" stroke="#2fe6ff" stroke-width="2"/>
+                </g>
+
+                <!-- Puntos de interés -->
+                <circle cx="60" cy="200" r="4" fill="rgba(47,230,255,.6)"/>
+                <circle cx="240" cy="80" r="4" fill="rgba(47,230,255,.6)"/>
+              </svg>
+            </div>
+
+            <!-- Info del vehículo -->
             <div class="app-vehicle-info">
-              <span class="vehicle-name">BMW X5</span>
-              <span class="vehicle-status">En movimiento</span>
+              <div style="display:grid;gap:.4rem">
+                <span class="vehicle-name">BMW X5</span>
+                <span class="vehicle-status">En movimiento • 62 km/h</span>
+              </div>
+            </div>
+
+            <!-- Botones de monitoreo -->
+            <div class="app-monitoring-buttons">
+              <button class="app-btn" title="Ubicación">📍</button>
+              <button class="app-btn" title="Alertas">🔔</button>
+              <button class="app-btn" title="Historial">📊</button>
+              <button class="app-btn" title="Llamada">☎️</button>
             </div>
           </div>
         </div>
