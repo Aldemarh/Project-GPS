@@ -360,6 +360,9 @@ html:not(.film-on) .pu{display:none}
 .profile-details{margin-top:2rem;padding-top:2rem;border-top:1px solid var(--line)}
 .profile-details h5{font:600 1rem var(--body);text-transform:uppercase;color:var(--cy);margin:1.5rem 0 1rem;font-size:.9rem;letter-spacing:.05em}
 .profile-details h5:first-child{margin-top:0}
+.profile-badge{display:inline-block;padding:.4rem .9rem;border-radius:20px;font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.status-active{background:rgba(76,175,80,.2);color:#81c784;border:1px solid rgba(76,175,80,.4)}
+.status-soon{background:rgba(255,152,0,.2);color:#ffb74d;border:1px solid rgba(255,152,0,.4)}
 .divider{width:1px;height:auto;background:var(--line);min-height:300px}
 
 /* responsive */
@@ -768,7 +771,10 @@ html:not(.film-on) .pu{display:none}
         <div class="profiles-options">
           <div class="profile-option">
             <div class="profile-icon-large">👤</div>
-            <h4>Persona Natural</h4>
+            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:.5rem">
+              <h4 style="margin:0">Persona Natural</h4>
+              <span class="profile-badge status-active">Ya en proceso</span>
+            </div>
             <p>Diseñado para propietarios de vehículos particulares que desean tener el control total de su carro o moto desde cualquier lugar.</p>
 
             <div class="profile-details">
@@ -795,7 +801,10 @@ html:not(.film-on) .pu{display:none}
 
           <div class="profile-option">
             <div class="profile-icon-large">🏢</div>
-            <h4>Empresa</h4>
+            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:.5rem">
+              <h4 style="margin:0">Empresa</h4>
+              <span class="profile-badge status-soon">Próximamente</span>
+            </div>
             <p>Solución empresarial completa para flotas y empresas que necesitan gestionar múltiples vehículos con control administrativo avanzado.</p>
 
             <div class="profile-details">
