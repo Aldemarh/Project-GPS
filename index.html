@@ -353,6 +353,9 @@ html:not(.film-on) .pu{display:none}
 .profile-list{list-style:none;margin:1.5rem 0 0;padding:0;display:grid;gap:.6rem;color:var(--steel);font-size:.9rem}
 .profile-list li{display:flex;gap:.6rem;align-items:center}
 .profile-list li::before{content:"▸";color:var(--cy);font-weight:600;font-size:1.2rem}
+.profile-details{margin-top:2rem;padding-top:2rem;border-top:1px solid var(--line)}
+.profile-details h5{font:600 1rem var(--body);text-transform:uppercase;color:var(--cy);margin:1.5rem 0 1rem;font-size:.9rem;letter-spacing:.05em}
+.profile-details h5:first-child{margin-top:0}
 .divider{width:1px;height:auto;background:var(--line);min-height:300px}
 
 /* responsive */
@@ -675,14 +678,26 @@ html:not(.film-on) .pu{display:none}
           <div class="profile-option">
             <div class="profile-icon-large">👤</div>
             <h4>Persona Natural</h4>
-            <p>Para propietarios de vehículos particulares que desean monitorear su carro o moto con total seguridad.</p>
-            <ul class="profile-list">
-              <li>Ubicación en tiempo real</li>
-              <li>Alertas personalizadas</li>
-              <li>Historial de rutas</li>
-              <li>Gestión sencilla y rápida</li>
-            </ul>
-            <a class="btn btn--p js-wa" href="#" target="_blank" rel="noopener" style="margin-top:1.5rem;display:flex;width:100%;justify-content:center;align-items:center">INGRESAR COMO PERSONA</a>
+            <p>Diseñado para propietarios de vehículos particulares que desean tener el control total de su carro o moto desde cualquier lugar.</p>
+
+            <div class="profile-details">
+              <h5>Funcionalidades:</h5>
+              <ul class="profile-list">
+                <li>Ubicación en tiempo real del vehículo</li>
+                <li>Alertas de movimiento y encendido</li>
+                <li>Historial completo de rutas</li>
+                <li>Velocidad y duración de recorridos</li>
+                <li>Panel web y aplicación móvil</li>
+              </ul>
+
+              <h5>Ideal para:</h5>
+              <ul class="profile-list">
+                <li>Protección contra robo</li>
+                <li>Control de conductores</li>
+                <li>Seguimiento de viajes</li>
+                <li>Geolocalización en emergencias</li>
+              </ul>
+            </div>
           </div>
 
           <div class="divider"></div>
@@ -690,14 +705,27 @@ html:not(.film-on) .pu{display:none}
           <div class="profile-option">
             <div class="profile-icon-large">🏢</div>
             <h4>Empresa</h4>
-            <p>Para empresas y flotas que necesitan gestionar múltiples vehículos con control administrativo avanzado.</p>
-            <ul class="profile-list">
-              <li>Gestión de múltiples vehículos</li>
-              <li>Panel administrativo completo</li>
-              <li>Reportes y análisis avanzados</li>
-              <li>Gestión de usuarios y permisos</li>
-            </ul>
-            <a class="btn btn--p js-wa" href="#" target="_blank" rel="noopener" style="margin-top:1.5rem;display:flex;width:100%;justify-content:center;align-items:center">INGRESAR COMO EMPRESA</a>
+            <p>Solución empresarial completa para flotas y empresas que necesitan gestionar múltiples vehículos con control administrativo avanzado.</p>
+
+            <div class="profile-details">
+              <h5>Funcionalidades:</h5>
+              <ul class="profile-list">
+                <li>Gestión ilimitada de vehículos</li>
+                <li>Panel administrativo avanzado</li>
+                <li>Reportes detallados por vehículo</li>
+                <li>Control de usuarios y permisos</li>
+                <li>Análisis de comportamiento de conductores</li>
+                <li>API para integraciones personalizadas</li>
+              </ul>
+
+              <h5>Ideal para:</h5>
+              <ul class="profile-list">
+                <li>Empresas de transporte y logística</li>
+                <li>Flotas comerciales</li>
+                <li>Servicios de delivery</li>
+                <li>Empresas de alquiler de vehículos</li>
+              </ul>
+            </div>
           </div>
         </div>
 
