@@ -1086,7 +1086,9 @@ function initThree(){
   function flat(tex,w,h,blend){var m=new T.Mesh(new T.PlaneGeometry(w,h),new T.MeshBasicMaterial({map:tex,transparent:true,depthWrite:false,blending:blend||T.AdditiveBlending,fog:false}));m.rotation.x=-Math.PI/2;return m;}
 
   /* vehículo */
-  var car=new T.Group(), proc=new T.Group(), wheels=[], spin=function(a){for(var i=0;i<wheels.length;i++) wheels[i].rotation.z=-a/.41;};
+  /* spin(giro, dirección): giro = ángulo acumulado de la llanta (rad); dirección = ángulo de las delanteras (rad). wR = radio de llanta, wB = distancia entre ejes */
+  var car=new T.Group(), proc=new T.Group(), wheels=[], wR=.41, wB=2.8,
+      spin=function(a,s){for(var i=0;i<wheels.length;i++){ wheels[i].rotation.z=-a; wheels[i].rotation.y=i<2?s:0; }};
   car.add(proc);
   (function(){
     var paint=new T.MeshStandardMaterial({color:0x101826,metalness:.92,roughness:.24,envMapIntensity:1.7});
@@ -1133,17 +1135,30 @@ function initThree(){
           brake:S({color:0x2fe6ff,emissive:0x0b4854,metalness:.4,roughness:.4}), disc:S({color:0x8d96a3,metalness:1,roughness:.35}), matte:S({color:0x050608,roughness:.75,metalness:.2}),
           head:new T.MeshBasicMaterial({color:0xeef8ff}), tail:new T.MeshBasicMaterial({color:0xff2626}), sig:S({color:0x3a1600,emissive:0x5a2200,roughness:.4})};
         var pick=function(n){ return /^Paint 1/.test(n)?M.paint:/^Paint 2|Panel/.test(n)?M.black:/Glass/.test(n)?M.glass:/Mirror/.test(n)?M.chrome:/Headlight/.test(n)?M.head:/Brakelight/.test(n)?M.tail:/Signal/.test(n)?M.sig:/Rim1/.test(n)?M.rim:/Rim2/.test(n)?M.alloy:/Tire/.test(n)?M.tire:/Brake/.test(n)?M.brake:/Disc/.test(n)?M.disc:M.matte; };
-        var m=g.scene, hold=new T.Group(), a=new T.Vector3(), b=new T.Vector3(), box=new T.Box3(), sz=new T.Vector3(), q=new T.Quaternion();
+        var m=g.scene, hold=new T.Group(), a=new T.Vector3(), b=new T.Vector3(), box=new T.Box3(), sz=new T.Vector3();
         m.traverse(function(o){ if(o.isMesh){ o.material=pick((o.material&&o.material.name)||''); o.frustumCulled=false; } });
         hold.add(m); hold.updateMatrixWorld(true);
         var fl=m.getObjectByName('WheelFrontL'), rl=m.getObjectByName('WheelRearL'); if(!fl||!rl) return;
         fl.getWorldPosition(a); rl.getWorldPosition(b); a.sub(b); hold.rotation.y=-Math.atan2(-a.z,a.x); hold.updateMatrixWorld(true);
+        /* ruedas: el modelo trae las delanteras giradas 30° (pose de exhibición). Se enderezan y cada rueda se monta en un «muñón»
+           (k) alineado con el eje lateral del carro: la llanta rueda dentro del muñón sobre su propio eje (sin bamboleo), el muñón
+           de las delanteras gira con la dirección y la pinza de freno se queda en el muñón (en un carro real no rueda). */
+        var X=new T.Vector3(1,0,0), Y=new T.Vector3(0,1,0), Z=new T.Vector3(0,0,1);
+        var ws=['WheelFrontL','WheelFrontR','WheelRearL','WheelRearR'].map(function(nm){ var w=m.getObjectByName(nm); if(!w||!w.parent) return null;
+          var wq=w.getWorldQuaternion(new T.Quaternion()), pq=w.parent.getWorldQuaternion(new T.Quaternion()), e=X, dz=0;
+          [X,Y,Z].forEach(function(v){ var d=v.clone().applyQuaternion(wq).z; if(Math.abs(d)>Math.abs(dz)){ dz=d; e=v; } });
+          var c=new T.Quaternion().setFromUnitVectors(e.clone().applyQuaternion(wq),new T.Vector3(0,0,dz<0?-1:1));
+          var qs=pq.clone().invert().multiply(c).multiply(wq), k=new T.Group();
+          k.position.copy(w.position); k.quaternion.copy(qs); k.scale.copy(w.scale); w.parent.add(k);
+          w.position.set(0,0,0); w.quaternion.identity(); w.scale.set(1,1,1); k.add(w);
+          w.children.filter(function(o){ return /BrakePad/.test(o.name); }).forEach(function(o){ k.add(o); });
+          return {o:w,k:k,qs:qs,f:/Front/.test(nm),ax:Z.clone().applyQuaternion(c.clone().multiply(wq).invert()).normalize(),up:Y.clone().applyQuaternion(pq.clone().invert()).normalize()};
+        }).filter(Boolean);
+        hold.updateMatrixWorld(true);
         box.setFromObject(hold); box.getSize(sz); hold.scale.setScalar(4.8/sz.x); hold.updateMatrixWorld(true);
         box.setFromObject(hold); box.getCenter(a); hold.position.set(-a.x,-box.min.y,-a.z); hold.updateMatrixWorld(true);
-        var ws=['WheelFrontL','WheelFrontR','WheelRearL','WheelRearR'].map(function(nm){ var w=m.getObjectByName(nm); if(!w) return null;
-          return {o:w,q0:w.quaternion.clone(),ax:new T.Vector3(0,0,1).applyQuaternion(w.getWorldQuaternion(new T.Quaternion()).invert()).normalize()}; }).filter(Boolean);
-        fl.getWorldPosition(a); var rad=Math.max(.2,a.y);
-        spin=function(d){ for(var i=0;i<ws.length;i++){ q.setFromAxisAngle(ws[i].ax,-d/rad); ws[i].o.quaternion.copy(ws[i].q0).multiply(q); } };
+        fl.getWorldPosition(a); rl.getWorldPosition(b); wR=Math.max(.2,a.y); wB=Math.max(1,Math.abs(a.x-b.x));
+        spin=function(r,s){ for(var i=0;i<ws.length;i++){ var W=ws[i]; W.o.quaternion.setFromAxisAngle(W.ax,-r); if(W.f) W.k.quaternion.setFromAxisAngle(W.up,s).multiply(W.qs); } };
         car.remove(proc); car.add(hold);
       },function(){});
     }catch(e){}
@@ -1163,11 +1178,24 @@ function initThree(){
   routeAt(.608,P); U.uFenceC.value.set(P.x,P.z);
   if('IntersectionObserver' in window){ var seen={}; var io=new IntersectionObserver(function(es){es.forEach(function(e){seen[e.target.id]=e.isIntersecting}); vis=!!(seen.film||seen.cta);}); io.observe($('#film')); io.observe($('#cta')); }
 
+  /* llantas: el giro sigue la distancia recorrida en la ruta (avanza y retrocede con el scroll), pero con un tope por cuadro:
+     con scroll rápido la llanta giraría más de un rayo por cuadro y se vería quieta, a saltos o girando al revés (efecto estroboscópico).
+     Las delanteras se orientan según la curvatura de la ruta en ese punto (Ackermann simple), así doblan en las esquinas. */
+  var rollA=0, rollD=-1, A0=new T.Vector3(), A1=new T.Vector3();
+  function roll(u){
+    var d=u*RLEN, h=1.2/RLEN, k=0;
+    if(rollD>=0) rollA+=clamp((d-rollD)/wR,-.35,.35); rollD=d;
+    routeAt(u-h,A0); routeAt(u+h,A1);
+    var x0=P.x-A0.x, z0=P.z-A0.z, x1=A1.x-P.x, z1=A1.z-P.z;
+    if(x0*x0+z0*z0>.04&&x1*x1+z1*z1>.04){ k=Math.atan2(-z1,x1)-Math.atan2(-z0,x0); k=Math.atan2(Math.sin(k),Math.cos(k))/(h*RLEN*2); }
+    spin(rollA,clamp(Math.atan(wB*k),-.55,.55));
+  }
+
   function draw(){
     var S=ctaOn?sc:st, t=clock.getElapsedTime(), u=clamp(S.car,0,.9995);
     routeAt(u,P); routeAt(Math.min(1,u+.0006),Q);
     car.position.copy(P); car.rotation.y=Math.atan2(-(Q.z-P.z),Q.x-P.x);
-    var i; spin(u*RLEN);
+    var i; roll(u);
     mx+=(tmx-mx)*.05; my+=(tmy-my)*.05;
     var d=S.dist*dm, az=S.az+mx*.07, el=clamp(S.el-my*.04,.04,1.5);
     tgt.set(P.x,.75,P.z);
