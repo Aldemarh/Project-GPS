@@ -53,7 +53,8 @@ html:not(.film-on) #gl{position:absolute;height:100vh}
 .nav nav a.active{color:var(--ice)}
 .nav nav a.active::after{content:"";position:absolute;bottom:-7px;left:0;right:0;height:1px;background:var(--cy)}
 @media (max-width:1100px){.nav{gap:1.2rem}.nav nav{gap:1.15rem}.nav nav a{font-size:.9rem}}
-@media (max-width:980px){.nav nav{display:none}.nav .btn{margin-left:auto}}
+@media (max-width:980px){.nav nav{display:none}.nav .btn{margin-left:auto}.nav{background:rgba(6,9,18,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}}
+@media (max-width:480px){.nav{gap:.8rem}.brand{font-size:1.25rem}.brand small{display:none}.nav .btn--s{padding:0 .95rem;font-size:.86rem}}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:48px;padding:0 1.5rem;border-radius:999px;border:1px solid transparent;
   font:600 1rem/1 var(--body);text-decoration:none;cursor:pointer;white-space:nowrap;transition:transform .2s,background .2s,border-color .2s,box-shadow .2s}
 .btn--p{background:var(--cy);color:#02131a;box-shadow:0 0 0 0 rgba(47,230,255,.5)}
