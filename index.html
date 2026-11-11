@@ -48,10 +48,12 @@ html:not(.film-on) #gl{position:absolute;height:100vh}
 .brand svg{width:26px;height:26px}
 .brand small{font:500 .72rem/1 var(--body);letter-spacing:.14em;color:var(--steel);border:1px solid var(--line);padding:3px 6px;border-radius:4px}
 .nav nav{margin-left:auto;display:flex;gap:1.8rem}
-.nav nav a{font-size:.95rem;color:var(--steel);text-decoration:none;transition:color .2s,.2s;position:relative}
+.nav nav a{font-size:.95rem;color:var(--steel);text-decoration:none;transition:color .2s;position:relative}
 .nav nav a:hover{color:var(--ice)}
-.nav nav a.active{color:var(--cy);font-weight:500}
-.nav nav a.active::after{content:"";position:absolute;bottom:-6px;left:0;right:0;height:2px;background:var(--cy);border-radius:1px}
+.nav nav a.active{color:var(--ice)}
+.nav nav a.active::after{content:"";position:absolute;bottom:-7px;left:0;right:0;height:1px;background:var(--cy)}
+@media (max-width:1100px){.nav{gap:1.2rem}.nav nav{gap:1.15rem}.nav nav a{font-size:.9rem}}
+@media (max-width:980px){.nav nav{display:none}.nav .btn{margin-left:auto}}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:48px;padding:0 1.5rem;border-radius:999px;border:1px solid transparent;
   font:600 1rem/1 var(--body);text-decoration:none;cursor:pointer;white-space:nowrap;transition:transform .2s,background .2s,border-color .2s,box-shadow .2s}
 .btn--p{background:var(--cy);color:#02131a;box-shadow:0 0 0 0 rgba(47,230,255,.5)}
@@ -317,67 +319,60 @@ html:not(.film-on) .pu{display:none}
 @media (max-width:820px) and (max-height:700px){ #tele .x,.t p{display:none} }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
-/* ---------- sección app: próximamente ---------- */
-#app{background:linear-gradient(135deg,rgba(14,19,29,.5),rgba(8,12,21,.3));border:1px solid var(--line);border-radius:20px;overflow:hidden}
-.app-container{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,6fr);gap:clamp(2rem,5vw,4rem);align-items:center;padding:clamp(2rem,5vh,3.5rem) 0}
-.app-phone{display:flex;justify-content:center;align-items:center}
-.phone-frame{position:relative;width:min(100%,340px);aspect-ratio:9/19;background:linear-gradient(135deg,#1a1f2e 0%,#0f1419 100%);border-radius:40px;border:12px solid #0a0d15;padding:8px;box-shadow:0 20px 60px -10px rgba(0,0,0,.8),inset 0 0 1px rgba(255,255,255,.1)}
-.phone-notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:35%;height:28px;background:#000;border-radius:0 0 24px 24px;z-index:10;box-shadow:0 0 15px rgba(0,0,0,.9)}
-.phone-screen{position:absolute;inset:0;border-radius:40px;overflow:hidden;display:flex;flex-direction:column}
-.app-preview{width:100%;height:100%;background:linear-gradient(180deg,#0e131d 0%,#080c15 100%);display:flex;flex-direction:column;padding:20px 12px;color:var(--ice)}
-.app-header{font:700 14px var(--disp);text-transform:uppercase;color:var(--cy);padding:8px 12px;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between}
-.app-map-container{flex:1;background:#e8e8e8;border-radius:8px;margin:6px 0;overflow:hidden;position:relative;border:1px solid #d0d0d0}
-.app-map-svg{width:100%;height:100%;display:block}
-.app-vehicle-info{padding:8px 12px;background:rgba(47,230,255,.08);border-radius:8px;border:1px solid var(--cy);display:grid;gap:2px;font-size:12px}
-.vehicle-name{font:600 12px var(--body);color:var(--ice);margin:0}
-.vehicle-status{font:400 10px var(--body);color:var(--steel);margin:0}
-.app-monitoring-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}
-.app-btn{background:rgba(47,230,255,.15);border:1px solid var(--cy);color:var(--ice);border-radius:6px;padding:6px;cursor:pointer;font-size:16px;transition:all .2s;display:flex;align-items:center;justify-content:center;min-height:32px}
-.app-btn:hover{background:rgba(47,230,255,.3)}
-.phone-home{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:100px;height:4px;background:#fff;border-radius:2px;opacity:.6}
-.app-features{display:flex;flex-direction:column}
-.app-features h3{font:700 clamp(1.6rem,2.5vw,2.2rem)/.95 var(--disp);text-transform:uppercase;margin-bottom:clamp(1.5rem,3vh,2.5rem)}
-.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.2rem;margin-bottom:2rem}
-.feature{padding:1.5rem;border:1px solid var(--line);border-radius:12px;background:rgba(8,12,21,.4);transition:all .3s ease;cursor:default}
-.feature:hover{border-color:var(--cy);background:rgba(47,230,255,.05);transform:translateY(-4px)}
-.feature-icon{font-size:2.2rem;margin-bottom:.5rem;display:block}
-.feature h4{font:600 1.1rem var(--body);margin:0;color:var(--ice)}
-.feature p{color:var(--steel);font-size:.95rem;margin:.5rem 0 0;line-height:1.5}
-.coming-soon-cta{margin-top:2.5rem;padding:2rem;background:linear-gradient(135deg,rgba(47,230,255,.1),rgba(255,176,32,.05));border:1px solid var(--cy);border-radius:16px;text-align:center}
-.coming-soon-cta p{margin:0;font-size:1.05rem;color:var(--ice)}
-
-/* --- app: opciones de perfil --- */
-.profile-intro{color:#c3cddc;margin-top:.8rem;font-size:1rem;max-width:32rem;margin-bottom:2.5rem}
-.profiles-options{display:grid;grid-template-columns:1fr auto 1fr;gap:2rem;align-items:stretch;margin:2rem 0}
-.profile-option{padding:2rem;border:1px solid var(--line);border-radius:16px;background:rgba(8,12,21,.4);transition:all .3s ease;display:flex;flex-direction:column}
-.profile-option:hover{border-color:var(--cy);background:rgba(47,230,255,.05);transform:translateY(-6px)}
-.profile-icon-large{font-size:4rem;margin-bottom:1rem;display:block;text-align:center}
-.profile-option h4{font:600 1.3rem var(--body);margin:0 0 .8rem;color:var(--ice)}
-.profile-option>p{color:var(--steel);font-size:.95rem;line-height:1.6;margin:0 0 1.5rem;flex-grow:1}
-.profile-list{list-style:none;margin:1.5rem 0 0;padding:0;display:grid;gap:.6rem;color:var(--steel);font-size:.9rem}
-.profile-list li{display:flex;gap:.6rem;align-items:center}
-.profile-list li::before{content:"▸";color:var(--cy);font-weight:600;font-size:1.2rem}
-.profile-details{margin-top:2rem;padding-top:2rem;border-top:1px solid var(--line)}
-.profile-details h5{font:600 1rem var(--body);text-transform:uppercase;color:var(--cy);margin:1.5rem 0 1rem;font-size:.9rem;letter-spacing:.05em}
-.profile-details h5:first-child{margin-top:0}
-.profile-badge{display:inline-block;padding:.4rem .9rem;border-radius:20px;font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
-.status-active{background:rgba(76,175,80,.2);color:#81c784;border:1px solid rgba(76,175,80,.4)}
-.status-soon{background:rgba(255,152,0,.2);color:#ffb74d;border:1px solid rgba(255,152,0,.4)}
-.divider{width:1px;height:auto;background:var(--line);min-height:300px}
-
-/* responsive */
-@media (max-width:1024px){
-  .app-container{grid-template-columns:1fr}
-  .phone-frame{width:min(100%,280px)}
-  .profiles-options{grid-template-columns:1fr}
-  .divider{display:none}
-}
-@media (max-width:640px){
-  .phone-frame{width:min(100%,240px)}
-  .app-phone{margin-bottom:2rem}
-  .profiles-options{grid-template-columns:1fr;gap:1.5rem}
-  .profile-option{padding:1.5rem}
-  .profile-icon-large{font-size:3rem}
+/* ---------- app: un perfil para cada uso ---------- */
+.appg{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:clamp(2rem,6vw,6rem);align-items:center;padding-top:clamp(2rem,5vh,3.5rem);border-top:1px solid var(--line)}
+.app-ph{display:grid;justify-items:center;gap:1.1rem}
+.phm{--pw:270px;width:var(--pw);height:calc(var(--pw)*2.06);border-radius:calc(var(--pw)*.15);background:#05070c;border:1px solid rgba(190,215,250,.32);padding:9px;
+  box-shadow:0 40px 90px -20px #000,0 0 0 6px rgba(255,255,255,.03),0 0 70px -20px rgba(47,230,255,.4)}
+.ascr{height:100%;border-radius:calc(var(--pw)*.12);overflow:hidden;background:#090d16;display:grid;grid-template-rows:minmax(0,1fr) auto}
+.as{grid-area:1/1;display:flex;flex-direction:column;min-height:0}
+.as+.as{display:none}
+.tabs-on .as+.as{display:flex}
+.tabs-on .as{visibility:hidden;opacity:0;transition:opacity .3s,visibility .3s}
+.tabs-on .as.on{visibility:visible;opacity:1}
+.abar{display:flex;justify-content:space-between;align-items:center;padding:1.9rem .9rem .65rem;font-size:.68rem}
+.abar b{font:700 .95rem/1 var(--disp);letter-spacing:.06em}
+.abar .live::before{width:6px;height:6px;box-shadow:0 0 0 3px rgba(47,230,255,.18)}
+.as svg{flex:1;min-height:0;width:100%;display:block;background:#080c15}
+.as .sheet{gap:.5rem}
+.aspd{display:flex;justify-content:space-between;align-items:baseline;color:var(--steel)}
+.aspd b{font:700 1.9rem/1 var(--disp);color:var(--ice)}
+.aspd small{font:500 .68rem var(--body);color:var(--steel);margin-left:.25rem}
+.atab{grid-area:2/1;display:grid;grid-template-columns:repeat(4,1fr);padding:.5rem .3rem .75rem;border-top:1px solid var(--line);background:#0a0f19;font-size:.56rem;color:var(--steel)}
+.atab span{display:grid;justify-items:center;gap:.2rem}
+.atab .ic{width:17px;height:17px}
+.atab .on{color:var(--cy)}
+.seg{display:none;gap:4px;padding:4px;border:1px solid var(--line);border-radius:999px;background:rgba(6,9,18,.6)}
+.tabs-on .seg{display:inline-flex}
+.seg button{min-height:44px;padding:0 1.35rem;border:0;border-radius:999px;background:none;color:var(--steel);font:600 .98rem/1 var(--body);cursor:pointer;white-space:nowrap;transition:color .2s,background .2s}
+.seg button:hover{color:var(--ice)}
+.seg button[aria-selected=true]{background:var(--cy);color:#02131a}
+.pfs{display:grid;gap:3rem}
+.tabs-on .pfs{gap:0;margin-top:1.9rem}
+.tabs-on .pf{grid-area:1/1;visibility:hidden;opacity:0;transition:opacity .3s,visibility .3s}
+.tabs-on .pf.on{visibility:visible;opacity:1}
+.stt{display:inline-flex;align-items:center;gap:.5rem;font-size:.82rem;font-weight:500;color:var(--cy)}
+.stt::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.stt.w{color:var(--amb)}
+.pf h3{font:700 clamp(1.9rem,3.2vw,3rem)/.98 var(--disp);text-transform:uppercase;margin-top:.7rem}
+.tabs-on .pf h3{display:none}
+.pf>p{color:#c3cddc;margin-top:.8rem;font-size:1.12rem;max-width:33rem}
+.pf-c{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem 2.5rem;margin-top:1.6rem;padding-top:1.4rem;border-top:1px solid var(--line)}
+.pf h4{margin:0 0 .8rem;font:500 .82rem var(--body);color:var(--steel)}
+.pf ul{list-style:none;margin:0;padding:0;display:grid;gap:.5rem;font-size:.97rem}
+.pf li{display:grid;grid-template-columns:14px 1fr;gap:.6rem}
+.pf li::before{content:"";height:1px;margin-top:.78em;background:var(--cy)}
+.app-cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.2rem 2rem;margin-top:2.2rem;padding-top:1.6rem;border-top:1px solid var(--line)}
+.app-cta h3{font:600 1.15rem var(--body)}
+.app-cta p{color:var(--steel);font-size:.97rem;margin-top:.3rem;max-width:26rem}
+@media (max-width:820px){
+  .appg{grid-template-columns:1fr;gap:2.5rem}
+  .phm{--pw:228px}
+  .seg{display:none}
+  .tabs-on .seg{display:flex}
+  .seg button{flex:1;padding:0 .8rem}
+  .pf-c{grid-template-columns:1fr}
+  .app-cta .btn{width:100%}
 }
 </style>
 </head>
@@ -404,7 +399,7 @@ html:not(.film-on) .pu{display:none}
     <a href="#film" data-go=".2">Tecnología</a>
     <a href="#soluciones">Soluciones</a>
     <a href="#prueba">Pruébalo</a>
-    <a href="#app">Nuestra App</a>
+    <a href="#app">App</a>
     <a href="#preguntas">Preguntas</a>
     <a href="#contacto">Contacto</a>
   </nav>
@@ -649,191 +644,76 @@ html:not(.film-on) .pu{display:none}
   </ol>
 </section>
 
-<!-- ESCENA 6B: APLICATIVO NUESTRA APP -->
+<!-- APP: un perfil para cada uso -->
 <section class="sec" id="app">
   <header>
-    <h2 class="h2">Nuestra App J&A Tech</h2>
-    <p>Un único aplicativo que se adapta a ti. Define tu perfil al ingresar y accede a todas las funciones diseñadas para tu necesidad.</p>
+    <h2 class="h2">Una app que se adapta a ti.</h2>
+    <p>Al ingresar eliges tu perfil y la aplicación te muestra justo lo que necesitas: tu vehículo o toda tu flota.</p>
   </header>
-
-  <div class="app-container">
-    <!-- Mockup del teléfono -->
-    <div class="app-phone">
-      <div class="phone-frame">
-        <div class="phone-notch"></div>
-        <div class="phone-screen">
-          <div class="app-preview">
-            <div class="app-header">
-              <span style="font-size:.8rem">J&A GPS</span>
-            </div>
-
-            <!-- Mapa con ubicación -->
-            <div class="app-map-container">
-              <svg class="app-map-svg" viewBox="0 0 320 300" preserveAspectRatio="xMidYMid slice">
-                <!-- Fondo base tipo Google Maps -->
-                <defs>
-                  <linearGradient id="mapGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#f0f0f0;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#e8e8e8;stop-opacity:1" />
-                  </linearGradient>
-                </defs>
-                <rect width="320" height="300" fill="url(#mapGrad)"/>
-
-                <!-- Parques/zonas verdes -->
-                <rect x="20" y="20" width="70" height="70" fill="#c8e6c9" rx="2"/>
-                <rect x="230" y="200" width="80" height="60" fill="#c8e6c9" rx="2"/>
-
-                <!-- Calles principales (más anchas) -->
-                <rect x="0" y="110" width="320" height="6" fill="#d0d0d0"/>
-                <rect x="110" y="0" width="6" height="300" fill="#d0d0d0"/>
-
-                <!-- Calles secundarias -->
-                <line x1="0" y1="70" x2="320" y2="70" stroke="#e0e0e0" stroke-width="3"/>
-                <line x1="0" y1="170" x2="320" y2="170" stroke="#e0e0e0" stroke-width="3"/>
-                <line x1="60" y1="0" x2="60" y2="300" stroke="#e0e0e0" stroke-width="3"/>
-                <line x1="190" y1="0" x2="190" y2="300" stroke="#e0e0e0" stroke-width="3"/>
-                <line x1="260" y1="0" x2="260" y2="300" stroke="#e0e0e0" stroke-width="3"/>
-
-                <!-- Edificios/manzanas -->
-                <rect x="130" y="130" width="30" height="25" fill="#bdbdbd"/>
-                <rect x="170" y="130" width="28" height="22" fill="#bdbdbd"/>
-                <rect x="135" y="40" width="22" height="35" fill="#bdbdbd"/>
-                <rect x="210" y="90" width="28" height="30" fill="#bdbdbd"/>
-                <rect x="30" y="180" width="25" height="28" fill="#bdbdbd"/>
-
-                <!-- Líneas de edificios -->
-                <line x1="145" y1="130" x2="145" y2="155" stroke="#a0a0a0" stroke-width="1" opacity="0.5"/>
-                <line x1="155" y1="130" x2="155" y2="155" stroke="#a0a0a0" stroke-width="1" opacity="0.5"/>
-
-                <!-- Vehículo (carro rojo destacado) -->
-                <g transform="translate(160, 150)">
-                  <!-- Sombra -->
-                  <ellipse cx="0" cy="8" rx="12" ry="3" fill="rgba(0,0,0,.15)"/>
-
-                  <!-- Carro -->
-                  <g>
-                    <!-- Cuerpo principal -->
-                    <path d="M -14,-3 L -8,-8 L 8,-8 L 14,-3 L 14,5 L -14,5 Z" fill="#ff5252" stroke="#d32f2f" stroke-width="0.5"/>
-                    <!-- Ventanas -->
-                    <rect x="-12" y="-6" width="7" height="4" fill="rgba(0,100,200,.4)" rx="1"/>
-                    <rect x="5" y="-6" width="7" height="4" fill="rgba(0,100,200,.4)" rx="1"/>
-                    <!-- Ruedas -->
-                    <circle cx="-8" cy="6" r="2.5" fill="#333"/>
-                    <circle cx="8" cy="6" r="2.5" fill="#333"/>
-                  </g>
-
-                  <!-- Círculo de ubicación pulsante -->
-                  <circle cx="0" cy="0" r="18" fill="none" stroke="#2196F3" stroke-width="1.5" opacity="0.3"/>
-                  <circle cx="0" cy="0" r="12" fill="none" stroke="#2196F3" stroke-width="1" opacity="0.5"/>
-                  <circle cx="0" cy="0" r="4" fill="#2196F3"/>
-                </g>
-
-                <!-- Controles zoom -->
-                <g>
-                  <!-- Botón zoom + -->
-                  <rect x="295" y="15" width="16" height="16" fill="#fff" stroke="#ccc" stroke-width="1" rx="2"/>
-                  <text x="303" y="25" font-size="12" text-anchor="middle" fill="#666" font-weight="bold">+</text>
-
-                  <!-- Botón zoom - -->
-                  <rect x="295" y="35" width="16" height="16" fill="#fff" stroke="#ccc" stroke-width="1" rx="2"/>
-                  <text x="303" y="45" font-size="14" text-anchor="middle" fill="#666" font-weight="bold">−</text>
-                </g>
-              </svg>
-            </div>
-
-            <!-- Info del vehículo -->
-            <div class="app-vehicle-info">
-              <div style="display:grid;gap:.4rem">
-                <span class="vehicle-name">BMW X5</span>
-                <span class="vehicle-status">En movimiento • 62 km/h</span>
-              </div>
-            </div>
-
-            <!-- Botones de monitoreo -->
-            <div class="app-monitoring-buttons">
-              <button class="app-btn" title="Ubicación">📍</button>
-              <button class="app-btn" title="Alertas">🔔</button>
-              <button class="app-btn" title="Historial">📊</button>
-              <button class="app-btn" title="Llamada">☎️</button>
-            </div>
+  <div class="appg">
+    <div class="app-ph" aria-hidden="true">
+      <div class="phm"><div class="ascr">
+        <div class="as on">
+          <div class="abar"><b>J&amp;A TECH</b><span class="live">En línea</span></div>
+          <svg data-map="a0" viewBox="0 0 250 300" preserveAspectRatio="xMidYMid slice"></svg>
+          <div class="sheet">
+            <h3>Mi vehículo</h3>
+            <div class="aspd"><span><b class="num">42</b><small>km/h</small></span><span class="live">En movimiento</span></div>
+            <div class="vrow off">Calle 41 con Carrera 6<span>hace 1 s</span></div>
           </div>
         </div>
-        <div class="phone-home"></div>
-      </div>
+        <div class="as">
+          <div class="abar"><b>J&amp;A TECH</b><span class="live">5 vehículos</span></div>
+          <svg data-map="a1" viewBox="0 0 250 230" preserveAspectRatio="xMidYMid slice"></svg>
+          <div class="sheet">
+            <h3>Mi flota</h3>
+            <div class="vrow">Camión 01<span>52 km/h</span></div>
+            <div class="vrow">Van 02<span>38 km/h</span></div>
+            <div class="vrow al">Camioneta 03<span>Alerta</span></div>
+            <div class="vrow off">Sedán 04<span>Apagado</span></div>
+          </div>
+        </div>
+        <div class="atab">
+          <span class="on"><svg class="ic"><use href="#i-pin"/></svg>Mapa</span>
+          <span><svg class="ic"><use href="#i-warn"/></svg>Alertas</span>
+          <span><svg class="ic"><use href="#i-move"/></svg>Recorridos</span>
+          <span><svg class="ic"><use href="#i-chat"/></svg>Soporte</span>
+        </div>
+      </div></div>
+      <p class="demo">Pantallas de demostración</p>
     </div>
 
-    <!-- Opciones de Perfil -->
-    <div class="app-features">
-      <div class="feature-group">
-        <h3>Elige cómo ingresar</h3>
-        <p class="profile-intro">Selecciona tu tipo de perfil y accede a un panel personalizado para ti.</p>
-
-        <div class="profiles-options">
-          <div class="profile-option">
-            <div class="profile-icon-large">👤</div>
-            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:.5rem">
-              <h4 style="margin:0">Persona Natural</h4>
-              <span class="profile-badge status-active">En proceso</span>
-            </div>
-            <p>Diseñado para propietarios de vehículos particulares que desean tener el control total de su carro o moto desde cualquier lugar.</p>
-
-            <div class="profile-details">
-              <h5>Funcionalidades:</h5>
-              <ul class="profile-list">
-                <li>Ubicación en tiempo real del vehículo</li>
-                <li>Alertas de movimiento y encendido</li>
-                <li>Historial completo de rutas</li>
-                <li>Velocidad y duración de recorridos</li>
-                <li>Panel web y aplicación móvil</li>
-              </ul>
-
-              <h5>Ideal para:</h5>
-              <ul class="profile-list">
-                <li>Protección contra robo</li>
-                <li>Control de conductores</li>
-                <li>Seguimiento de viajes</li>
-                <li>Geolocalización en emergencias</li>
-              </ul>
-            </div>
+    <div>
+      <div class="seg" role="tablist" aria-label="Tipo de perfil">
+        <button type="button" role="tab" id="pt0" aria-controls="pp0" aria-selected="true">Persona natural</button>
+        <button type="button" role="tab" id="pt1" aria-controls="pp1" aria-selected="false">Empresa</button>
+      </div>
+      <div class="pfs">
+        <article class="pf on" id="pp0" role="tabpanel" aria-labelledby="pt0">
+          <span class="stt">En proceso</span>
+          <h3>Persona natural</h3>
+          <p>Para quien quiere tener su carro o su moto a la vista desde el celular, esté donde esté.</p>
+          <div class="pf-c">
+            <div><h4>Incluye</h4><ul><li>Ubicación en tiempo real</li><li>Alertas de encendido y movimiento</li><li>Historial de recorridos</li><li>Velocidad y duración de cada viaje</li></ul></div>
+            <div><h4>Ideal para</h4><ul><li>Protección contra robo</li><li>Seguimiento de viajes</li><li>Ubicación en una emergencia</li><li>Vehículos que prestas o compartes</li></ul></div>
           </div>
-
-          <div class="divider"></div>
-
-          <div class="profile-option">
-            <div class="profile-icon-large">🏢</div>
-            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:.5rem">
-              <h4 style="margin:0">Empresa</h4>
-              <span class="profile-badge status-soon">Próximamente</span>
-            </div>
-            <p>Solución empresarial completa para flotas y empresas que necesitan gestionar múltiples vehículos con control administrativo avanzado.</p>
-
-            <div class="profile-details">
-              <h5>Funcionalidades:</h5>
-              <ul class="profile-list">
-                <li>Gestión ilimitada de vehículos</li>
-                <li>Panel administrativo avanzado</li>
-                <li>Reportes detallados por vehículo</li>
-                <li>Control de usuarios y permisos</li>
-                <li>Análisis de comportamiento de conductores</li>
-                <li>API para integraciones personalizadas</li>
-              </ul>
-
-              <h5>Ideal para:</h5>
-              <ul class="profile-list">
-                <li>Empresas de transporte y logística</li>
-                <li>Flotas comerciales</li>
-                <li>Servicios de delivery</li>
-                <li>Empresas de alquiler de vehículos</li>
-              </ul>
-            </div>
+        </article>
+        <article class="pf" id="pp1" role="tabpanel" aria-labelledby="pt1">
+          <span class="stt w">Próximamente</span>
+          <h3>Empresa</h3>
+          <p>Para flotas y negocios que administran varios vehículos y necesitan control por usuario.</p>
+          <div class="pf-c">
+            <div><h4>Incluye</h4><ul><li>Todos tus vehículos en una cuenta</li><li>Panel administrativo</li><li>Reportes por vehículo</li><li>Usuarios y permisos</li><li>Análisis de conducción</li><li>API para integraciones</li></ul></div>
+            <div><h4>Ideal para</h4><ul><li>Transporte y logística</li><li>Flotas comerciales</li><li>Domicilios y reparto</li><li>Alquiler de vehículos</li></ul></div>
           </div>
+        </article>
+      </div>
+      <div class="app-cta">
+        <div>
+          <h3>Muy pronto en iOS y Android.</h3>
+          <p>Escríbenos y te avisamos apenas esté lista para descargar.</p>
         </div>
-
-        <div class="coming-soon-cta">
-          <p><strong>Disponible para iOS y Android</strong></p>
-          <p style="color:var(--steel);font-size:.95rem;margin-top:.5rem;">Descarga la app hoy y comienza a monitorear tu vehículo.</p>
-          <a class="btn btn--p js-wa" href="#" target="_blank" rel="noopener" style="margin-top:1.5rem;display:flex;justify-content:center;align-items:center">Próximamente</a>
-        </div>
+        <a class="btn btn--p js-wa" href="#" target="_blank" rel="noopener" data-msg="Hola, quiero que me avisen cuando la app de J&amp;A Tech esté disponible.">Avísame cuando esté lista</a>
       </div>
     </div>
   </div>
@@ -913,7 +793,7 @@ var clamp=function(v,a,b){return Math.min(b,Math.max(a,v))};
 
 /* ---------- WhatsApp, formulario, enlaces ---------- */
 var waURL=function(t){return 'https://wa.me/'+CFG.wa+'?text='+encodeURIComponent(t)};
-$$('.js-wa').forEach(function(a){a.href=waURL(CFG.msg)});
+$$('.js-wa').forEach(function(a){a.href=waURL(a.dataset.msg||CFG.msg)});
 $$('.js-wa-n').forEach(function(s){s.textContent=CFG.waLabel});
 $('#yr').textContent=new Date().getFullYear();
 $('#form').addEventListener('submit',function(e){
@@ -941,6 +821,22 @@ function mapSVG(w,h,o){
 }
 $('[data-map=p]').innerHTML=mapSVG(230,290,{g:46,sw:8,routes:['M23 244H115V152H161V60H230'],marks:[[161,106],[69,60,'#ffb020'],[207,198,'#93a0b5']]});
 $('[data-map=l]').innerHTML=mapSVG(420,260,{g:42,sw:7,routes:['M21 189H147V105H273V63H420','M105 260V147H315V21'],marks:[[231,105],[315,147],[63,63,'#ffb020'],[357,231,'#93a0b5'],[189,189]]});
+$('[data-map=a0]').innerHTML=mapSVG(250,300,{g:50,sw:9,fence:[[175,125,66]],routes:['M25 275H125V175H175V75H250'],marks:[[175,125]]});
+$('[data-map=a1]').innerHTML=mapSVG(250,230,{g:46,sw:8,routes:['M23 207H115V115H207V23','M0 69H161V161H250'],marks:[[115,161],[161,115],[69,69,'#ffb020'],[207,207,'#93a0b5'],[207,69]]});
+
+/* ---------- app: selector de perfil ---------- */
+(function(){
+  var box=$('#app'), tabs=$$('.seg button',box), pfs=$$('.pf',box), scr=$$('.as',box);
+  function pick(i,focus){
+    tabs.forEach(function(t,k){ var on=k===i; t.setAttribute('aria-selected',on); t.tabIndex=on?0:-1; pfs[k].classList.toggle('on',on); scr[k].classList.toggle('on',on); });
+    if(focus) tabs[i].focus();
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){pick(i)});
+    t.addEventListener('keydown',function(e){ if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft') return; e.preventDefault(); pick((i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length,true); });
+  });
+  box.classList.add('tabs-on'); pick(0);
+})();
 var SOL=[
   {routes:['M60 260H220V140H380V60H500'],stops:[[60,260],[500,60]],marks:[[60,260]]},
   {routes:['M20 100H260V220H540','M100 300V180H420V20','M540 260H340V60H140'],marks:[[20,100],[100,300],[540,260,'#ffb020']]},
@@ -1405,52 +1301,15 @@ mm.add({desk:'(min-width:821px)',mob:'(max-width:820px)'},function(ctx){
     var fz=$('.fz',el); if(fz) t2.fromTo(fz,{scale:.3,autoAlpha:0,transformOrigin:'50% 50%'},{scale:1,autoAlpha:1,duration:.4,ease:'back.out(1.6)'},.5);
   });
   gsap.from('.steps li',{autoAlpha:0,y:40,stagger:.12,ease:'none',scrollTrigger:{trigger:'.steps',start:'top 90%',end:'top 45%',scrub:.6}});
+  gsap.from('#app .appg>*',{autoAlpha:0,y:70,stagger:.15,ease:'none',scrollTrigger:{trigger:'#app .appg',start:'top 85%',end:'top 35%',scrub:.6}});
 });
 addEventListener('load',function(){ScrollTrigger.refresh()});
 
-/* --- seguimiento de sección activa en header --- */
-(function(){
-  var sections=[
-    {id:'film',label:'Tecnología'},
-    {id:'soluciones',label:'Soluciones'},
-    {id:'prueba',label:'Pruébalo'},
-    {id:'app',label:'Nuestra App'},
-    {id:'preguntas',label:'Preguntas'},
-    {id:'contacto',label:'Contacto'}
-  ];
-  var navLinks=$$('.nav nav a');
-  var currentSection=null;
-
-  function updateActiveSection(){
-    var scrollPos=window.scrollY+200;
-    var found=null;
-
-    sections.forEach(function(sec){
-      var el=$('#'+sec.id);
-      if(!el) return;
-      var rect=el.getBoundingClientRect();
-      var elTop=window.scrollY+rect.top;
-      var elBottom=window.scrollY+rect.bottom;
-
-      if(scrollPos>=elTop && scrollPos<elBottom){
-        found=sec.id;
-      }
-    });
-
-    if(found!==currentSection){
-      currentSection=found;
-      navLinks.forEach(function(link){
-        link.classList.remove('active');
-        if(link.getAttribute('href')==='#'+found){
-          link.classList.add('active');
-        }
-      });
-    }
-  }
-
-  addEventListener('scroll',updateActiveSection,{passive:true});
-  updateActiveSection();
-})();
+/* --- enlace activo del menú según la sección visible --- */
+if(HAS_GSAP) $$('.nav nav a').forEach(function(a){
+  var el=$(a.getAttribute('href')); if(!el) return;
+  ScrollTrigger.create({trigger:el,start:'top 45%',end:'bottom 45%',onToggle:function(st){ a.classList.toggle('active',st.isActive); if(st.isActive) a.setAttribute('aria-current','true'); else a.removeAttribute('aria-current'); }});
+});
 })();
 </script>
 </body>
