@@ -1,0 +1,1055 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>J&amp;A Tech | Rastreo GPS y monitoreo vehicular en tiempo real</title>
+<meta name="description" content="Rastreo GPS vehicular en tiempo real, alertas inteligentes, historial de recorridos y control de flotas desde tu celular o tu computador.">
+<meta name="theme-color" content="#0a0c10">
+<meta property="og:type" content="website">
+<meta property="og:title" content="J&amp;A Tech | Tu vehículo localizado, protegido y bajo control">
+<meta property="og:description" content="Rastreo GPS en tiempo real, alertas inteligentes y gestión de flotas en una sola plataforma.">
+<meta property="og:locale" content="es_CO">
+<script>
+/* Activa el recorrido por escenas antes del primer pintado, salvo que el usuario pida menos movimiento */
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('film-on');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --ink:#0a0c10; --ink-2:#0f1319; --ink-3:#161b23; --ink-4:#1e2530;
+  --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.16);
+  --text:#eef1f5; --mute:#9aa4b2; --dim:#6b7686;
+  --paper:#f2f3f0; --card:#ffffff; --p-ink:#0c1016; --p-mute:#55606e; --p-line:rgba(12,16,22,.1);
+  --blue:#4c8dff; --blue-d:#2c6ae6; --green:#35cf88; --amber:#f5a524; --red:#f0564a;
+  --sans:"Geist","Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --pad:clamp(20px,5vw,72px); --max:1240px; --r:16px;
+  --sec:clamp(4.5rem,11vh,8.5rem);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;background:var(--ink);color:var(--text);font:400 17px/1.6 var(--sans);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,p,ul,ol,dl,dd,figure{margin:0}
+ul,ol{padding:0;list-style:none}
+img{display:block;max-width:100%}
+a{color:inherit}
+button{font:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
+.wrap{width:min(100%,calc(var(--max) + var(--pad)*2));margin-inline:auto;padding-inline:var(--pad)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* ---------- tipografía ---------- */
+h1,h2{font-weight:600;letter-spacing:-.035em;line-height:1.02;text-wrap:balance}
+h1{font-size:clamp(2.55rem,6.1vw,5.1rem)}
+h2{font-size:clamp(2rem,4.1vw,3.4rem)}
+h3{font-weight:600;letter-spacing:-.015em;line-height:1.2}
+.eyebrow{display:inline-flex;align-items:center;gap:.6rem;font:500 .78rem/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
+.eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(53,207,136,.18)}
+.lead{color:#c6ced9;font-size:clamp(1.02rem,1.3vw,1.2rem);max-width:34rem}
+.demo{display:inline-flex;align-items:center;gap:.45rem;font:400 .72rem/1.2 var(--mono);color:var(--dim);letter-spacing:.02em}
+.demo::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--amber);flex:none}
+
+/* ---------- botones ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;min-height:50px;padding:0 1.35rem;border-radius:12px;border:1px solid transparent;
+  font:500 .98rem/1 var(--sans);text-decoration:none;cursor:pointer;white-space:nowrap;transition:background .2s,border-color .2s,color .2s,transform .2s}
+.btn:active{transform:translateY(1px)}
+.btn--light{background:#fff;color:#0a0c10}
+.btn--light:hover{background:#dfe5ee}
+.btn--ghost{border-color:rgba(255,255,255,.28);color:#fff;background:rgba(10,12,16,.28);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.btn--ghost:hover{border-color:#fff;background:rgba(10,12,16,.5)}
+.btn--dark{background:var(--p-ink);color:#fff}
+.btn--dark:hover{background:#232b37}
+.btn--wa{background:#1fbf5b;color:#04230f}
+.btn--wa:hover{background:#3ad173}
+.btn--s{min-height:42px;padding:0 1rem;font-size:.92rem;border-radius:10px}
+.btn .ic{width:18px;height:18px}
+
+/* ---------- navegación ---------- */
+.nav{position:fixed;z-index:50;inset:0 0 auto 0;padding-top:env(safe-area-inset-top,0px);transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
+.nav.solid,.nav.open{background:rgba(10,12,16,.93);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);border-bottom-color:var(--line)}
+.nav-in{display:flex;align-items:center;gap:2rem;height:72px}
+.brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;font:600 1.12rem/1 var(--sans);letter-spacing:-.02em;white-space:nowrap}
+.brand svg{width:30px;height:30px}
+.brand span span{color:var(--mute);font-weight:400}
+.menu{margin-left:auto;display:flex;gap:.3rem}
+.menu a{padding:.55rem .8rem;border-radius:8px;font-size:.93rem;color:#c3cbd6;text-decoration:none;transition:color .2s,background .2s}
+.menu a:hover{color:#fff;background:rgba(255,255,255,.07)}
+.menu a.active{color:#fff}
+.menu .only-m{display:none}
+.burger{display:none;width:44px;height:44px;margin-left:auto;border:1px solid var(--line-2);border-radius:10px;background:none;color:#fff;cursor:pointer;place-items:center}
+.burger i{display:block;width:18px;height:1.5px;background:currentColor;margin:2.5px 0;transition:transform .25s,opacity .2s}
+.nav.open .burger i:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.nav.open .burger i:nth-child(2){opacity:0}
+.nav.open .burger i:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+/* ---------- película: cinco escenas con fotografía que avanzan con el scroll ---------- */
+.scene{position:relative;display:flex;align-items:flex-end;min-height:92vh;padding:120px 0 clamp(3rem,8vh,5rem);overflow:hidden;isolation:isolate}
+.ph{position:absolute;inset:0;z-index:-2}
+.ph img{width:100%;height:100%;object-fit:cover}
+.scene::before{content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,rgba(10,12,16,.86) 0,rgba(10,12,16,.25) 24%,rgba(10,12,16,.25) 50%,rgba(10,12,16,.9) 92%,var(--ink) 100%),
+             linear-gradient(90deg,rgba(10,12,16,.94) 0,rgba(10,12,16,.74) 36%,rgba(10,12,16,.2) 66%,rgba(10,12,16,.1) 100%)}
+.sc-in{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(2rem,6vw,6rem);align-items:end}
+.sc-t h1{max-width:12em;margin-top:1.3rem;font-size:clamp(2.5rem,5vw,4.4rem)}
+.sc-t h2{max-width:11em;margin-top:1.1rem;font-size:clamp(2.2rem,4.8vw,4.2rem)}
+.sc-t .lead{margin-top:1.3rem}
+.sc-p{justify-self:end;width:min(100%,24.5rem)}
+.cta-row{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2.1rem}
+.hero-strip{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);margin-top:clamp(.5rem,3vh,2rem);border-top:1px solid var(--line-2)}
+.hero-strip li{padding:1.2rem 1.5rem 0 0;font-size:.95rem;color:#c6ced9}
+.hero-strip li+li{padding-left:1.5rem;border-left:1px solid var(--line-2)}
+.hero-strip b{display:block;font:500 .74rem/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:#fff;margin-bottom:.55rem}
+.glass{background:rgba(13,17,23,.74);border:1px solid var(--line-2);border-radius:var(--r);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2)}
+.pnl{padding:1.05rem 1.15rem 1.1rem;box-shadow:0 30px 70px -30px #000}
+.lc-top{display:flex;justify-content:space-between;align-items:center;gap:1rem;font:500 .74rem/1 var(--mono);letter-spacing:.05em;color:var(--mute)}
+.st{display:inline-flex;align-items:center;gap:.45rem;color:var(--green)}
+.st::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+.st.a{color:var(--amber)} .st.o{color:var(--dim)}
+.lc-spd{display:flex;align-items:baseline;gap:.4rem;margin:.9rem 0 .7rem;font:500 2.7rem/1 var(--mono);letter-spacing:-.04em}
+.lc-spd small{font:400 .8rem var(--mono);color:var(--mute);letter-spacing:0}
+.lc-row{display:flex;justify-content:space-between;gap:1rem;padding:.5rem 0;border-top:1px solid var(--line);font-size:.84rem;color:var(--mute)}
+.lc-row b{font-weight:500;color:var(--text);text-align:right}
+.pnl .demo{margin-top:.7rem}
+.pnl-map{display:block;width:100%;height:auto;margin-top:.6rem;border-radius:10px;border:1px solid var(--line)}
+.rt{fill:none;stroke:var(--blue);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.rt-b{fill:none;stroke:rgba(76,141,255,.22);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.mk circle:first-child{fill:var(--blue);opacity:.22}
+.mk circle:last-child{fill:var(--blue);stroke:#fff;stroke-width:2.5}
+.gau{display:grid;grid-template-columns:8.5rem 1fr;gap:1.2rem;align-items:center;margin:.9rem 0 .4rem}
+.gau-d{position:relative}
+.gau-d svg{display:block;width:100%;overflow:visible}
+.gau-d b{position:absolute;inset:auto 0 2%;text-align:center;font:500 1.9rem/1 var(--mono);letter-spacing:-.04em}
+.gau-d b small{display:block;font:400 .68rem var(--mono);color:var(--mute);letter-spacing:0;margin-top:.2rem}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:1rem;font-size:.84rem;color:var(--mute)}
+.sw+.sw{margin-top:.7rem;padding-top:.7rem;border-top:1px solid var(--line)}
+.sw b{display:block;color:var(--text);font-weight:500;font-size:.95rem}
+.sw i{width:40px;height:23px;border-radius:99px;background:rgba(53,207,136,.25);border:1px solid var(--green);position:relative;flex:none}
+.sw i::after{content:"";position:absolute;right:3px;top:3px;width:15px;height:15px;border-radius:50%;background:var(--green)}
+.hst{display:grid;grid-template-columns:auto 1fr auto;gap:.55rem 1rem;align-items:center;font-size:.82rem;color:var(--mute)}
+.hst i{height:4px;border-radius:9px;background:linear-gradient(90deg,var(--blue),rgba(76,141,255,.15));transform-origin:0 50%}
+.hst b{font:400 .8rem var(--mono);color:var(--text)}
+.ntfs{display:grid;gap:.55rem}
+.ntf{display:flex;align-items:center;gap:.8rem;padding:.75rem .9rem;border-radius:13px;font-size:.93rem;line-height:1.25;box-shadow:0 20px 50px -25px #000}
+.ntf .ic{width:36px;height:36px;padding:8px;border-radius:10px;background:rgba(76,141,255,.16);color:var(--blue)}
+.ntf.w .ic{background:rgba(245,165,36,.16);color:var(--amber)}
+.ntf small{display:block;font:400 .72rem var(--mono);color:var(--mute);margin-top:.15rem}
+.flt{display:flex;align-items:center;gap:.7rem;padding:.6rem 0;border-top:1px solid var(--line);font-size:.9rem}
+.flt b{font-weight:500}
+.flt .mono{font-size:.72rem;color:var(--mute)}
+.flt .st{margin-left:auto;font-size:.8rem}
+.fnav,.hint{display:none}
+.film-on #film{height:620vh}
+.film-on .stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.film-on .scene{position:absolute;inset:0;min-height:0;padding:96px 0 clamp(2.4rem,7vh,4.2rem)}
+.film-on .scene+.scene{visibility:hidden}
+.film-on .ph{inset:-1%;will-change:transform}
+.film-on .fnav{display:grid;gap:.9rem;position:absolute;z-index:3;right:calc(var(--pad)/2 - 4px);top:50%;transform:translateY(-50%)}
+.fnav li{width:8px;height:8px;border-radius:50%;border:1px solid rgba(255,255,255,.55);transition:background .25s,transform .25s}
+.fnav li.on{background:#fff;transform:scale(1.35)}
+.film-on .hint{display:flex;position:absolute;z-index:3;left:50%;bottom:1.1rem;transform:translateX(-50%);align-items:center;gap:.6rem;font:400 .7rem/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
+.hint i{width:1px;height:26px;background:linear-gradient(#fff,transparent);animation:hint 1.8s ease-in-out infinite}
+@keyframes hint{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ---------- secciones ---------- */
+.sec{position:relative;padding-block:var(--sec)}
+.sec--paper{background:var(--paper);color:var(--p-ink)}
+.sec--paper .eyebrow{color:var(--p-mute)}
+.sec--paper .lead{color:var(--p-mute)}
+.head{max-width:44rem;margin-bottom:clamp(2.4rem,6vh,4rem)}
+.head h2{margin-top:1.1rem}
+.head .lead{margin-top:1.1rem}
+.head--c{margin-inline:auto;text-align:center}
+.head--c .lead{margin-inline:auto}
+
+/* ---------- marcos de foto e interfaz ---------- */
+.shot{border-radius:22px;overflow:hidden;border:1px solid var(--line);background:var(--ink-3)}
+.shot img{width:100%;height:100%;object-fit:cover}
+
+/* ---------- funcionalidades ---------- */
+.bento{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.fc{position:relative;display:flex;flex-direction:column;min-height:300px;padding:1.7rem;border-radius:20px;background:var(--card);border:1px solid var(--p-line);overflow:hidden;isolation:isolate}
+.fc.w2{grid-column:span 2}
+.fc-ic{display:grid;place-items:center;width:42px;height:42px;border-radius:11px;background:var(--p-ink);color:#fff}
+.fc-n{position:absolute;top:1.7rem;right:1.7rem;font:400 .74rem/1 var(--mono);color:#9aa3ae;letter-spacing:.05em}
+.fc h3{font-size:1.32rem;margin-top:auto;padding-top:2.4rem}
+.fc p{margin-top:.55rem;color:var(--p-mute);font-size:.97rem;max-width:26rem}
+.fc--dark{background:var(--ink-2);border-color:transparent;color:#fff}
+.fc--dark p{color:#c3cbd6}
+.fc--dark .fc-ic{background:rgba(255,255,255,.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.fc--dark .fc-n{color:rgba(255,255,255,.6)}
+.fc-bg{position:absolute;inset:0;z-index:-1}
+.fc-bg img{width:100%;height:100%;object-fit:cover}
+.fc-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,12,16,.35) 0,rgba(10,12,16,.25) 35%,rgba(10,12,16,.92) 100%)}
+.fc-map{position:absolute;right:0;top:0;bottom:0;width:52%;z-index:-1;-webkit-mask-image:linear-gradient(90deg,transparent,#000 45%);mask-image:linear-gradient(90deg,transparent,#000 45%)}
+.fc-map svg{width:100%;height:100%;display:block}
+.fc--map{background:#0e1218;border-color:transparent;color:#fff}
+.fc--map p{color:#c3cbd6;max-width:19rem}
+.fc--map .fc-ic{background:rgba(255,255,255,.1)}
+.fc--map .fc-n{color:rgba(255,255,255,.6)}
+.fc-chip{align-self:flex-start;display:flex;align-items:center;gap:.6rem;margin-top:1.3rem;padding:.6rem .8rem;border-radius:11px;border:1px solid var(--p-line);background:var(--paper);font-size:.84rem}
+.fc-chip i{width:8px;height:8px;border-radius:50%;background:var(--amber);flex:none}
+.fc-chip span{color:var(--p-mute);font-family:var(--mono);font-size:.76rem}
+.bars{display:flex;align-items:flex-end;gap:7px;height:74px;margin-top:1.3rem}
+.bars i{flex:1;border-radius:5px 5px 2px 2px;background:#d9dde2;transform-origin:50% 100%}
+.bars i.on{background:var(--blue)}
+
+/* ---------- software ---------- */
+.soft{overflow:hidden;isolation:isolate;background:radial-gradient(70% 50% at 50% 0,#151b25,var(--ink) 70%)}
+.frame{transform-origin:50% 100%;border-radius:16px;border:1px solid var(--line-2);background:#0b0e13;box-shadow:0 60px 120px -50px #000,0 0 0 1px rgba(0,0,0,.6);overflow:hidden}
+.frame-bar{display:flex;align-items:center;gap:.9rem;height:40px;padding:0 14px;border-bottom:1px solid var(--line);background:#11151c}
+.frame-bar i{width:10px;height:10px;border-radius:50%;background:#2a313c}
+.frame-bar i+i{margin-left:-.5rem}
+.frame-url{flex:1;max-width:24rem;margin-inline:auto;padding:.32rem .8rem;border-radius:7px;background:#0b0e13;border:1px solid var(--line);font:400 .7rem/1.2 var(--mono);color:var(--dim);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dash-fit{position:relative;overflow:hidden}
+.dash{width:1180px;height:680px;transform-origin:0 0;display:grid;grid-template-columns:196px 236px minmax(0,1fr) 244px;grid-template-rows:54px minmax(0,1fr);font-size:13px;line-height:1.35;color:var(--text);background:#0b0e13}
+.d-rail{grid-row:1/3;display:flex;flex-direction:column;padding:16px 12px;border-right:1px solid var(--line);background:#0d1117}
+.d-rail .brand{font-size:.95rem;padding:0 6px 16px}
+.d-rail .brand svg{width:24px;height:24px}
+.d-nav{display:grid;gap:2px}
+.d-nav span{display:flex;align-items:center;gap:10px;padding:8px 9px;border-radius:8px;color:var(--mute)}
+.d-nav .ic{width:16px;height:16px}
+.d-nav .on{background:rgba(76,141,255,.14);color:#fff}
+.d-nav em{margin-left:auto;font:500 10px/1 var(--mono);font-style:normal;padding:3px 6px;border-radius:99px;background:var(--amber);color:#201400}
+.d-acc{margin-top:auto;display:flex;align-items:center;gap:9px;padding:10px 8px 0;border-top:1px solid var(--line);color:var(--mute);font-size:12px}
+.d-acc i{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:var(--ink-4);color:#fff;font:500 11px var(--mono);font-style:normal}
+.d-acc b{display:block;color:var(--text);font-weight:500}
+.d-top{grid-column:2/5;display:flex;align-items:center;gap:14px;padding:0 16px;border-bottom:1px solid var(--line)}
+.d-top h4{font-size:14px;font-weight:600;letter-spacing:-.01em}
+.d-search{display:flex;align-items:center;gap:8px;width:250px;margin-left:10px;padding:7px 10px;border-radius:8px;border:1px solid var(--line);color:var(--dim);font-size:12px}
+.d-search .ic{width:14px;height:14px}
+.d-top .mono{margin-left:auto;font-size:11px;color:var(--mute)}
+.d-list{border-right:1px solid var(--line);padding:14px 10px;overflow:hidden}
+.d-t{display:flex;justify-content:space-between;padding:0 6px 10px;font:500 10.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.v{display:grid;grid-template-columns:1fr auto;gap:2px 8px;padding:10px;border-radius:10px;border:1px solid transparent}
+.v+.v{margin-top:4px}
+.v.sel{background:rgba(76,141,255,.1);border-color:rgba(76,141,255,.4)}
+.v b{font-weight:500}
+.v .mono{font-size:11px;color:var(--mute);margin-left:7px;font-weight:400}
+.v .st{font-size:11.5px}
+.v .spd{grid-row:1/3;grid-column:2;align-self:center;font:500 13px var(--mono);text-align:right}
+.v .spd small{display:block;font-size:10px;color:var(--dim);font-weight:400}
+.v.warn .spd{color:var(--amber)}
+.d-map{position:relative;overflow:hidden;background:#0f1318}
+.d-map svg{position:absolute;inset:0;width:100%;height:100%}
+.d-kpi{position:absolute;left:12px;top:12px;display:flex;gap:6px}
+.d-kpi span{padding:6px 9px;border-radius:8px;background:rgba(11,14,19,.86);border:1px solid var(--line-2);font-size:11.5px;color:var(--mute)}
+.d-kpi b{font:500 12px var(--mono);color:#fff;margin-right:5px}
+.d-zoom{position:absolute;right:12px;bottom:12px;display:grid;border-radius:8px;overflow:hidden;border:1px solid var(--line-2);background:rgba(11,14,19,.9)}
+.d-zoom span{display:grid;place-items:center;width:30px;height:30px;color:var(--mute);font-size:16px}
+.d-zoom span+span{border-top:1px solid var(--line)}
+.d-scale{position:absolute;left:12px;bottom:12px;font:400 10px/1 var(--mono);color:var(--dim);padding-bottom:5px;width:74px;border-bottom:1.5px solid var(--dim);text-align:center}
+.vm circle:first-child{opacity:.2}
+.vm text{font:500 12.5px var(--mono);fill:#dfe5ee;paint-order:stroke;stroke:#0b0e13;stroke-width:3px}
+.fence{fill:rgba(53,207,136,.08);stroke:var(--green);stroke-width:1.5;stroke-dasharray:6 6}
+.d-side{border-left:1px solid var(--line);padding:14px 14px 0;display:flex;flex-direction:column;min-height:0}
+.d-sel{padding-bottom:12px;border-bottom:1px solid var(--line)}
+.d-sel h5{margin:0;font-size:14px;font-weight:600}
+.d-sel .mono{font-size:11px;color:var(--mute)}
+.d-spd{display:flex;align-items:baseline;gap:6px;margin:12px 0 8px;font:500 34px/1 var(--mono);letter-spacing:-.04em}
+.d-spd small{font:400 11px var(--mono);color:var(--mute);letter-spacing:0}
+.d-spd.warn{color:var(--amber)}
+.d-kv{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-top:1px solid var(--line);font-size:12px;color:var(--mute)}
+.d-kv b{font-weight:500;color:var(--text);text-align:right}
+.d-feed{flex:1;min-height:0;padding-top:14px;overflow:hidden}
+.d-feed .d-t{padding-inline:0}
+.ev{display:grid;grid-template-columns:8px 1fr;gap:9px;padding:9px 0;border-top:1px solid var(--line);font-size:12px}
+.ev i{width:8px;height:8px;margin-top:5px;border-radius:50%;background:var(--blue)}
+.ev.w i{background:var(--amber)}
+.ev small{display:block;font:400 10.5px var(--mono);color:var(--dim);margin-top:2px}
+.ev.new{animation:evin .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes evin{from{opacity:0;transform:translateY(-10px)}}
+.sim{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.7rem;margin-top:1.8rem}
+.sim p{flex-basis:100%;text-align:center;color:var(--mute);font-size:.95rem;margin-bottom:.2rem}
+.sim .btn[aria-pressed=true]{border-color:var(--blue);color:#fff;background:rgba(76,141,255,.16)}
+.soft .demo{display:flex;justify-content:center;margin-top:1.3rem}
+
+/* ---------- cómo funciona ---------- */
+.how{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(2.5rem,7vw,7rem);align-items:center}
+.how .shot{aspect-ratio:4/5;border-color:var(--p-line)}
+.how h2{margin-top:1.1rem}
+.steps{margin-top:2.4rem;counter-reset:s}
+.steps li{counter-increment:s;display:grid;grid-template-columns:4.5rem 1fr;gap:1rem;padding:1.6rem 0;border-top:1px solid var(--p-line)}
+.steps li:last-child{border-bottom:1px solid var(--p-line)}
+.steps li::before{content:"0" counter(s);font:400 .95rem/1.7 var(--mono);color:var(--blue-d)}
+.steps h3{font-size:1.28rem}
+.steps p{margin-top:.4rem;color:var(--p-mute);font-size:.98rem;max-width:30rem}
+
+/* ---------- beneficios ---------- */
+.ben{min-height:min(100vh,860px);display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;isolation:isolate;padding-top:clamp(9rem,26vh,16rem)}
+.ben-bg{position:absolute;inset:-8% 0;z-index:-2}
+.ben-bg img{width:100%;height:100%;object-fit:cover;object-position:50% 60%}
+.ben::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,var(--ink) 0,rgba(10,12,16,.35) 22%,rgba(10,12,16,.5) 52%,rgba(10,12,16,.95) 88%,var(--ink) 100%)}
+.ben h2{max-width:12em;margin-top:1.1rem}
+.ben-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin-top:clamp(2.5rem,7vh,4.5rem);border-top:1px solid var(--line-2)}
+.ben-grid li{padding:1.4rem 1.3rem 0 0}
+.ben-grid li+li{padding-left:1.3rem;border-left:1px solid var(--line-2)}
+.ben-grid b{display:block;font:400 .74rem/1 var(--mono);color:var(--mute);letter-spacing:.06em;margin-bottom:.9rem}
+.ben-grid h3{font-size:1.12rem}
+.ben-grid p{margin-top:.4rem;font-size:.92rem;color:#c3cbd6}
+
+/* ---------- soluciones ---------- */
+.sols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.sol{display:flex;flex-direction:column;border-radius:20px;background:var(--card);border:1px solid var(--p-line);overflow:hidden}
+.sol-ph{aspect-ratio:16/9;overflow:hidden}
+.sol-ph img{width:100%;height:100%;object-fit:cover}
+.sol-b{padding:1.8rem 1.8rem 2rem}
+.sol-b small{font:500 .74rem/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--p-mute)}
+.sol-b h3{font-size:1.6rem;letter-spacing:-.025em;margin-top:.7rem}
+.sol-b p{margin-top:.6rem;color:var(--p-mute);font-size:.98rem}
+.ticks{display:grid;grid-template-columns:1fr 1fr;gap:.55rem 1.2rem;margin-top:1.4rem;padding-top:1.4rem;border-top:1px solid var(--p-line);font-size:.93rem}
+.ticks li{display:grid;grid-template-columns:16px 1fr;gap:.55rem;align-items:start}
+.ticks .ic{width:16px;height:16px;margin-top:.28em;color:var(--blue-d);stroke-width:2}
+.appbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.2rem 2rem;margin-top:16px;padding:1.5rem 1.8rem;border-radius:20px;background:var(--p-ink);color:#fff}
+.appbar h3{font-size:1.15rem}
+.appbar p{margin-top:.35rem;color:#aab3c0;font-size:.93rem;display:flex;flex-wrap:wrap;gap:.3rem 1.3rem}
+.appbar .st{font:400 .8rem var(--mono)}
+
+/* ---------- preguntas ---------- */
+.faq{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:clamp(2rem,6vw,6rem);margin-top:clamp(3rem,7vh,5rem);padding-top:clamp(3rem,7vh,5rem);border-top:1px solid var(--p-line)}
+.faq h2{font-size:clamp(1.8rem,3.2vw,2.6rem)}
+.faq details{border-top:1px solid var(--p-line)}
+.faq details:last-child{border-bottom:1px solid var(--p-line)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:1.5rem;align-items:center;padding:1.25rem 0;font-weight:500;font-size:1.06rem}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";width:11px;height:11px;flex:none;border-right:1.6px solid var(--p-ink);border-bottom:1.6px solid var(--p-ink);transform:translateY(-3px) rotate(45deg);transition:transform .25s}
+.faq details[open] summary::after{transform:translateY(2px) rotate(225deg)}
+.faq details p{color:var(--p-mute);padding:0 3rem 1.4rem 0;max-width:40rem}
+
+/* ---------- contacto ---------- */
+.cta{overflow:hidden;isolation:isolate}
+.cta-bg{position:absolute;inset:-8% 0;z-index:-2}
+.cta-bg img{width:100%;height:100%;object-fit:cover}
+.cta::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,var(--ink) 0,rgba(10,12,16,.72) 30%,rgba(10,12,16,.8) 70%,var(--ink) 100%)}
+.cta-g{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(2.5rem,7vw,7rem);align-items:center}
+.cta h2{margin-top:1.1rem}
+.cta .lead{margin-top:1.1rem}
+.cta-dl{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:1rem 2.5rem;margin-top:2.6rem;padding-top:1.6rem;border-top:1px solid var(--line-2)}
+.cta-dl dt{font:500 .72rem/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--mute);margin-bottom:.5rem}
+.cta-dl dd{font-size:.98rem}
+.cta-dl a{text-decoration-color:rgba(255,255,255,.35);text-underline-offset:4px}
+form{display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding:clamp(1.4rem,3vw,2rem)}
+form h3{grid-column:1/-1;font-size:1.2rem;margin-bottom:.2rem}
+form label{display:grid;gap:.4rem;font-size:.84rem;color:var(--mute)}
+form .w2{grid-column:1/-1}
+input,select,textarea{width:100%;min-height:48px;padding:.7rem .9rem;border-radius:10px;border:1px solid var(--line-2);background:rgba(10,12,16,.6);color:var(--text);font:400 1rem var(--sans)}
+textarea{min-height:96px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(76,141,255,.2)}
+.err{color:var(--amber);font-size:.86rem;min-height:1.2em}
+
+/* ---------- pie ---------- */
+footer{border-top:1px solid var(--line);padding:clamp(3rem,7vh,4.5rem) 0 calc(2rem + env(safe-area-inset-bottom,0px));font-size:.93rem;color:var(--mute)}
+.ft{display:grid;grid-template-columns:minmax(0,4fr) repeat(3,minmax(0,2fr));gap:2.5rem}
+.ft .brand{color:var(--text)}
+.ft p{margin-top:1rem;max-width:22rem}
+.ft h4{font:500 .72rem/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--dim);margin-bottom:1.1rem}
+.ft li+li{margin-top:.6rem}
+.ft a{text-decoration:none;transition:color .2s}
+.ft a:hover{color:#fff}
+.soc{display:flex;gap:.5rem;margin-top:1.4rem}
+.soc a{display:grid;place-items:center;width:40px;height:40px;border-radius:10px;border:1px solid var(--line-2);color:var(--text)}
+.soc a:hover{border-color:#fff}
+.ft-b{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.6rem 2rem;margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.82rem;color:var(--dim)}
+.wa{position:fixed;z-index:40;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:#1fbf5b;color:#fff;box-shadow:0 12px 30px -8px rgba(0,0,0,.6);transition:transform .2s,opacity .2s}
+.wa:hover{transform:scale(1.06)}
+.wa.off{opacity:0;pointer-events:none;transform:scale(.8)}
+.wa svg{width:27px;height:27px}
+
+/* ---------- tablet y celular ---------- */
+@media (max-width:1080px){
+  .menu{position:absolute;top:100%;left:0;right:0;height:calc(100vh - 73px);height:calc(100dvh - 73px - env(safe-area-inset-top,0px));margin:1px 0 0;flex-direction:column;gap:0;padding:1rem var(--pad) 2rem;background:var(--ink);overflow:auto;visibility:hidden;opacity:0;transition:opacity .25s,visibility .25s}
+  .nav.open .menu{visibility:visible;opacity:1}
+  .menu a{padding:1.05rem 0;border-radius:0;border-bottom:1px solid var(--line);font-size:1.25rem;color:#fff}
+  .menu .only-m{display:flex;margin-top:1.5rem;border:0;border-radius:12px;padding:0 1.35rem;font-size:1rem;color:#04230f}
+  .burger{display:grid}
+  .nav-cta{display:none}
+  .how,.cta-g,.faq{grid-template-columns:1fr}
+  .sc-in{gap:2rem}
+  .film-on .fnav{right:8px}
+  .bento{grid-template-columns:1fr 1fr}
+  .fc.w2{grid-column:span 2}
+  .ben-grid{grid-template-columns:repeat(2,minmax(0,1fr));border-top:0}
+  .ben-grid li{padding:1.2rem 1.2rem 1.2rem 0;border-top:1px solid var(--line-2)}
+  .ben-grid li+li{padding-left:0;border-left:0}
+  .ben-grid li:nth-child(even){padding-left:1.2rem;border-left:1px solid var(--line-2)}
+  .how .shot{aspect-ratio:16/10}
+  .ft{grid-template-columns:1fr 1fr}
+}
+@media (max-width:700px){
+  body{font-size:16px}
+  .nav-in{height:64px}
+  .menu{height:calc(100vh - 65px);height:calc(100dvh - 65px - env(safe-area-inset-top,0px))}
+  .scene{padding-top:100px}
+  .scene::before{background:linear-gradient(180deg,rgba(10,12,16,.92) 0,rgba(10,12,16,.74) 26%,rgba(10,12,16,.3) 46%,rgba(10,12,16,.85) 66%,var(--ink) 100%)}
+  .sc-in{grid-template-columns:1fr;gap:1.5rem}
+  .sc-p{justify-self:stretch;width:auto}
+  .sc-t h1{font-size:clamp(2.1rem,9.2vw,2.7rem)}
+  .sc-t h2{font-size:clamp(1.9rem,8.6vw,2.6rem)}
+  .sc-t .lead{margin-top:.8rem;font-size:.98rem}
+  .film-on .scene{padding:84px 0 5.4rem;align-items:stretch}
+  .film-on .sc-in{height:100%;align-content:space-between}
+  .film-on .s1 .sc-in{align-content:end}
+  .film-on .hero-strip,.film-on .hint,.film-on .x-m{display:none}
+  .s1::before{background:linear-gradient(180deg,rgba(10,12,16,.9) 0,rgba(10,12,16,.25) 12%,rgba(10,12,16,.25) 20%,rgba(10,12,16,.86) 38%,var(--ink) 62%)}
+  .s1 .ph img{object-position:50% 0;height:56%}
+  .pnl{padding:.85rem .95rem .9rem}
+  .lc-spd{font-size:2.2rem;margin:.6rem 0 .5rem}
+  .ntf{padding:.55rem .7rem;font-size:.86rem}
+  .ntf .ic{width:30px;height:30px;padding:6px}
+  .ben::before{background:linear-gradient(180deg,var(--ink) 0,rgba(10,12,16,.3) 18%,rgba(10,12,16,.45) 34%,rgba(10,12,16,.9) 52%,var(--ink) 100%)}
+  .dash{width:540px;height:600px;grid-template-columns:minmax(0,1fr) 236px;grid-template-rows:minmax(0,1fr)}
+  .d-rail,.d-list,.d-top{display:none}
+  .cta-row .btn{flex:1 1 100%}
+  .hero-strip{grid-template-columns:1fr;margin-top:1rem}
+  .hero-strip li{padding:.9rem 0;display:grid;grid-template-columns:7.2rem 1fr;align-items:baseline;border-bottom:1px solid var(--line)}
+  .hero-strip li+li{padding-left:0;border-left:0}
+  .hero-strip b{margin:0}
+  .bento,.sols{grid-template-columns:1fr}
+  .fc.w2{grid-column:auto}
+  .fc{min-height:260px}
+  .fc-map{width:100%;opacity:.5;-webkit-mask-image:linear-gradient(180deg,#000,transparent 75%);mask-image:linear-gradient(180deg,#000,transparent 75%)}
+  .steps li{grid-template-columns:3rem 1fr}
+  .ben-grid{grid-template-columns:1fr}
+  .ben-grid li:nth-child(even){padding-left:0;border-left:0}
+  .ticks{grid-template-columns:1fr}
+  .appbar .btn,.sim .btn{width:100%}
+  .cta-dl{grid-template-columns:1fr}
+  form{grid-template-columns:1fr}
+  .faq details p{padding-right:0}
+  .ft{grid-template-columns:1fr}
+  .frame-bar{height:30px}
+  .frame-url{font-size:.6rem;padding:.2rem .6rem}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <g id="map"><rect x="-260" y="-300" width="1720" height="1400" fill="#0f1318"/><rect x="323" y="210" width="188" height="124" rx="6" fill="#132119"/><rect x="819" y="-15" width="106" height="93" rx="6" fill="#132119"/><rect x="-15" y="485" width="128" height="79" rx="6" fill="#132119"/><path d="M-260 760C40 700 120 560 330 520S640 380 760 200 980 -60 1100 -300" fill="none" stroke="#0e2230" stroke-width="30" stroke-linecap="round"/><path d="M-260 760C40 700 120 560 330 520S640 380 760 200 980 -60 1100 -300" fill="none" stroke="#123044" stroke-width="1" opacity=".8"/><path d="M-260 -259V207M-260 296V435M-260 482V522M-260 567V1138M-196 -300V385M-196 435V522M-196 567V849M-196 891V1138M-75 -300V-157M-75 -111V251M-75 296V1138M-18 -300V-69M-18 -18V121M-18 164V296M-18 337V944M-18 984V1091M46 -300V482M46 567V620M46 661V944M46 984V1138M190 -300V-206M190 -157V1138M251 -300V207M251 251V522M251 567V891M251 944V1138M380 -300V-259M380 -206V164M380 337V567M380 620V849M380 891V984M380 1039V1138M444 -300V207M444 337V482M444 522V661M444 710V1138M566 -259V-206M566 -157V37M566 81V620M566 661V1039M566 1091V1138M625 -300V81M625 121V806M625 849V1039M625 1091V1138M698 -300V435M698 482V620M698 661V1138M816 -300V-206M816 -157V-111M816 -69V121M816 164V435M816 482V522M816 567V806M816 849V1138M872 -300V-259M872 -206V-18M872 81V435M872 522V567M872 620V891M872 944V1138M990 -206V81M990 121V849M990 944V1138M1047 -300V-111M1047 -69V435M1047 482V891M1047 944V984M1047 1039V1138M1179 -300V1138M1253 -300V37M1253 81V296M1253 337V385M1253 435V482M1253 522V849M1253 891V944M1253 984V1138M1324 -300V-69M1324 -18V567M1324 710V1138M1447 -300V121M1447 164V1091M1502 -300V121M1502 207V385M1502 435V710M1502 762V1138M-260 -300H46M116 -300H514M566 -300H1047M1107 -300H1502M-260 -206H251M320 -206H698M750 -206H1447M-260 -157H1179M1253 -157H1324M1394 -157H1447M-260 -69H-75M-18 -69H1253M1324 -69H1502M-260 -18H-134M-75 -18H320M380 -18H514M625 -18H698M750 -18H990M1047 -18H1502M-260 37H750M928 37H990M1047 37H1502M-260 121H46M116 121H1394M1447 121H1502M-260 164H116M190 164H251M320 164H872M928 164H1502M-260 251H46M116 251H190M251 251H320M514 251H1502M-260 296H-18M46 296H190M251 296H320M514 296H816M872 296H990M1047 296H1502M-260 385H872M928 385H1047M1107 385H1502M-260 435H-75M-18 435H320M380 435H990M1047 435H1502M-260 482H-196M-134 482H320M380 482H444M514 482H1502M-260 567H444M514 567H698M750 567H872M928 567H1107M1179 567H1502M-260 620H514M566 620H698M750 620H1502M-260 710H514M566 710H1107M1179 710H1394M1447 710H1502M-260 762H190M251 762H625M698 762H1324M1394 762H1502M-260 849H251M320 849H625M698 849H1179M1253 849H1502M-196 891H-75M-18 891H116M190 891H1502M-260 944H-196M-134 944H514M566 944H1253M1447 944H1502M-260 1039H320M380 1039H514M566 1039H1324M1394 1039H1447M-260 1091H190M251 1091H514M566 1091H816M872 1091H928M990 1091H1502" fill="none" stroke="#1c232c" stroke-width="2.6"/><path d="M-134 -300V1138M320 -300V1138M514 -300V1138M928 -300V1138M1107 -300V1138M-260 -259H1502M-260 -111H1502M-260 207H1502M-260 337H1502M-260 661H1502M-260 806H1502M-260 1138H1502" fill="none" stroke="#252e39" stroke-width="5"/><path d="M-260 420L1460 -20" fill="none" stroke="#252e39" stroke-width="6"/><path d="M116 -300V1138M750 -300V1138M1394 -300V1138M-260 81H1502M-260 522H1502M-260 984H1502" fill="none" stroke="#303b49" stroke-width="9"/><path d="M116 -300V1138M750 -300V1138M1394 -300V1138M-260 81H1502M-260 522H1502M-260 984H1502" fill="none" stroke="#3a4656" stroke-width=".8" stroke-dasharray="6 7"/><text x="180" y="74" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Calle 53</text><text x="620" y="74" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Calle 53</text><text x="1010" y="74" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Calle 53</text><text x="180" y="515" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Calle 63</text><text x="620" y="515" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Calle 63</text><text x="1010" y="515" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Calle 63</text><text x="180" y="977" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Calle 72</text><text x="620" y="977" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Calle 72</text><text x="1010" y="977" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Calle 72</text><text transform="translate(123 130) rotate(90)" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Cra. 7</text><text transform="translate(123 520) rotate(90)" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Cra. 7</text><text transform="translate(757 130) rotate(90)" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Cra. 15</text><text transform="translate(757 520) rotate(90)" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Cra. 15</text><text transform="translate(1401 130) rotate(90)" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Cra. 24</text><text transform="translate(1401 520) rotate(90)" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Cra. 24</text><text x="417" y="275" text-anchor="middle" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#3f6b52" letter-spacing=".06em">Parque Central</text><text x="872" y="34.5" text-anchor="middle" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#3f6b52" letter-spacing=".06em">Parque El Lago</text><text x="49" y="527.5" text-anchor="middle" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#3f6b52" letter-spacing=".06em">Parque Norte</text></g>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/></symbol>
+  <symbol id="i-power" viewBox="0 0 24 24"><path d="M12 3v9M6.300 6.300a8 8 0 1 0 11.400 0"/></symbol>
+  <symbol id="i-move" viewBox="0 0 24 24"><path d="M3 12h4l3-7 4 14 3-7h4"/></symbol>
+  <symbol id="i-fence" viewBox="0 0 24 24"><path d="M12 4a8 8 0 1 0 8 8M13 11l7-7M15 4h5v5"/></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 18a9 9 0 1 1 16 0M12 14l4-5"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 4l9 16H3zM12 10v4M12 17v.500"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7.5 3v5.5c0 4.6-3.1 8-7.5 9.5-4.400-1.500-7.500-4.900-7.500-9.500V6z"/><path d="M9 12l2.200 2.200L15.200 10"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20h16M7 16v-5M12 16V6M17 16v-8"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="9" r="3.2"/><path d="M3.500 19a5.500 5.500 0 0 1 11 0M16 6.200a3 3 0 0 1 0 5.600M17.500 14.500a5 5 0 0 1 3 4.500"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.300-4.300"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.500l4.500 4.500L19 7.500"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M4 20l1.300-4.200A8 8 0 1 1 8.400 19z"/><path d="M9.200 8.800c0 3 2.600 5.600 5.600 5.600l1-1.600-1.900-1-.8.800c-.8-.4-1.500-1.100-1.900-1.900l.8-.8-1-1.900z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4.500"/><circle cx="12" cy="12" r="3.600"/><path d="M16.800 7.200h.01"/></symbol>
+  <symbol id="i-fb" viewBox="0 0 24 24"><path d="M14 8.500V7a1.500 1.500 0 0 1 1.500-1.500H17V3h-2a4 4 0 0 0-4 4v1.500H9V11h2v10h3V11h2.500l.5-2.500z"/></symbol>
+  <symbol id="logo" viewBox="0 0 30 30"><rect width="30" height="30" rx="8" fill="#4c8dff"/><path d="M8 15.200L22 8l-7.200 14-1.500-5.300z" fill="#fff"/></symbol>
+</defs></svg>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#inicio" aria-label="J&amp;A Tech, inicio"><svg aria-hidden="true"><use href="#logo"/></svg><span>J&amp;A <span>Tech</span></span></a>
+    <nav class="menu" id="menu" aria-label="Principal">
+      <a href="#film" data-go=".25">Tecnología</a>
+      <a href="#funciones">Funciones</a>
+      <a href="#software">Software</a>
+      <a href="#como">Cómo funciona</a>
+      <a href="#soluciones">Soluciones</a>
+      <a href="#contacto">Contacto</a>
+      <a class="btn btn--wa only-m js-wa" href="#" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-wa"/></svg>Escribir por WhatsApp</a>
+    </nav>
+    <a class="btn btn--light btn--s nav-cta" href="#contacto">Solicitar asesoría</a>
+    <button class="burger" type="button" aria-controls="menu" aria-expanded="false" aria-label="Abrir menú"><span><i></i><i></i><i></i></span></button>
+  </div>
+</header>
+
+<main>
+<!-- PELÍCULA: cinco escenas que avanzan con el scroll -->
+<section id="film" aria-label="Recorrido por la tecnología">
+  <div class="stage">
+
+    <!-- ESCENA 1 -->
+    <article class="scene s1" id="inicio">
+      <picture class="ph">
+        <source media="(max-width:700px)" srcset="assets/img/hero-m.webp">
+        <img src="assets/img/hero.webp" width="2000" height="1333" alt="Automóvil negro circulando por una autopista al atardecer" fetchpriority="high">
+      </picture>
+      <div class="wrap sc-in">
+        <div class="sc-t">
+          <p class="eyebrow" data-in><i></i>Rastreo y monitoreo vehicular</p>
+          <h1 data-in>Tu vehículo localizado, protegido y bajo control.</h1>
+          <p class="lead" data-in>Rastreo GPS en tiempo real, alertas inteligentes y gestión de flotas en una sola plataforma, desde tu celular o tu computador.</p>
+          <div class="cta-row" data-in>
+            <a class="btn btn--light" href="#film" data-go=".25">Conoce nuestra plataforma<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <a class="btn btn--ghost js-wa" href="#" target="_blank" rel="noopener">Solicitar asesoría</a>
+          </div>
+        </div>
+        <ul class="hero-strip" data-in>
+          <li><b>Tiempo real</b>Ubicación y velocidad de cada vehículo, al instante.</li>
+          <li><b>Alertas</b>Encendido, movimiento, velocidad y zonas autorizadas.</li>
+          <li><b>Web y celular</b>Tu vehículo o tu flota, desde donde estés.</li>
+        </ul>
+      </div>
+    </article>
+
+    <!-- ESCENA 2 -->
+    <article class="scene s2">
+      <div class="ph"><img src="assets/img/road.webp" width="2000" height="1333" loading="lazy" decoding="async" alt="Automóvil avanzando por una carretera en curva al atardecer" style="object-position:38% 62%"></div>
+      <div class="wrap sc-in">
+        <div class="sc-t">
+          <p class="eyebrow">Ubicación en vivo</p>
+          <h2>Tu vehículo, en tiempo real.</h2>
+          <p class="lead">Consulta su ubicación desde cualquier lugar y mantente informado sobre sus movimientos.</p>
+        </div>
+        <aside class="sc-p glass pnl" aria-label="Ejemplo de datos de localización">
+          <div class="lc-top"><span>VEHÍCULO 01 · JKL 908</span><span class="st">En movimiento</span></div>
+          <div class="lc-spd"><span id="f-spd">62</span><small>km/h</small></div>
+          <div class="lc-row"><span>Ubicación</span><b id="f-loc">Calle 63 con Cra. 15</b></div>
+          <div class="lc-row"><span>Recorrido</span><b><span id="f-km">4,8</span> km</b></div>
+          <svg class="pnl-map x-m" viewBox="300 190 520 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g transform="rotate(-14 600 400)"><use href="#map"/>
+            <path class="rt-b" d="M116 661H320V522H514V337H750V207H928"/><path class="rt" id="f-rt" pathLength="1" stroke-dasharray="1" d="M320 522H514V337H750V207"/>
+            <g class="mk" id="f-mk" transform="translate(750 207)"><circle r="16"/><circle r="7"/></g></g></svg>
+          <p class="demo">Datos de demostración</p>
+        </aside>
+      </div>
+    </article>
+
+    <!-- ESCENA 3 -->
+    <article class="scene s3">
+      <div class="ph"><img src="assets/img/suv.webp" width="2000" height="1247" loading="lazy" decoding="async" alt="Camioneta SUV plateada estacionada en una vía rodeada de árboles" style="object-position:62% 50%"></div>
+      <div class="wrap sc-in">
+        <div class="sc-t">
+          <p class="eyebrow">Panel de control</p>
+          <h2>Más que localización. Control inteligente.</h2>
+          <p class="lead">Estado, encendido, velocidad, recorridos y alertas de tu vehículo en un solo panel.</p>
+        </div>
+        <aside class="sc-p glass pnl" aria-label="Ejemplo de panel de monitoreo">
+          <div class="lc-top"><span>CAMIONETA 03</span><span class="st">En línea</span></div>
+          <div class="gau">
+            <div class="gau-d"><svg viewBox="0 0 200 118" aria-hidden="true"><path d="M20 108a80 80 0 0 1 160 0" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="10" stroke-linecap="round"/><path id="f-arc" d="M20 108a80 80 0 0 1 160 0" fill="none" stroke="#4c8dff" stroke-width="10" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="62"/></svg><b><span id="f-gv">46</span><small>km/h</small></b></div>
+            <div><div class="sw"><span>Estado<b>En movimiento</b></span></div><div class="sw"><span>Motor<b>Encendido</b></span><i aria-hidden="true"></i></div></div>
+          </div>
+          <div class="lc-row x-m"><span>Alertas de hoy</span><b style="color:var(--amber)">2</b></div>
+          <div class="lc-row" style="display:block"><div class="hst"><span>Hoy, 7:12 a. m.</span><i style="width:78%"></i><b>14,2 km</b><span>Ayer, 5:40 p. m.</span><i style="width:46%"></i><b>8,6 km</b><span class="x-m">Ayer, 6:55 a. m.</span><i class="x-m" style="width:92%"></i><b class="x-m">17,9 km</b></div></div>
+          <p class="demo">Datos de demostración</p>
+        </aside>
+      </div>
+    </article>
+
+    <!-- ESCENA 4 -->
+    <article class="scene s4">
+      <div class="ph"><img src="assets/img/night.webp" width="1400" height="1750" loading="lazy" decoding="async" alt="Camioneta con las luces encendidas en una vía oscura" style="object-position:50% 68%"></div>
+      <div class="wrap sc-in">
+        <div class="sc-t">
+          <p class="eyebrow">Alertas</p>
+          <h2>Nosotros te avisamos. Tú tienes el control.</h2>
+          <p class="lead">Cada evento llega a tu celular en el momento en que ocurre.</p>
+        </div>
+        <div class="sc-p ntfs" aria-label="Ejemplos de alertas">
+          <div class="ntf glass"><svg class="ic" aria-hidden="true"><use href="#i-power"/></svg><span>Encendido del vehículo<small>Ahora</small></span></div>
+          <div class="ntf glass"><svg class="ic" aria-hidden="true"><use href="#i-move"/></svg><span>Alerta de movimiento<small>Ahora</small></span></div>
+          <div class="ntf glass w"><svg class="ic" aria-hidden="true"><use href="#i-fence"/></svg><span>Salida de zona autorizada<small>Hace 1 min</small></span></div>
+          <div class="ntf glass w"><svg class="ic" aria-hidden="true"><use href="#i-gauge"/></svg><span>Exceso de velocidad<small>Hace 3 min</small></span></div>
+          <div class="ntf glass w x-m"><svg class="ic" aria-hidden="true"><use href="#i-warn"/></svg><span>Desplazamiento no autorizado<small>Hace 5 min</small></span></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ESCENA 5 -->
+    <article class="scene s5">
+      <div class="ph"><img src="assets/img/aerial.webp" width="1800" height="1349" loading="lazy" decoding="async" alt="Vista aérea de un cruce de autopistas con tráfico"></div>
+      <div class="wrap sc-in">
+        <div class="sc-t">
+          <p class="eyebrow">Flotas</p>
+          <h2>Toda tu flota en un solo lugar.</h2>
+          <p class="lead">Mapa, historial, notificaciones y administración de todos tus vehículos, desde el celular o el computador.</p>
+        </div>
+        <aside class="sc-p glass pnl" aria-label="Ejemplo de lista de vehículos">
+          <div class="lc-top" style="margin-bottom:.7rem"><span>MI FLOTA · 5 VEHÍCULOS</span><span class="st">4 en línea</span></div>
+          <div class="flt"><b>Camión 01</b><span class="mono">TRK 418</span><span class="st">52 km/h</span></div>
+          <div class="flt"><b>Van 02</b><span class="mono">VAN 207</span><span class="st">38 km/h</span></div>
+          <div class="flt"><b>Camioneta 03</b><span class="mono">JKL 908</span><span class="st">42 km/h</span></div>
+          <div class="flt"><b>Sedán 04</b><span class="mono">SDN 351</span><span class="st o">Apagado</span></div>
+          <div class="flt x-m"><b>Moto 05</b><span class="mono">MTO 64F</span><span class="st a">Detenida</span></div>
+          <p class="demo">Datos de demostración</p>
+        </aside>
+      </div>
+    </article>
+
+    <ol class="fnav" aria-hidden="true"><li class="on"></li><li></li><li></li><li></li><li></li></ol>
+    <div class="hint" aria-hidden="true"><i></i>Desplázate</div>
+  </div>
+</section>
+
+<!-- 3. FUNCIONALIDADES -->
+<section class="sec sec--paper" id="funciones">
+  <div class="wrap">
+    <header class="head">
+      <p class="eyebrow" data-rv>Funcionalidades</p>
+      <h2 data-rv>Lo que necesitas para cuidar cada vehículo.</h2>
+    </header>
+    <div class="bento">
+      <article class="fc fc--map w2" data-rv>
+        <div class="fc-map" aria-hidden="true"><svg viewBox="440 110 420 300" preserveAspectRatio="xMidYMid slice" data-route><g transform="rotate(-14 600 400)"><use href="#map"/><path class="rt" pathLength="1" stroke-dasharray="1" d="M514 522V337H750V207"/><g class="mk" transform="translate(750 207)"><circle r="16"/><circle r="7"/></g></g></svg></div>
+        <span class="fc-ic"><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg></span><span class="fc-n">01</span>
+        <h3>Ubicación en tiempo real</h3>
+        <p>Mira en el mapa dónde está cada vehículo, a qué velocidad va y si está encendido.</p>
+      </article>
+      <article class="fc" data-rv>
+        <span class="fc-ic"><svg class="ic" aria-hidden="true"><use href="#i-route"/></svg></span><span class="fc-n">02</span>
+        <h3>Historial de recorridos</h3>
+        <p>Consulta por dónde estuvo, cuánto recorrió y cuánto tardó cada viaje.</p>
+      </article>
+      <article class="fc" data-rv>
+        <span class="fc-ic"><svg class="ic" aria-hidden="true"><use href="#i-bell"/></svg></span><span class="fc-n">03</span>
+        <div class="fc-chip" aria-hidden="true"><i></i>Exceso de velocidad<span>96 km/h</span></div>
+        <h3>Alertas inteligentes</h3>
+        <p>Recibe un aviso cuando se enciende, se mueve, excede la velocidad o sale de una zona.</p>
+      </article>
+      <article class="fc fc--dark w2" data-rv>
+        <div class="fc-bg"><img src="assets/img/truck.webp" width="1500" height="779" loading="lazy" decoding="async" alt="Tractocamión con remolque detenido junto a una carretera al atardecer"></div>
+        <span class="fc-ic"><svg class="ic" aria-hidden="true"><use href="#i-grid"/></svg></span><span class="fc-n">04</span>
+        <h3>Control de flotas</h3>
+        <p>Todos tus vehículos en una sola cuenta, con el estado de cada unidad.</p>
+      </article>
+      <article class="fc fc--dark w2" data-rv>
+        <div class="fc-bg"><img src="assets/img/night.webp" width="1400" height="1750" loading="lazy" decoding="async" alt="Camioneta con las luces encendidas en una vía oscura" style="object-position:50% 66%"></div>
+        <span class="fc-ic"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg></span><span class="fc-n">05</span>
+        <h3>Seguridad vehicular</h3>
+        <p>Zonas autorizadas y avisos de movimiento no autorizado para reaccionar a tiempo.</p>
+      </article>
+      <article class="fc" data-rv>
+        <span class="fc-ic"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg></span><span class="fc-n">06</span>
+        <div class="bars" aria-hidden="true"><i style="height:46%"></i><i style="height:70%"></i><i style="height:38%"></i><i style="height:84%"></i><i class="on" style="height:100%"></i><i style="height:62%"></i><i style="height:30%"></i></div>
+        <h3>Reportes y estadísticas</h3>
+        <p>Distancias, tiempos, paradas y eventos, resumidos por vehículo y por periodo.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 4. SOFTWARE -->
+<section class="sec soft" id="software">
+  <div class="wrap">
+    <header class="head head--c">
+      <p class="eyebrow" data-rv>Experiencia del software</p>
+      <h2 data-rv>Una plataforma hecha para decidir rápido.</h2>
+      <p class="lead" data-rv>Mapa en vivo, lista de vehículos, detalle de cada unidad y actividad reciente. Todo en el navegador, sin instalar nada.</p>
+    </header>
+    <div class="frame" id="frame">
+      <div class="frame-bar" aria-hidden="true"><i></i><i></i><i></i><span class="frame-url">app.tuempresa.co/mapa</span></div>
+      <div class="dash-fit" id="dash-fit">
+        <div class="dash" id="dash" role="img" aria-label="Ejemplo del panel web: mapa con cinco vehículos, lista de vehículos, detalle del vehículo seleccionado y actividad reciente">
+          <div class="d-rail" aria-hidden="true">
+            <span class="brand"><svg><use href="#logo"/></svg><span>J&amp;A <span>Tech</span></span></span>
+            <div class="d-nav">
+              <span class="on"><svg class="ic"><use href="#i-pin"/></svg>Mapa en vivo</span>
+              <span><svg class="ic"><use href="#i-grid"/></svg>Vehículos</span>
+              <span><svg class="ic"><use href="#i-route"/></svg>Recorridos</span>
+              <span><svg class="ic"><use href="#i-bell"/></svg>Alertas<em id="d-badge">2</em></span>
+              <span><svg class="ic"><use href="#i-shield"/></svg>Zonas</span>
+              <span><svg class="ic"><use href="#i-chart"/></svg>Reportes</span>
+              <span><svg class="ic"><use href="#i-users"/></svg>Usuarios</span>
+            </div>
+            <div class="d-acc"><i>TD</i><span><b>Transportes Demo</b>Administrador</span></div>
+          </div>
+          <div class="d-top" aria-hidden="true">
+            <h4>Mapa en vivo</h4>
+            <span class="d-search"><svg class="ic"><use href="#i-search"/></svg>Buscar placa o vehículo</span>
+            <span class="mono">5 vehículos · 4 en línea</span>
+          </div>
+          <div class="d-list" aria-hidden="true">
+            <div class="d-t"><span>Vehículos</span><span>5</span></div>
+            <div class="v"><b>Camión 01<span class="mono">TRK 418</span></b><span class="spd"><span id="v-s0">52</span><small>km/h</small></span><span class="st">En movimiento</span></div>
+            <div class="v"><b>Van 02<span class="mono">VAN 207</span></b><span class="spd"><span id="v-s1">38</span><small>km/h</small></span><span class="st">En movimiento</span></div>
+            <div class="v sel" id="v-sel"><b>Camioneta 03<span class="mono">JKL 908</span></b><span class="spd"><span id="v-s2">42</span><small>km/h</small></span><span class="st" id="v-st">En movimiento</span></div>
+            <div class="v"><b>Sedán 04<span class="mono">SDN 351</span></b><span class="spd">0<small>km/h</small></span><span class="st o">Apagado</span></div>
+            <div class="v"><b>Moto 05<span class="mono">MTO 64F</span></b><span class="spd">0<small>km/h</small></span><span class="st a">Detenida</span></div>
+          </div>
+          <div class="d-map" aria-hidden="true">
+            <svg viewBox="300 40 640 800" preserveAspectRatio="xMidYMid slice"><g transform="rotate(-14 600 400)"><use href="#map"/>
+              <circle class="fence" id="fence" cx="514" cy="430" r="150" visibility="hidden"/>
+              <path class="rt-b" id="rA" d="M320 661H514V522H750V337" visibility="hidden"/>
+              <path class="rt" id="trail" d="M320 661H514V522H750V337" visibility="hidden"/>
+              <path id="rB" d="M750 600V661H514V790" fill="none"/>
+              <path id="rC" d="M514 337V207H750V150" fill="none"/>
+              <g class="vm" transform="translate(320 522)"><circle r="17" fill="#6b7686"/><circle r="7.500" fill="#6b7686" stroke="#fff" stroke-width="2"/><text transform="rotate(14)" x="12" y="-11">SDN 351</text></g>
+              <g class="vm" transform="translate(320 400)"><circle r="17" fill="#f5a524"/><circle r="7.500" fill="#f5a524" stroke="#fff" stroke-width="2"/><text transform="rotate(14)" x="12" y="-11">MTO 64F</text></g>
+              <g class="vm" id="m0"><circle r="17" fill="#35cf88"/><circle r="7.500" fill="#35cf88" stroke="#fff" stroke-width="2"/><text transform="rotate(14)" x="12" y="-11">TRK 418</text></g>
+              <g class="vm" id="m1"><circle r="17" fill="#35cf88"/><circle r="7.500" fill="#35cf88" stroke="#fff" stroke-width="2"/><text transform="rotate(14)" x="12" y="-11">VAN 207</text></g>
+              <g class="vm" id="m2"><circle r="24" fill="#4c8dff"/><circle r="10" fill="#4c8dff" stroke="#fff" stroke-width="3"/><text transform="rotate(14)" x="15" y="-13">JKL 908</text></g>
+            </g></svg>
+            <div class="d-kpi"><span><b>3</b>en movimiento</span><span><b>1</b>detenido</span><span><b id="d-al">2</b>alertas hoy</span></div>
+            <div class="d-scale">200 m</div>
+            <div class="d-zoom"><span>+</span><span>−</span></div>
+          </div>
+          <div class="d-side" aria-hidden="true">
+            <div class="d-sel">
+              <h5>Camioneta 03</h5><span class="mono">JKL 908 · GPS activo</span>
+              <div class="d-spd" id="d-spd"><span id="d-v">42</span><small>km/h</small></div>
+              <div class="d-kv"><span>Estado</span><b id="d-st">En movimiento</b></div>
+              <div class="d-kv"><span>Motor</span><b>Encendido</b></div>
+              <div class="d-kv"><span>Ubicación</span><b id="d-loc">Calle 63 con Cra. 15</b></div>
+              <div class="d-kv"><span>Recorrido de hoy</span><b><span id="d-km">14,2</span> km</b></div>
+            </div>
+            <div class="d-feed">
+              <div class="d-t"><span>Actividad reciente</span></div>
+              <div id="feed">
+                <div class="ev w"><i></i><span>Salida de zona autorizada<small>Van 02 · 8:40 a. m.</small></span></div>
+                <div class="ev"><i></i><span>Encendido del vehículo<small>Camión 01 · 7:12 a. m.</small></span></div>
+                <div class="ev w"><i></i><span>Exceso de velocidad<small>Camión 01 · ayer, 5:26 p. m.</small></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sim" data-rv>
+      <p>Pruébala: da una orden y mira cómo responde el panel.</p>
+      <button class="btn btn--ghost btn--s" id="sb-f" type="button" aria-pressed="false">Crear zona segura</button>
+      <button class="btn btn--ghost btn--s" id="sb-v" type="button">Simular exceso de velocidad</button>
+      <button class="btn btn--ghost btn--s" id="sb-t" type="button" aria-pressed="false">Mostrar recorrido</button>
+    </div>
+    <p class="demo" id="sim-live" aria-live="polite">Vista de demostración con datos de ejemplo</p>
+  </div>
+</section>
+
+<!-- 5. CÓMO FUNCIONA -->
+<section class="sec sec--paper" id="como">
+  <div class="wrap how">
+    <figure class="shot" data-rv><img src="assets/img/truck-dusk.webp" width="900" height="1349" loading="lazy" decoding="async" alt="Camión de carga circulando por una autopista al anochecer"></figure>
+    <div>
+      <p class="eyebrow" data-rv>Cómo funciona</p>
+      <h2 data-rv>Empiezas a monitorear en tres pasos.</h2>
+      <ol class="steps">
+        <li data-rv><div><h3>Instalamos el dispositivo GPS</h3><p>Un técnico instala y configura el equipo de rastreo en tu vehículo.</p></div></li>
+        <li data-rv><div><h3>Conectamos el vehículo a la plataforma</h3><p>Activamos tu cuenta y dejamos el vehículo reportando su ubicación.</p></div></li>
+        <li data-rv><div><h3>Lo monitoreas desde cualquier lugar</h3><p>Entras desde tu celular o tu computador y recibes las alertas en el momento.</p></div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 6. BENEFICIOS -->
+<section class="sec ben" id="beneficios">
+  <div class="ben-bg" data-px="5"><img src="assets/img/street.webp" width="1800" height="1201" loading="lazy" decoding="async" alt="Automóvil con las luces traseras encendidas en una calle de ciudad al anochecer"></div>
+  <div class="wrap">
+    <p class="eyebrow" data-rv>Beneficios</p>
+    <h2 data-rv>La tranquilidad de saber dónde está tu vehículo.</h2>
+    <ul class="ben-grid">
+      <li data-rv><b>01</b><h3>Seguridad</h3><p>Te enteras al instante si tu vehículo se mueve sin ti.</p></li>
+      <li data-rv><b>02</b><h3>Tranquilidad</h3><p>Sabes dónde está, de día y de noche.</p></li>
+      <li data-rv><b>03</b><h3>Control</h3><p>Recorridos, velocidades y paradas siempre a la vista.</p></li>
+      <li data-rv><b>04</b><h3>Tecnología</h3><p>Plataforma web y móvil, clara y fácil de usar.</p></li>
+      <li data-rv><b>05</b><h3>Acompañamiento</h3><p>Te asesoramos, instalamos y te atendemos cuando lo necesites.</p></li>
+    </ul>
+  </div>
+</section>
+
+<!-- SOLUCIONES + PREGUNTAS -->
+<section class="sec sec--paper" id="soluciones">
+  <div class="wrap">
+    <header class="head">
+      <p class="eyebrow" data-rv>Soluciones</p>
+      <h2 data-rv>Para tu vehículo o para toda tu operación.</h2>
+    </header>
+    <div class="sols">
+      <article class="sol" data-rv>
+        <div class="sol-ph"><img src="assets/img/sedan.webp" width="1400" height="933" loading="lazy" decoding="async" alt="Automóvil sedán negro en movimiento por una vía con palmeras"></div>
+        <div class="sol-b">
+          <small>Particulares</small>
+          <h3>Tu carro o tu moto, siempre a la vista.</h3>
+          <p>Para quien quiere saber dónde está su vehículo, cuándo se enciende y si se mueve sin permiso.</p>
+          <ul class="ticks">
+            <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Ubicación en tiempo real</li>
+            <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Alertas de encendido y movimiento</li>
+            <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Historial de recorridos</li>
+            <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Velocidad y duración de cada viaje</li>
+          </ul>
+        </div>
+      </article>
+      <article class="sol" data-rv>
+        <div class="sol-ph"><img src="assets/img/truck.webp" width="1500" height="779" loading="lazy" decoding="async" alt="Tractocamión con remolque junto a una carretera"></div>
+        <div class="sol-b">
+          <small>Empresas y flotas</small>
+          <h3>Todos tus vehículos en una sola cuenta.</h3>
+          <p>Para negocios que administran varios vehículos y necesitan control por unidad y por usuario.</p>
+          <ul class="ticks">
+            <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Panel administrativo</li>
+            <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Usuarios y permisos</li>
+            <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Reportes por vehículo</li>
+            <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>Zonas autorizadas y paradas</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+    <div class="appbar" data-rv>
+      <div>
+        <h3>App móvil J&amp;A Tech, muy pronto en iOS y Android.</h3>
+        <p><span class="st">Perfil personal: en proceso</span><span class="st a">Perfil empresa: próximamente</span></p>
+      </div>
+      <a class="btn btn--light btn--s js-wa" href="#" target="_blank" rel="noopener" data-msg="Hola, quiero que me avisen cuando la app de J&amp;A Tech esté disponible.">Avísame cuando esté lista</a>
+    </div>
+
+    <div class="faq" id="preguntas">
+      <h2 data-rv>Preguntas frecuentes</h2>
+      <div data-rv>
+        <details><summary>¿Desde dónde puedo ver mi vehículo?</summary><p>Desde tu celular o desde un computador, con tu usuario y contraseña. Solo necesitas conexión a internet.</p></details>
+        <details><summary>¿Qué alertas puedo recibir?</summary><p>Encendido del vehículo, movimiento, salida de una zona autorizada, exceso de velocidad y desplazamientos no autorizados.</p></details>
+        <details><summary>¿Puedo monitorear varios vehículos con una sola cuenta?</summary><p>Sí. Puedes agregar todos tus vehículos a la misma cuenta y verlos juntos en el mapa.</p></details>
+        <details><summary>¿Puedo consultar por dónde estuvo mi vehículo?</summary><p>Sí. El historial guarda los recorridos con su distancia y duración para que los consultes cuando quieras.</p></details>
+        <details><summary>¿Cómo solicito el servicio?</summary><p>Escríbenos por WhatsApp o llena el formulario de contacto. Te asesoramos y agendamos la instalación.</p></details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. LLAMADO A LA ACCIÓN -->
+<section class="sec cta" id="contacto">
+  <div class="cta-bg" data-px="5"><img src="assets/img/city.webp" width="1800" height="1200" loading="lazy" decoding="async" alt="Vista aérea de una ciudad iluminada al anochecer"></div>
+  <div class="wrap cta-g">
+    <div>
+      <p class="eyebrow" data-rv>Solicita una demostración</p>
+      <h2 data-rv>Hablemos de tu vehículo.</h2>
+      <p class="lead" data-rv>Cuéntanos qué necesitas monitorear. Te asesoramos sin compromiso y te mostramos la plataforma funcionando.</p>
+      <div class="cta-row" data-rv>
+        <a class="btn btn--wa js-wa" href="#" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-wa"/></svg>Escribir por WhatsApp</a>
+      </div>
+      <dl class="cta-dl" data-rv>
+        <div><dt>WhatsApp</dt><dd><a class="js-wa" href="#" target="_blank" rel="noopener"><span class="js-wa-n">+57 300 000 0000</span></a></dd></div>
+        <div><dt>Correo</dt><dd><a href="mailto:contacto@tuempresa.co">contacto@tuempresa.co</a></dd></div>
+        <div><dt>Atención</dt><dd>[Ciudad y horario de atención]</dd></div>
+      </dl>
+    </div>
+    <form class="glass" id="form" novalidate data-rv>
+      <h3>Solicitar asesoría</h3>
+      <label>Nombre<input name="n" autocomplete="name" required></label>
+      <label>Celular<input name="c" type="tel" autocomplete="tel" inputmode="tel" required></label>
+      <label class="w2">¿Qué quieres monitorear?
+        <select name="t"><option>Vehículo particular</option><option>Flota de empresa</option><option>Vehículos comerciales</option><option>Moto</option></select>
+      </label>
+      <label class="w2">Mensaje (opcional)<textarea name="m"></textarea></label>
+      <div class="w2 err" id="err" role="alert"></div>
+      <button class="btn btn--light w2" type="submit">Enviar por WhatsApp</button>
+    </form>
+  </div>
+</section>
+</main>
+
+<!-- 8. PIE -->
+<footer>
+  <div class="wrap">
+    <div class="ft">
+      <div>
+        <a class="brand" href="#inicio"><svg aria-hidden="true"><use href="#logo"/></svg><span>J&amp;A <span>Tech</span></span></a>
+        <p>Rastreo GPS y monitoreo vehicular en tiempo real para particulares, empresas y flotas.</p>
+        <div class="soc">
+          <a class="js-wa" href="#" target="_blank" rel="noopener" aria-label="WhatsApp"><svg class="ic"><use href="#i-wa"/></svg></a>
+          <a href="#" data-social="instagram" aria-label="Instagram"><svg class="ic"><use href="#i-ig"/></svg></a>
+          <a href="#" data-social="facebook" aria-label="Facebook"><svg class="ic"><use href="#i-fb"/></svg></a>
+        </div>
+      </div>
+      <nav aria-label="Servicios"><h4>Servicios</h4><ul>
+        <li><a href="#funciones">Rastreo en tiempo real</a></li>
+        <li><a href="#funciones">Historial de recorridos</a></li>
+        <li><a href="#funciones">Alertas inteligentes</a></li>
+        <li><a href="#soluciones">Control de flotas</a></li>
+      </ul></nav>
+      <nav aria-label="Navegación"><h4>Navegación</h4><ul>
+        <li><a href="#film" data-go=".25">Tecnología</a></li>
+        <li><a href="#software">Software</a></li>
+        <li><a href="#como">Cómo funciona</a></li>
+        <li><a href="#preguntas">Preguntas frecuentes</a></li>
+      </ul></nav>
+      <div><h4>Contacto</h4><ul>
+        <li><a class="js-wa" href="#" target="_blank" rel="noopener"><span class="js-wa-n">+57 300 000 0000</span></a></li>
+        <li><a href="mailto:contacto@tuempresa.co">contacto@tuempresa.co</a></li>
+        <li>[Ciudad y horario de atención]</li>
+      </ul></div>
+    </div>
+    <div class="ft-b">
+      <span>© <span id="yr">2026</span> J&amp;A Tech. Todos los derechos reservados.</span>
+      <span>Las pantallas y los datos mostrados son demostrativos.</span>
+    </div>
+  </div>
+</footer>
+
+<a class="wa js-wa" href="#" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp"><svg class="ic" aria-hidden="true"><use href="#i-wa"/></svg></a>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+'use strict';
+/* ---------- configuración: cambia aquí el WhatsApp y el mensaje ---------- */
+var CFG={ wa:'573000000000', waLabel:'+57 300 000 0000', msg:'Hola, quiero una asesoría sobre el GPS para mi vehículo.' };
+
+var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){return [].slice.call((r||document).querySelectorAll(s))};
+var REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var HAS_GSAP=!!(window.gsap&&window.ScrollTrigger);
+var root=document.documentElement;
+if(!HAS_GSAP) root.classList.remove('film-on');
+var FILM=root.classList.contains('film-on');
+var clamp=function(v,a,b){return Math.min(b,Math.max(a,v))};
+
+/* ---------- WhatsApp y formulario ---------- */
+var waURL=function(t){return 'https://wa.me/'+CFG.wa+'?text='+encodeURIComponent(t)};
+$$('.js-wa').forEach(function(a){a.href=waURL(a.dataset.msg||CFG.msg)});
+$$('.js-wa-n').forEach(function(s){s.textContent=CFG.waLabel});
+$('#yr').textContent=new Date().getFullYear();
+$('#form').addEventListener('submit',function(e){
+  e.preventDefault(); var f=e.target, err=$('#err');
+  if(!f.n.value.trim()||f.c.value.replace(/\D/g,'').length<7){ err.textContent='Escribe tu nombre y un número de celular válido para poder responderte.'; (f.n.value.trim()?f.c:f.n).focus(); return; }
+  err.textContent='';
+  var t='Hola, soy '+f.n.value.trim()+'. Quiero información sobre el GPS para: '+f.t.value+'.'+(f.m.value.trim()?'\n'+f.m.value.trim():'')+'\nMi celular: '+f.c.value.trim();
+  window.open(waURL(t),'_blank','noopener');
+});
+
+/* ---------- menú ---------- */
+var nav=$('#nav'), burger=$('.burger');
+function menu(open){ nav.classList.toggle('open',open); burger.setAttribute('aria-expanded',open); burger.setAttribute('aria-label',open?'Cerrar menú':'Abrir menú'); document.body.style.overflow=open?'hidden':''; }
+burger.addEventListener('click',function(){menu(!nav.classList.contains('open'))});
+$$('.menu a').forEach(function(a){a.addEventListener('click',function(){menu(false)})});
+addEventListener('keydown',function(e){ if(e.key==='Escape') menu(false); });
+matchMedia('(min-width:1081px)').addEventListener('change',function(){menu(false)});
+$$('[data-go]').forEach(function(a){a.addEventListener('click',function(e){
+  if(!FILM) return; e.preventDefault(); var f=$('#film');
+  window.scrollTo({top:f.offsetTop+parseFloat(a.dataset.go)*(f.offsetHeight-innerHeight),behavior:'smooth'});
+})});
+function solid(){ nav.classList.toggle('solid',scrollY>24); }
+addEventListener('scroll',solid,{passive:true}); solid();
+
+/* el botón flotante se oculta donde ya hay un botón de WhatsApp a la vista */
+if('IntersectionObserver' in window){ var seen={}, fab=$('.wa'); var io=new IntersectionObserver(function(es){ es.forEach(function(e){seen[e.target.tagName+e.target.id]=e.isIntersecting}); fab.classList.toggle('off',Object.keys(seen).some(function(k){return seen[k]})); },{rootMargin:'0px 0px -25% 0px'}); io.observe($('#contacto')); io.observe($('footer')); }
+
+/* ---------- panel de demostración: se escala como una captura ---------- */
+var fit=$('#dash-fit'), dash=$('#dash');
+function scale(){ var k=fit.clientWidth/dash.offsetWidth; dash.style.transform='scale('+k+')'; fit.style.height=(dash.offsetHeight*k)+'px'; }
+if('ResizeObserver' in window) new ResizeObserver(scale).observe(fit); else addEventListener('resize',scale);
+scale();
+
+/* ---------- panel de demostración: vehículos en movimiento y órdenes ---------- */
+(function(){
+  var routes=[$('#rB'),$('#rC'),$('#rA')], marks=[$('#m0'),$('#m1'),$('#m2')], len=routes.map(function(r){return r.getTotalLength()});
+  var base=[52,38,42], pos=[.18,.3,.42], dir=[1,1,1], spdEl=[$('#v-s0'),$('#v-s1'),$('#v-s2')];
+  var trail=$('#trail'), fence=$('#fence'), feed=$('#feed'), live=$('#sim-live');
+  var L=len[2], fenceOn=false, inside=true, boost=0, km=14.2, alerts=2, last=0, visible=false, tick=0;
+  var places=['Calle 72 con Cra. 7','Calle 72 con Cra. 15','Calle 63 con Cra. 15','Calle 63 con Cra. 24'];
+  trail.style.strokeDasharray=L;
+  function place(i){ var p=routes[i].getPointAtLength(pos[i]*len[i]); marks[i].setAttribute('transform','translate('+p.x.toFixed(1)+' '+p.y.toFixed(1)+')'); return p; }
+  function note(txt,warn){
+    var d=document.createElement('div'); d.className='ev new'+(warn?' w':''); d.innerHTML='<i></i><span>'+txt+'<small>Camioneta 03 · ahora</small></span>';
+    feed.insertBefore(d,feed.firstChild); while(feed.children.length>4) feed.removeChild(feed.lastChild);
+    if(warn){ alerts++; $('#d-al').textContent=alerts; $('#d-badge').textContent=alerts; }
+    live.textContent='Aviso de demostración: '+txt;
+  }
+  function paint(){
+    var p=place(2), v=boost>0?96:Math.round(base[2]+4*Math.sin(tick*.9));
+    place(0); place(1);
+    trail.style.strokeDashoffset=L*(1-pos[2]);
+    $('#d-v').textContent=v; spdEl[2].textContent=v;
+    $('#d-spd').classList.toggle('warn',boost>0); $('#v-sel').classList.toggle('warn',boost>0);
+    $('#d-loc').textContent=places[Math.min(places.length-1,Math.floor(pos[2]*places.length))];
+    $('#d-km').textContent=km.toFixed(1).replace('.',',');
+    if(fenceOn){ var dx=p.x-514, dy=p.y-430, now=dx*dx+dy*dy<150*150; if(inside&&!now) note('Salida de zona autorizada',1); if(!inside&&now) note('Ingreso a zona autorizada',0); inside=now; }
+  }
+  function step(t){
+    requestAnimationFrame(step); if(!visible){ last=0; return; }
+    var dt=last?Math.min(.05,(t-last)/1000):0; last=t; tick+=dt;
+    for(var i=0;i<3;i++){ var k=(i===2&&boost>0?2.6:1)*base[i]/42*22*dt/len[i]; pos[i]+=dir[i]*k; if(pos[i]>=1){pos[i]=1;dir[i]=-1} if(pos[i]<=0){pos[i]=0;dir[i]=1} }
+    km+=dt*.012*(boost>0?2.6:1); if(boost>0){ boost-=dt; }
+    spdEl[0].textContent=Math.round(base[0]+3*Math.sin(tick*.7)); spdEl[1].textContent=Math.round(base[1]+3*Math.cos(tick*.8));
+    paint();
+  }
+  $('#sb-f').addEventListener('click',function(){
+    fenceOn=!fenceOn; fence.setAttribute('visibility',fenceOn?'visible':'hidden'); this.setAttribute('aria-pressed',fenceOn); this.textContent=fenceOn?'Quitar zona segura':'Crear zona segura';
+    if(fenceOn){ var p=routes[2].getPointAtLength(pos[2]*L), dx=p.x-514, dy=p.y-430; inside=dx*dx+dy*dy<150*150; note('Zona segura creada',0); if(REDUCED&&!inside) note('Salida de zona autorizada',1); }
+  });
+  $('#sb-v').addEventListener('click',function(){ if(boost>0) return; boost=4; note('Exceso de velocidad: 96 km/h',1); if(REDUCED){ paint(); boost=0; } });
+  $('#sb-t').addEventListener('click',function(){ var on=this.getAttribute('aria-pressed')!=='true'; this.setAttribute('aria-pressed',on); this.textContent=on?'Ocultar recorrido':'Mostrar recorrido'; trail.setAttribute('visibility',on?'visible':'hidden'); $('#rA').setAttribute('visibility',on?'visible':'hidden'); });
+  paint();
+  if(!REDUCED){
+    if('IntersectionObserver' in window) new IntersectionObserver(function(es){visible=es[0].isIntersecting}).observe(dash); else visible=true;
+    requestAnimationFrame(step);
+  }
+})();
+
+/* ---------- animaciones ---------- */
+if(!HAS_GSAP||REDUCED) return;
+gsap.registerPlugin(ScrollTrigger);
+
+/* entrada del hero */
+gsap.from('[data-in]',{opacity:0,y:26,duration:.9,ease:'power3.out',stagger:.09,delay:.15});
+
+/* película: un solo timeline ligado al scroll; cada escena dura 1 y la foto se acerca despacio */
+(function(){
+  var sc=$$('.scene'), n=sc.length, dots=$$('.fnav li'), cur=0;
+  var rt=$('#f-rt'), mk=$('#f-mk'), L=rt.getTotalLength(), d={p:0,g:46};
+  var places=['Calle 72 con Cra. 7','Calle 72 con Cra. 15','Calle 63 con Cra. 15','Calle 63 con Cra. 24'];
+  var tl=gsap.timeline({defaults:{ease:'none'},scrollTrigger:{trigger:'#film',start:'top top',end:'bottom bottom',scrub:.7,
+    onUpdate:function(self){ var k=clamp(Math.round(self.progress*(n-.5)-.1),0,n-1); if(k!==cur){ cur=k; dots.forEach(function(el,i){el.classList.toggle('on',i===k)}); } }}});
+  sc.forEach(function(el,i){
+    var ph=$('.ph',el), tx=$('.sc-t',el), pn=$('.sc-p',el), strip=$('.hero-strip',el), out=[tx]; if(pn) out.push(pn); if(strip) out.push(strip);
+    tl.fromTo(ph,{scale:1.03,xPercent:i%2?1.2:-1.2},{scale:1.17,xPercent:i%2?-1.2:1.2,duration:1.3},Math.max(0,i-.15));
+    if(i>0){
+      tl.fromTo(el,{autoAlpha:0},{autoAlpha:1,duration:.3},i-.15)
+        .fromTo(tx.children,{y:50,opacity:0},{y:0,opacity:1,duration:.3,stagger:.05,ease:'power2.out'},i+.05);
+      if(pn&&!pn.classList.contains('ntfs')) tl.fromTo(pn,{y:90,opacity:0},{y:0,opacity:1,duration:.34,ease:'power2.out'},i+.16);
+    }
+    if(i<n-1) tl.to(out,{y:-46,opacity:0,duration:.2,ease:'power1.in'},i+.66);
+  });
+  /* escena 2: la ruta se dibuja, el marcador avanza y la velocidad cambia */
+  tl.fromTo(d,{p:0},{p:1,duration:.5,onUpdate:function(){
+    var pt=rt.getPointAtLength(d.p*L); rt.style.strokeDashoffset=1-d.p; mk.setAttribute('transform','translate('+pt.x.toFixed(1)+' '+pt.y.toFixed(1)+')');
+    $('#f-spd').textContent=Math.round(38+34*Math.sin(d.p*Math.PI*.9)+d.p*12); $('#f-km').textContent=(1.2+d.p*3.6).toFixed(1).replace('.',',');
+    $('#f-loc').textContent=places[Math.min(places.length-1,Math.floor(d.p*places.length))];
+  }},1.16);
+  /* escena 3: el velocímetro sube y el historial se llena */
+  tl.fromTo('#f-arc',{strokeDashoffset:100},{strokeDashoffset:42,duration:.4},2.2)
+    .fromTo(d,{g:0},{g:70,duration:.4,onUpdate:function(){ $('#f-gv').textContent=Math.round(d.g); }},2.2)
+    .fromTo('.hst i',{scaleX:0},{scaleX:1,duration:.3,stagger:.06},2.28);
+  /* escena 4: las alertas llegan una por una */
+  tl.fromTo('.ntf',{x:70,opacity:0},{x:0,opacity:1,duration:.18,stagger:.09,ease:'power2.out'},3.14);
+  /* escena 5: los vehículos de la flota aparecen en lista */
+  tl.fromTo('.flt',{x:30,opacity:0},{x:0,opacity:1,duration:.16,stagger:.06,ease:'power2.out'},4.24)
+    .to({}, {duration:.35});
+})();
+
+/* el panel del software se levanta hacia el lector */
+gsap.fromTo('#frame',{rotateX:20,scale:.9,y:70,opacity:.5,transformPerspective:1500},{rotateX:0,scale:1,y:0,opacity:1,ease:'none',scrollTrigger:{trigger:'#frame',start:'top 96%',end:'top 34%',scrub:.6}});
+
+/* aparición al hacer scroll */
+gsap.set('[data-rv]',{opacity:0,y:30});
+ScrollTrigger.batch('[data-rv]',{start:'top 90%',once:true,onEnter:function(els){gsap.to(els,{opacity:1,y:0,duration:.9,ease:'power3.out',stagger:.08,overwrite:true})}});
+
+/* parallax moderado en las fotografías */
+$$('[data-px]').forEach(function(el){
+  var d=parseFloat(el.dataset.px);
+  gsap.fromTo(el,{yPercent:-d},{yPercent:d,ease:'none',scrollTrigger:{trigger:el.closest('section')||el,start:'top bottom',end:'bottom top',scrub:true}});
+});
+
+/* las rutas se dibujan sobre el mapa */
+$$('[data-route]').forEach(function(svg){
+  var rt=$('.rt',svg), mk=$('.mk',svg);
+  gsap.timeline({scrollTrigger:{trigger:svg,start:'top 82%',once:true}})
+    .fromTo(rt,{strokeDashoffset:1},{strokeDashoffset:0,duration:1.8,ease:'power2.inOut'})
+    .from(mk,{scale:0,transformOrigin:'50% 50%',duration:.5,ease:'back.out(2)'},'-=.25');
+});
+gsap.from('.bars i',{scaleY:0,duration:.8,ease:'power3.out',stagger:.06,scrollTrigger:{trigger:'.bars',start:'top 88%',once:true}});
+
+/* enlace activo del menú */
+$$('.menu a[href^="#"]').forEach(function(a){
+  var el=$(a.getAttribute('href')); if(!el||a.classList.contains('only-m')) return;
+  ScrollTrigger.create({trigger:el,start:'top 50%',end:'bottom 50%',onToggle:function(st){ a.classList.toggle('active',st.isActive); if(st.isActive) a.setAttribute('aria-current','true'); else a.removeAttribute('aria-current'); }});
+});
+addEventListener('load',function(){ScrollTrigger.refresh()});
+})();
+</script>
+</body>
+</html>
