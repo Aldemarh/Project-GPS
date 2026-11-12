@@ -10,6 +10,10 @@
 <meta property="og:title" content="J&amp;A Tech | Tu vehículo localizado, protegido y bajo control">
 <meta property="og:description" content="Rastreo GPS en tiempo real, alertas inteligentes y gestión de flotas en una sola plataforma.">
 <meta property="og:locale" content="es_CO">
+<script>
+/* Activa el recorrido por escenas antes del primer pintado, salvo que el usuario pida menos movimiento */
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('film-on');
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -83,32 +87,73 @@ h3{font-weight:600;letter-spacing:-.015em;line-height:1.2}
 .nav.open .burger i:nth-child(2){opacity:0}
 .nav.open .burger i:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
 
-/* ---------- hero ---------- */
-.hero{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;isolation:isolate}
-.hero-bg{position:absolute;inset:-6% 0 -6%;z-index:-2}
-.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:62% 50%}
-.hero::before{content:"";position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(180deg,rgba(10,12,16,.82) 0,rgba(10,12,16,.25) 26%,rgba(10,12,16,.2) 50%,rgba(10,12,16,.86) 86%,var(--ink) 100%),
-             linear-gradient(90deg,rgba(10,12,16,.95) 0,rgba(10,12,16,.8) 36%,rgba(10,12,16,.25) 62%,rgba(10,12,16,0) 80%)}
-.hero-in{padding-top:120px}
-.hero h1{max-width:11em;margin-top:1.3rem}
-.hero .lead{margin-top:1.4rem}
+/* ---------- película: cinco escenas con fotografía que avanzan con el scroll ---------- */
+.scene{position:relative;display:flex;align-items:flex-end;min-height:92vh;padding:120px 0 clamp(3rem,8vh,5rem);overflow:hidden;isolation:isolate}
+.ph{position:absolute;inset:0;z-index:-2}
+.ph img{width:100%;height:100%;object-fit:cover}
+.scene::before{content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,rgba(10,12,16,.86) 0,rgba(10,12,16,.25) 24%,rgba(10,12,16,.25) 50%,rgba(10,12,16,.9) 92%,var(--ink) 100%),
+             linear-gradient(90deg,rgba(10,12,16,.94) 0,rgba(10,12,16,.74) 36%,rgba(10,12,16,.2) 66%,rgba(10,12,16,.1) 100%)}
+.sc-in{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(2rem,6vw,6rem);align-items:end}
+.sc-t h1{max-width:12em;margin-top:1.3rem;font-size:clamp(2.5rem,5vw,4.4rem)}
+.sc-t h2{max-width:11em;margin-top:1.1rem;font-size:clamp(2.2rem,4.8vw,4.2rem)}
+.sc-t .lead{margin-top:1.3rem}
+.sc-p{justify-self:end;width:min(100%,24.5rem)}
 .cta-row{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2.1rem}
-.hero-strip{display:grid;grid-template-columns:repeat(3,1fr);margin-top:clamp(2.5rem,7vh,4.5rem);border-top:1px solid var(--line-2)}
-.hero-strip li{padding:1.25rem 1.5rem 1.6rem 0;font-size:.95rem;color:#c6ced9}
+.hero-strip{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);margin-top:clamp(.5rem,3vh,2rem);border-top:1px solid var(--line-2)}
+.hero-strip li{padding:1.2rem 1.5rem 0 0;font-size:.95rem;color:#c6ced9}
 .hero-strip li+li{padding-left:1.5rem;border-left:1px solid var(--line-2)}
 .hero-strip b{display:block;font:500 .74rem/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:#fff;margin-bottom:.55rem}
-.glass{background:rgba(13,17,23,.72);border:1px solid var(--line-2);border-radius:var(--r);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2)}
-.live-card{position:absolute;right:var(--pad);top:24%;width:17.5rem;padding:1.05rem 1.15rem 1.1rem;box-shadow:0 30px 70px -30px #000}
-.lc-top{display:flex;justify-content:space-between;align-items:center;font:500 .74rem/1 var(--mono);letter-spacing:.05em;color:var(--mute)}
+.glass{background:rgba(13,17,23,.74);border:1px solid var(--line-2);border-radius:var(--r);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2)}
+.pnl{padding:1.05rem 1.15rem 1.1rem;box-shadow:0 30px 70px -30px #000}
+.lc-top{display:flex;justify-content:space-between;align-items:center;gap:1rem;font:500 .74rem/1 var(--mono);letter-spacing:.05em;color:var(--mute)}
 .st{display:inline-flex;align-items:center;gap:.45rem;color:var(--green)}
-.st::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.st::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
 .st.a{color:var(--amber)} .st.o{color:var(--dim)}
 .lc-spd{display:flex;align-items:baseline;gap:.4rem;margin:.9rem 0 .7rem;font:500 2.7rem/1 var(--mono);letter-spacing:-.04em}
 .lc-spd small{font:400 .8rem var(--mono);color:var(--mute);letter-spacing:0}
 .lc-row{display:flex;justify-content:space-between;gap:1rem;padding:.5rem 0;border-top:1px solid var(--line);font-size:.84rem;color:var(--mute)}
 .lc-row b{font-weight:500;color:var(--text);text-align:right}
-.live-card .demo{margin-top:.7rem}
+.pnl .demo{margin-top:.7rem}
+.pnl-map{display:block;width:100%;height:auto;margin-top:.6rem;border-radius:10px;border:1px solid var(--line)}
+.rt{fill:none;stroke:var(--blue);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.rt-b{fill:none;stroke:rgba(76,141,255,.22);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.mk circle:first-child{fill:var(--blue);opacity:.22}
+.mk circle:last-child{fill:var(--blue);stroke:#fff;stroke-width:2.5}
+.gau{display:grid;grid-template-columns:8.5rem 1fr;gap:1.2rem;align-items:center;margin:.9rem 0 .4rem}
+.gau-d{position:relative}
+.gau-d svg{display:block;width:100%;overflow:visible}
+.gau-d b{position:absolute;inset:auto 0 2%;text-align:center;font:500 1.9rem/1 var(--mono);letter-spacing:-.04em}
+.gau-d b small{display:block;font:400 .68rem var(--mono);color:var(--mute);letter-spacing:0;margin-top:.2rem}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:1rem;font-size:.84rem;color:var(--mute)}
+.sw+.sw{margin-top:.7rem;padding-top:.7rem;border-top:1px solid var(--line)}
+.sw b{display:block;color:var(--text);font-weight:500;font-size:.95rem}
+.sw i{width:40px;height:23px;border-radius:99px;background:rgba(53,207,136,.25);border:1px solid var(--green);position:relative;flex:none}
+.sw i::after{content:"";position:absolute;right:3px;top:3px;width:15px;height:15px;border-radius:50%;background:var(--green)}
+.hst{display:grid;grid-template-columns:auto 1fr auto;gap:.55rem 1rem;align-items:center;font-size:.82rem;color:var(--mute)}
+.hst i{height:4px;border-radius:9px;background:linear-gradient(90deg,var(--blue),rgba(76,141,255,.15));transform-origin:0 50%}
+.hst b{font:400 .8rem var(--mono);color:var(--text)}
+.ntfs{display:grid;gap:.55rem}
+.ntf{display:flex;align-items:center;gap:.8rem;padding:.75rem .9rem;border-radius:13px;font-size:.93rem;line-height:1.25;box-shadow:0 20px 50px -25px #000}
+.ntf .ic{width:36px;height:36px;padding:8px;border-radius:10px;background:rgba(76,141,255,.16);color:var(--blue)}
+.ntf.w .ic{background:rgba(245,165,36,.16);color:var(--amber)}
+.ntf small{display:block;font:400 .72rem var(--mono);color:var(--mute);margin-top:.15rem}
+.flt{display:flex;align-items:center;gap:.7rem;padding:.6rem 0;border-top:1px solid var(--line);font-size:.9rem}
+.flt b{font-weight:500}
+.flt .mono{font-size:.72rem;color:var(--mute)}
+.flt .st{margin-left:auto;font-size:.8rem}
+.fnav,.hint{display:none}
+.film-on #film{height:620vh}
+.film-on .stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.film-on .scene{position:absolute;inset:0;min-height:0;padding:96px 0 clamp(2.4rem,7vh,4.2rem)}
+.film-on .scene+.scene{visibility:hidden}
+.film-on .ph{inset:-1%;will-change:transform}
+.film-on .fnav{display:grid;gap:.9rem;position:absolute;z-index:3;right:calc(var(--pad)/2 - 4px);top:50%;transform:translateY(-50%)}
+.fnav li{width:8px;height:8px;border-radius:50%;border:1px solid rgba(255,255,255,.55);transition:background .25s,transform .25s}
+.fnav li.on{background:#fff;transform:scale(1.35)}
+.film-on .hint{display:flex;position:absolute;z-index:3;left:50%;bottom:1.1rem;transform:translateX(-50%);align-items:center;gap:.6rem;font:400 .7rem/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
+.hint i{width:1px;height:26px;background:linear-gradient(#fff,transparent);animation:hint 1.8s ease-in-out infinite}
+@keyframes hint{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
 /* ---------- secciones ---------- */
 .sec{position:relative;padding-block:var(--sec)}
@@ -121,29 +166,9 @@ h3{font-weight:600;letter-spacing:-.015em;line-height:1.2}
 .head--c{margin-inline:auto;text-align:center}
 .head--c .lead{margin-inline:auto}
 
-/* ---------- plataforma ---------- */
-.plat{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(2.5rem,6vw,6rem);align-items:center}
-.plat h2{margin-top:1.1rem}
-.plat .lead{margin-top:1.1rem}
-.facts{margin-top:2.2rem;border-top:1px solid var(--line)}
-.facts li{display:grid;grid-template-columns:8.5rem 1fr;gap:1rem;padding:.95rem 0;border-bottom:1px solid var(--line);font-size:.97rem;color:#c6ced9}
-.facts b{font:500 .74rem/1.9 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
-.plat-vis{position:relative;padding:0 0 13% 9%}
+/* ---------- marcos de foto e interfaz ---------- */
 .shot{border-radius:22px;overflow:hidden;border:1px solid var(--line);background:var(--ink-3)}
 .shot img{width:100%;height:100%;object-fit:cover}
-.plat-vis .shot{aspect-ratio:16/11}
-.ui{background:#0e1218;border:1px solid var(--line-2);border-radius:14px;box-shadow:0 40px 80px -30px rgba(0,0,0,.9);overflow:hidden}
-.ui-h{display:flex;justify-content:space-between;align-items:center;padding:.7rem .9rem;border-bottom:1px solid var(--line);font:500 .72rem/1 var(--mono);letter-spacing:.05em;color:var(--mute)}
-.ui-map{position:absolute;left:0;bottom:0;width:52%}
-.ui-map svg{display:block;width:100%;height:auto}
-.ui-tele{position:absolute;right:-3%;top:9%;width:43%;padding-bottom:.3rem}
-.ui-tele .lc-spd{margin:.9rem .9rem .6rem;font-size:2.3rem}
-.ui-tele .lc-row{margin:0 .9rem;font-size:.8rem}
-.plat .demo{margin-top:1.4rem}
-.rt{fill:none;stroke:var(--blue);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
-.rt-b{fill:none;stroke:rgba(76,141,255,.22);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
-.mk circle:first-child{fill:var(--blue);opacity:.22}
-.mk circle:last-child{fill:var(--blue);stroke:#fff;stroke-width:2.5}
 
 /* ---------- funcionalidades ---------- */
 .bento{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
@@ -174,10 +199,8 @@ h3{font-weight:600;letter-spacing:-.015em;line-height:1.2}
 .bars i.on{background:var(--blue)}
 
 /* ---------- software ---------- */
-.soft{overflow:hidden;isolation:isolate}
-.soft-bg{position:absolute;inset:0 0 auto 0;height:74%;z-index:-1;opacity:.34;-webkit-mask-image:linear-gradient(180deg,#000 0,transparent 92%);mask-image:linear-gradient(180deg,#000 0,transparent 92%)}
-.soft-bg img{width:100%;height:100%;object-fit:cover;filter:grayscale(.6) brightness(.6)}
-.frame{border-radius:16px;border:1px solid var(--line-2);background:#0b0e13;box-shadow:0 60px 120px -50px #000,0 0 0 1px rgba(0,0,0,.6);overflow:hidden}
+.soft{overflow:hidden;isolation:isolate;background:radial-gradient(70% 50% at 50% 0,#151b25,var(--ink) 70%)}
+.frame{transform-origin:50% 100%;border-radius:16px;border:1px solid var(--line-2);background:#0b0e13;box-shadow:0 60px 120px -50px #000,0 0 0 1px rgba(0,0,0,.6);overflow:hidden}
 .frame-bar{display:flex;align-items:center;gap:.9rem;height:40px;padding:0 14px;border-bottom:1px solid var(--line);background:#11151c}
 .frame-bar i{width:10px;height:10px;border-radius:50%;background:#2a313c}
 .frame-bar i+i{margin-left:-.5rem}
@@ -344,8 +367,9 @@ footer{border-top:1px solid var(--line);padding:clamp(3rem,7vh,4.5rem) 0 calc(2r
   .menu .only-m{display:flex;margin-top:1.5rem;border:0;border-radius:12px;padding:0 1.35rem;font-size:1rem;color:#04230f}
   .burger{display:grid}
   .nav-cta{display:none}
-  .live-card{display:none}
-  .plat,.how,.cta-g,.faq{grid-template-columns:1fr}
+  .how,.cta-g,.faq{grid-template-columns:1fr}
+  .sc-in{gap:2rem}
+  .film-on .fnav{right:8px}
   .bento{grid-template-columns:1fr 1fr}
   .fc.w2{grid-column:span 2}
   .ben-grid{grid-template-columns:repeat(2,minmax(0,1fr));border-top:0}
@@ -359,22 +383,31 @@ footer{border-top:1px solid var(--line);padding:clamp(3rem,7vh,4.5rem) 0 calc(2r
   body{font-size:16px}
   .nav-in{height:64px}
   .menu{height:calc(100vh - 65px);height:calc(100dvh - 65px - env(safe-area-inset-top,0px))}
-  .hero{justify-content:flex-start}
-  .hero-bg{inset:-3svh 0 auto 0;height:66svh}
-  .hero-bg img{object-position:58% 50%}
-  .hero::before{background:linear-gradient(180deg,rgba(10,12,16,.92) 0,rgba(10,12,16,.3) 11svh,rgba(10,12,16,.1) 26svh,rgba(10,12,16,.82) 48svh,var(--ink) 60svh)}
-  .hero-in{padding-top:43svh}
+  .scene{padding-top:100px}
+  .scene::before{background:linear-gradient(180deg,rgba(10,12,16,.92) 0,rgba(10,12,16,.74) 26%,rgba(10,12,16,.3) 46%,rgba(10,12,16,.85) 66%,var(--ink) 100%)}
+  .sc-in{grid-template-columns:1fr;gap:1.5rem}
+  .sc-p{justify-self:stretch;width:auto}
+  .sc-t h1{font-size:clamp(2.1rem,9.2vw,2.7rem)}
+  .sc-t h2{font-size:clamp(1.9rem,8.6vw,2.6rem)}
+  .sc-t .lead{margin-top:.8rem;font-size:.98rem}
+  .film-on .scene{padding:84px 0 5.4rem;align-items:stretch}
+  .film-on .sc-in{height:100%;align-content:space-between}
+  .film-on .s1 .sc-in{align-content:end}
+  .film-on .hero-strip,.film-on .hint,.film-on .x-m{display:none}
+  .s1::before{background:linear-gradient(180deg,rgba(10,12,16,.9) 0,rgba(10,12,16,.25) 12%,rgba(10,12,16,.25) 20%,rgba(10,12,16,.86) 38%,var(--ink) 62%)}
+  .s1 .ph img{object-position:50% 0;height:56%}
+  .pnl{padding:.85rem .95rem .9rem}
+  .lc-spd{font-size:2.2rem;margin:.6rem 0 .5rem}
+  .ntf{padding:.55rem .7rem;font-size:.86rem}
+  .ntf .ic{width:30px;height:30px;padding:6px}
   .ben::before{background:linear-gradient(180deg,var(--ink) 0,rgba(10,12,16,.3) 18%,rgba(10,12,16,.45) 34%,rgba(10,12,16,.9) 52%,var(--ink) 100%)}
   .dash{width:540px;height:600px;grid-template-columns:minmax(0,1fr) 236px;grid-template-rows:minmax(0,1fr)}
   .d-rail,.d-list,.d-top{display:none}
   .cta-row .btn{flex:1 1 100%}
-  .hero-strip{grid-template-columns:1fr;margin-top:2.2rem}
+  .hero-strip{grid-template-columns:1fr;margin-top:1rem}
   .hero-strip li{padding:.9rem 0;display:grid;grid-template-columns:7.2rem 1fr;align-items:baseline;border-bottom:1px solid var(--line)}
   .hero-strip li+li{padding-left:0;border-left:0}
   .hero-strip b{margin:0}
-  .facts li{grid-template-columns:1fr;gap:.1rem}
-  .plat-vis{padding:0}
-  .ui-map,.ui-tele{position:static;width:auto;margin-top:12px}
   .bento,.sols{grid-template-columns:1fr}
   .fc.w2{grid-column:auto}
   .fc{min-height:260px}
@@ -400,6 +433,11 @@ footer{border-top:1px solid var(--line);padding:clamp(3rem,7vh,4.5rem) 0 calc(2r
   <g id="map"><rect x="-260" y="-300" width="1720" height="1400" fill="#0f1318"/><rect x="323" y="210" width="188" height="124" rx="6" fill="#132119"/><rect x="819" y="-15" width="106" height="93" rx="6" fill="#132119"/><rect x="-15" y="485" width="128" height="79" rx="6" fill="#132119"/><path d="M-260 760C40 700 120 560 330 520S640 380 760 200 980 -60 1100 -300" fill="none" stroke="#0e2230" stroke-width="30" stroke-linecap="round"/><path d="M-260 760C40 700 120 560 330 520S640 380 760 200 980 -60 1100 -300" fill="none" stroke="#123044" stroke-width="1" opacity=".8"/><path d="M-260 -259V207M-260 296V435M-260 482V522M-260 567V1138M-196 -300V385M-196 435V522M-196 567V849M-196 891V1138M-75 -300V-157M-75 -111V251M-75 296V1138M-18 -300V-69M-18 -18V121M-18 164V296M-18 337V944M-18 984V1091M46 -300V482M46 567V620M46 661V944M46 984V1138M190 -300V-206M190 -157V1138M251 -300V207M251 251V522M251 567V891M251 944V1138M380 -300V-259M380 -206V164M380 337V567M380 620V849M380 891V984M380 1039V1138M444 -300V207M444 337V482M444 522V661M444 710V1138M566 -259V-206M566 -157V37M566 81V620M566 661V1039M566 1091V1138M625 -300V81M625 121V806M625 849V1039M625 1091V1138M698 -300V435M698 482V620M698 661V1138M816 -300V-206M816 -157V-111M816 -69V121M816 164V435M816 482V522M816 567V806M816 849V1138M872 -300V-259M872 -206V-18M872 81V435M872 522V567M872 620V891M872 944V1138M990 -206V81M990 121V849M990 944V1138M1047 -300V-111M1047 -69V435M1047 482V891M1047 944V984M1047 1039V1138M1179 -300V1138M1253 -300V37M1253 81V296M1253 337V385M1253 435V482M1253 522V849M1253 891V944M1253 984V1138M1324 -300V-69M1324 -18V567M1324 710V1138M1447 -300V121M1447 164V1091M1502 -300V121M1502 207V385M1502 435V710M1502 762V1138M-260 -300H46M116 -300H514M566 -300H1047M1107 -300H1502M-260 -206H251M320 -206H698M750 -206H1447M-260 -157H1179M1253 -157H1324M1394 -157H1447M-260 -69H-75M-18 -69H1253M1324 -69H1502M-260 -18H-134M-75 -18H320M380 -18H514M625 -18H698M750 -18H990M1047 -18H1502M-260 37H750M928 37H990M1047 37H1502M-260 121H46M116 121H1394M1447 121H1502M-260 164H116M190 164H251M320 164H872M928 164H1502M-260 251H46M116 251H190M251 251H320M514 251H1502M-260 296H-18M46 296H190M251 296H320M514 296H816M872 296H990M1047 296H1502M-260 385H872M928 385H1047M1107 385H1502M-260 435H-75M-18 435H320M380 435H990M1047 435H1502M-260 482H-196M-134 482H320M380 482H444M514 482H1502M-260 567H444M514 567H698M750 567H872M928 567H1107M1179 567H1502M-260 620H514M566 620H698M750 620H1502M-260 710H514M566 710H1107M1179 710H1394M1447 710H1502M-260 762H190M251 762H625M698 762H1324M1394 762H1502M-260 849H251M320 849H625M698 849H1179M1253 849H1502M-196 891H-75M-18 891H116M190 891H1502M-260 944H-196M-134 944H514M566 944H1253M1447 944H1502M-260 1039H320M380 1039H514M566 1039H1324M1394 1039H1447M-260 1091H190M251 1091H514M566 1091H816M872 1091H928M990 1091H1502" fill="none" stroke="#1c232c" stroke-width="2.6"/><path d="M-134 -300V1138M320 -300V1138M514 -300V1138M928 -300V1138M1107 -300V1138M-260 -259H1502M-260 -111H1502M-260 207H1502M-260 337H1502M-260 661H1502M-260 806H1502M-260 1138H1502" fill="none" stroke="#252e39" stroke-width="5"/><path d="M-260 420L1460 -20" fill="none" stroke="#252e39" stroke-width="6"/><path d="M116 -300V1138M750 -300V1138M1394 -300V1138M-260 81H1502M-260 522H1502M-260 984H1502" fill="none" stroke="#303b49" stroke-width="9"/><path d="M116 -300V1138M750 -300V1138M1394 -300V1138M-260 81H1502M-260 522H1502M-260 984H1502" fill="none" stroke="#3a4656" stroke-width=".8" stroke-dasharray="6 7"/><text x="180" y="74" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Calle 53</text><text x="620" y="74" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Calle 53</text><text x="1010" y="74" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Calle 53</text><text x="180" y="515" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Calle 63</text><text x="620" y="515" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Calle 63</text><text x="1010" y="515" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Calle 63</text><text x="180" y="977" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Calle 72</text><text x="620" y="977" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Calle 72</text><text x="1010" y="977" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Calle 72</text><text transform="translate(123 130) rotate(90)" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Cra. 7</text><text transform="translate(123 520) rotate(90)" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Cra. 7</text><text transform="translate(757 130) rotate(90)" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Cra. 15</text><text transform="translate(757 520) rotate(90)" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Cra. 15</text><text transform="translate(1401 130) rotate(90)" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Cra. 24</text><text transform="translate(1401 520) rotate(90)" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#5d6a7a" letter-spacing=".06em">Cra. 24</text><text x="417" y="275" text-anchor="middle" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#3f6b52" letter-spacing=".06em">Parque Central</text><text x="872" y="34.5" text-anchor="middle" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#3f6b52" letter-spacing=".06em">Parque El Lago</text><text x="49" y="527.5" text-anchor="middle" font-family="Geist,system-ui,sans-serif" font-size="9" fill="#3f6b52" letter-spacing=".06em">Parque Norte</text></g>
   <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
   <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/></symbol>
+  <symbol id="i-power" viewBox="0 0 24 24"><path d="M12 3v9M6.300 6.300a8 8 0 1 0 11.400 0"/></symbol>
+  <symbol id="i-move" viewBox="0 0 24 24"><path d="M3 12h4l3-7 4 14 3-7h4"/></symbol>
+  <symbol id="i-fence" viewBox="0 0 24 24"><path d="M12 4a8 8 0 1 0 8 8M13 11l7-7M15 4h5v5"/></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 18a9 9 0 1 1 16 0M12 14l4-5"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 4l9 16H3zM12 10v4M12 17v.500"/></symbol>
   <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20a2 2 0 0 0 4 0"/></symbol>
   <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
   <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7.5 3v5.5c0 4.6-3.1 8-7.5 9.5-4.400-1.500-7.500-4.900-7.500-9.500V6z"/><path d="M9 12l2.200 2.200L15.200 10"/></symbol>
@@ -418,7 +456,7 @@ footer{border-top:1px solid var(--line);padding:clamp(3rem,7vh,4.5rem) 0 calc(2r
   <div class="wrap nav-in">
     <a class="brand" href="#inicio" aria-label="J&amp;A Tech, inicio"><svg aria-hidden="true"><use href="#logo"/></svg><span>J&amp;A <span>Tech</span></span></a>
     <nav class="menu" id="menu" aria-label="Principal">
-      <a href="#plataforma">Plataforma</a>
+      <a href="#film" data-go=".25">Tecnología</a>
       <a href="#funciones">Funciones</a>
       <a href="#software">Software</a>
       <a href="#como">Cómo funciona</a>
@@ -432,67 +470,120 @@ footer{border-top:1px solid var(--line);padding:clamp(3rem,7vh,4.5rem) 0 calc(2r
 </header>
 
 <main>
-<!-- 1. HERO -->
-<section class="hero" id="inicio">
-  <picture class="hero-bg" data-px="4">
-    <source media="(max-width:700px)" srcset="assets/img/hero-m.webp">
-    <img src="assets/img/hero.webp" width="2000" height="1333" alt="Automóvil negro circulando por una autopista al atardecer" fetchpriority="high">
-  </picture>
-  <div class="wrap hero-in">
-    <p class="eyebrow" data-in><i></i>Rastreo y monitoreo vehicular</p>
-    <h1 data-in>Tu vehículo localizado, protegido y bajo control.</h1>
-    <p class="lead" data-in>Rastreo GPS en tiempo real, alertas inteligentes y gestión de flotas en una sola plataforma, desde tu celular o tu computador.</p>
-    <div class="cta-row" data-in>
-      <a class="btn btn--light" href="#plataforma">Conoce nuestra plataforma<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-      <a class="btn btn--ghost js-wa" href="#" target="_blank" rel="noopener">Solicitar asesoría</a>
-    </div>
-    <ul class="hero-strip" data-in>
-      <li><b>Tiempo real</b>Ubicación y velocidad de cada vehículo, al instante.</li>
-      <li><b>Alertas</b>Encendido, movimiento, velocidad y zonas autorizadas.</li>
-      <li><b>Web y celular</b>Tu vehículo o tu flota, desde donde estés.</li>
-    </ul>
-  </div>
-  <aside class="live-card glass" data-in aria-label="Ejemplo de seguimiento en vivo">
-    <div class="lc-top"><span>VEHÍCULO 01</span><span class="st">En movimiento</span></div>
-    <div class="lc-spd"><span>86</span><small>km/h</small></div>
-    <div class="lc-row"><span>Ubicación</span><b>Autopista Norte, km 12</b></div>
-    <div class="lc-row"><span>Actualizado</span><b>hace 2 s</b></div>
-    <p class="demo">Datos de demostración</p>
-  </aside>
-</section>
+<!-- PELÍCULA: cinco escenas que avanzan con el scroll -->
+<section id="film" aria-label="Recorrido por la tecnología">
+  <div class="stage">
 
-<!-- 2. PLATAFORMA -->
-<section class="sec" id="plataforma">
-  <div class="wrap plat">
-    <div>
-      <p class="eyebrow" data-rv>Plataforma GPS</p>
-      <h2 data-rv>Todo lo que pasa con tu vehículo, en una sola pantalla.</h2>
-      <p class="lead" data-rv>El equipo GPS instalado en tu vehículo envía su posición a nuestra plataforma. Tú la ves en el mapa, con los datos que importan.</p>
-      <ul class="facts" data-rv>
-        <li><b>Ubicación</b>Posición exacta en el mapa, actualizada de forma continua.</li>
-        <li><b>Velocidad</b>A qué velocidad se mueve en cada momento.</li>
-        <li><b>Estado</b>Encendido, apagado, en movimiento o detenido.</li>
-        <li><b>Historial</b>Cada recorrido, con su distancia y su duración.</li>
-      </ul>
-      <p class="demo" data-rv>Pantallas con datos de demostración</p>
-    </div>
-    <div class="plat-vis">
-      <figure class="shot" data-rv><img src="assets/img/suv.webp" width="1500" height="935" loading="lazy" decoding="async" alt="Camioneta SUV plateada estacionada en una vía rodeada de árboles"></figure>
-      <div class="ui ui-tele" data-rv aria-hidden="true">
-        <div class="ui-h"><span>CAMIONETA 03 · JKL 908</span><span class="st">En línea</span></div>
-        <div class="lc-spd"><span>42</span><small>km/h</small></div>
-        <div class="lc-row"><span>Estado</span><b>En movimiento</b></div>
-        <div class="lc-row"><span>Motor</span><b>Encendido</b></div>
-        <div class="lc-row"><span>Última ubicación</span><b>Calle 63 con Cra. 15</b></div>
-        <div class="lc-row"><span>Recorrido de hoy</span><b>14,2 km</b></div>
+    <!-- ESCENA 1 -->
+    <article class="scene s1" id="inicio">
+      <picture class="ph">
+        <source media="(max-width:700px)" srcset="assets/img/hero-m.webp">
+        <img src="assets/img/hero.webp" width="2000" height="1333" alt="Automóvil negro circulando por una autopista al atardecer" fetchpriority="high">
+      </picture>
+      <div class="wrap sc-in">
+        <div class="sc-t">
+          <p class="eyebrow" data-in><i></i>Rastreo y monitoreo vehicular</p>
+          <h1 data-in>Tu vehículo localizado, protegido y bajo control.</h1>
+          <p class="lead" data-in>Rastreo GPS en tiempo real, alertas inteligentes y gestión de flotas en una sola plataforma, desde tu celular o tu computador.</p>
+          <div class="cta-row" data-in>
+            <a class="btn btn--light" href="#film" data-go=".25">Conoce nuestra plataforma<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <a class="btn btn--ghost js-wa" href="#" target="_blank" rel="noopener">Solicitar asesoría</a>
+          </div>
+        </div>
+        <ul class="hero-strip" data-in>
+          <li><b>Tiempo real</b>Ubicación y velocidad de cada vehículo, al instante.</li>
+          <li><b>Alertas</b>Encendido, movimiento, velocidad y zonas autorizadas.</li>
+          <li><b>Web y celular</b>Tu vehículo o tu flota, desde donde estés.</li>
+        </ul>
       </div>
-      <div class="ui ui-map" data-rv aria-hidden="true">
-        <div class="ui-h"><span>UBICACIÓN EN VIVO</span><span>hace 2 s</span></div>
-        <svg viewBox="250 150 560 400" preserveAspectRatio="xMidYMid slice" data-route><g transform="rotate(-14 600 400)"><use href="#map"/>
-          <path class="rt-b" d="M116 661H320V522H514V337H750V207H928"/><path class="rt" pathLength="1" stroke-dasharray="1" d="M116 661H320V522H514V337H750"/>
-          <g class="mk" transform="translate(750 337)"><circle r="16"/><circle r="7"/></g></g></svg>
+    </article>
+
+    <!-- ESCENA 2 -->
+    <article class="scene s2">
+      <div class="ph"><img src="assets/img/road.webp" width="2000" height="1333" loading="lazy" decoding="async" alt="Automóvil avanzando por una carretera en curva al atardecer" style="object-position:38% 62%"></div>
+      <div class="wrap sc-in">
+        <div class="sc-t">
+          <p class="eyebrow">Ubicación en vivo</p>
+          <h2>Tu vehículo, en tiempo real.</h2>
+          <p class="lead">Consulta su ubicación desde cualquier lugar y mantente informado sobre sus movimientos.</p>
+        </div>
+        <aside class="sc-p glass pnl" aria-label="Ejemplo de datos de localización">
+          <div class="lc-top"><span>VEHÍCULO 01 · JKL 908</span><span class="st">En movimiento</span></div>
+          <div class="lc-spd"><span id="f-spd">62</span><small>km/h</small></div>
+          <div class="lc-row"><span>Ubicación</span><b id="f-loc">Calle 63 con Cra. 15</b></div>
+          <div class="lc-row"><span>Recorrido</span><b><span id="f-km">4,8</span> km</b></div>
+          <svg class="pnl-map x-m" viewBox="300 190 520 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g transform="rotate(-14 600 400)"><use href="#map"/>
+            <path class="rt-b" d="M116 661H320V522H514V337H750V207H928"/><path class="rt" id="f-rt" pathLength="1" stroke-dasharray="1" d="M320 522H514V337H750V207"/>
+            <g class="mk" id="f-mk" transform="translate(750 207)"><circle r="16"/><circle r="7"/></g></g></svg>
+          <p class="demo">Datos de demostración</p>
+        </aside>
       </div>
-    </div>
+    </article>
+
+    <!-- ESCENA 3 -->
+    <article class="scene s3">
+      <div class="ph"><img src="assets/img/suv.webp" width="2000" height="1247" loading="lazy" decoding="async" alt="Camioneta SUV plateada estacionada en una vía rodeada de árboles" style="object-position:62% 50%"></div>
+      <div class="wrap sc-in">
+        <div class="sc-t">
+          <p class="eyebrow">Panel de control</p>
+          <h2>Más que localización. Control inteligente.</h2>
+          <p class="lead">Estado, encendido, velocidad, recorridos y alertas de tu vehículo en un solo panel.</p>
+        </div>
+        <aside class="sc-p glass pnl" aria-label="Ejemplo de panel de monitoreo">
+          <div class="lc-top"><span>CAMIONETA 03</span><span class="st">En línea</span></div>
+          <div class="gau">
+            <div class="gau-d"><svg viewBox="0 0 200 118" aria-hidden="true"><path d="M20 108a80 80 0 0 1 160 0" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="10" stroke-linecap="round"/><path id="f-arc" d="M20 108a80 80 0 0 1 160 0" fill="none" stroke="#4c8dff" stroke-width="10" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="62"/></svg><b><span id="f-gv">46</span><small>km/h</small></b></div>
+            <div><div class="sw"><span>Estado<b>En movimiento</b></span></div><div class="sw"><span>Motor<b>Encendido</b></span><i aria-hidden="true"></i></div></div>
+          </div>
+          <div class="lc-row x-m"><span>Alertas de hoy</span><b style="color:var(--amber)">2</b></div>
+          <div class="lc-row" style="display:block"><div class="hst"><span>Hoy, 7:12 a. m.</span><i style="width:78%"></i><b>14,2 km</b><span>Ayer, 5:40 p. m.</span><i style="width:46%"></i><b>8,6 km</b><span class="x-m">Ayer, 6:55 a. m.</span><i class="x-m" style="width:92%"></i><b class="x-m">17,9 km</b></div></div>
+          <p class="demo">Datos de demostración</p>
+        </aside>
+      </div>
+    </article>
+
+    <!-- ESCENA 4 -->
+    <article class="scene s4">
+      <div class="ph"><img src="assets/img/night.webp" width="1400" height="1750" loading="lazy" decoding="async" alt="Camioneta con las luces encendidas en una vía oscura" style="object-position:50% 68%"></div>
+      <div class="wrap sc-in">
+        <div class="sc-t">
+          <p class="eyebrow">Alertas</p>
+          <h2>Nosotros te avisamos. Tú tienes el control.</h2>
+          <p class="lead">Cada evento llega a tu celular en el momento en que ocurre.</p>
+        </div>
+        <div class="sc-p ntfs" aria-label="Ejemplos de alertas">
+          <div class="ntf glass"><svg class="ic" aria-hidden="true"><use href="#i-power"/></svg><span>Encendido del vehículo<small>Ahora</small></span></div>
+          <div class="ntf glass"><svg class="ic" aria-hidden="true"><use href="#i-move"/></svg><span>Alerta de movimiento<small>Ahora</small></span></div>
+          <div class="ntf glass w"><svg class="ic" aria-hidden="true"><use href="#i-fence"/></svg><span>Salida de zona autorizada<small>Hace 1 min</small></span></div>
+          <div class="ntf glass w"><svg class="ic" aria-hidden="true"><use href="#i-gauge"/></svg><span>Exceso de velocidad<small>Hace 3 min</small></span></div>
+          <div class="ntf glass w x-m"><svg class="ic" aria-hidden="true"><use href="#i-warn"/></svg><span>Desplazamiento no autorizado<small>Hace 5 min</small></span></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ESCENA 5 -->
+    <article class="scene s5">
+      <div class="ph"><img src="assets/img/aerial.webp" width="1800" height="1349" loading="lazy" decoding="async" alt="Vista aérea de un cruce de autopistas con tráfico"></div>
+      <div class="wrap sc-in">
+        <div class="sc-t">
+          <p class="eyebrow">Flotas</p>
+          <h2>Toda tu flota en un solo lugar.</h2>
+          <p class="lead">Mapa, historial, notificaciones y administración de todos tus vehículos, desde el celular o el computador.</p>
+        </div>
+        <aside class="sc-p glass pnl" aria-label="Ejemplo de lista de vehículos">
+          <div class="lc-top" style="margin-bottom:.7rem"><span>MI FLOTA · 5 VEHÍCULOS</span><span class="st">4 en línea</span></div>
+          <div class="flt"><b>Camión 01</b><span class="mono">TRK 418</span><span class="st">52 km/h</span></div>
+          <div class="flt"><b>Van 02</b><span class="mono">VAN 207</span><span class="st">38 km/h</span></div>
+          <div class="flt"><b>Camioneta 03</b><span class="mono">JKL 908</span><span class="st">42 km/h</span></div>
+          <div class="flt"><b>Sedán 04</b><span class="mono">SDN 351</span><span class="st o">Apagado</span></div>
+          <div class="flt x-m"><b>Moto 05</b><span class="mono">MTO 64F</span><span class="st a">Detenida</span></div>
+          <p class="demo">Datos de demostración</p>
+        </aside>
+      </div>
+    </article>
+
+    <ol class="fnav" aria-hidden="true"><li class="on"></li><li></li><li></li><li></li><li></li></ol>
+    <div class="hint" aria-hidden="true"><i></i>Desplázate</div>
   </div>
 </section>
 
@@ -528,7 +619,7 @@ footer{border-top:1px solid var(--line);padding:clamp(3rem,7vh,4.5rem) 0 calc(2r
         <p>Todos tus vehículos en una sola cuenta, con el estado de cada unidad.</p>
       </article>
       <article class="fc fc--dark w2" data-rv>
-        <div class="fc-bg"><img src="assets/img/night.webp" width="900" height="1125" loading="lazy" decoding="async" alt="Camioneta con las luces encendidas en una vía oscura" style="object-position:50% 66%"></div>
+        <div class="fc-bg"><img src="assets/img/night.webp" width="1400" height="1750" loading="lazy" decoding="async" alt="Camioneta con las luces encendidas en una vía oscura" style="object-position:50% 66%"></div>
         <span class="fc-ic"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg></span><span class="fc-n">05</span>
         <h3>Seguridad vehicular</h3>
         <p>Zonas autorizadas y avisos de movimiento no autorizado para reaccionar a tiempo.</p>
@@ -545,14 +636,13 @@ footer{border-top:1px solid var(--line);padding:clamp(3rem,7vh,4.5rem) 0 calc(2r
 
 <!-- 4. SOFTWARE -->
 <section class="sec soft" id="software">
-  <div class="soft-bg" aria-hidden="true"><img src="assets/img/aerial.webp" width="1200" height="899" loading="lazy" decoding="async" alt=""></div>
   <div class="wrap">
     <header class="head head--c">
       <p class="eyebrow" data-rv>Experiencia del software</p>
       <h2 data-rv>Una plataforma hecha para decidir rápido.</h2>
       <p class="lead" data-rv>Mapa en vivo, lista de vehículos, detalle de cada unidad y actividad reciente. Todo en el navegador, sin instalar nada.</p>
     </header>
-    <div class="frame" data-rv>
+    <div class="frame" id="frame">
       <div class="frame-bar" aria-hidden="true"><i></i><i></i><i></i><span class="frame-url">app.tuempresa.co/mapa</span></div>
       <div class="dash-fit" id="dash-fit">
         <div class="dash" id="dash" role="img" aria-label="Ejemplo del panel web: mapa con cinco vehículos, lista de vehículos, detalle del vehículo seleccionado y actividad reciente">
@@ -648,7 +738,7 @@ footer{border-top:1px solid var(--line);padding:clamp(3rem,7vh,4.5rem) 0 calc(2r
 
 <!-- 6. BENEFICIOS -->
 <section class="sec ben" id="beneficios">
-  <div class="ben-bg" data-px="5"><img src="assets/img/road.webp" width="1800" height="1200" loading="lazy" decoding="async" alt="Automóvil deportivo avanzando por una carretera en curva al atardecer"></div>
+  <div class="ben-bg" data-px="5"><img src="assets/img/street.webp" width="1800" height="1201" loading="lazy" decoding="async" alt="Automóvil con las luces traseras encendidas en una calle de ciudad al anochecer"></div>
   <div class="wrap">
     <p class="eyebrow" data-rv>Beneficios</p>
     <h2 data-rv>La tranquilidad de saber dónde está tu vehículo.</h2>
@@ -772,7 +862,7 @@ footer{border-top:1px solid var(--line);padding:clamp(3rem,7vh,4.5rem) 0 calc(2r
         <li><a href="#soluciones">Control de flotas</a></li>
       </ul></nav>
       <nav aria-label="Navegación"><h4>Navegación</h4><ul>
-        <li><a href="#plataforma">Plataforma</a></li>
+        <li><a href="#film" data-go=".25">Tecnología</a></li>
         <li><a href="#software">Software</a></li>
         <li><a href="#como">Cómo funciona</a></li>
         <li><a href="#preguntas">Preguntas frecuentes</a></li>
@@ -803,6 +893,9 @@ var CFG={ wa:'573000000000', waLabel:'+57 300 000 0000', msg:'Hola, quiero una a
 var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){return [].slice.call((r||document).querySelectorAll(s))};
 var REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
 var HAS_GSAP=!!(window.gsap&&window.ScrollTrigger);
+var root=document.documentElement;
+if(!HAS_GSAP) root.classList.remove('film-on');
+var FILM=root.classList.contains('film-on');
 var clamp=function(v,a,b){return Math.min(b,Math.max(a,v))};
 
 /* ---------- WhatsApp y formulario ---------- */
@@ -825,6 +918,10 @@ burger.addEventListener('click',function(){menu(!nav.classList.contains('open'))
 $$('.menu a').forEach(function(a){a.addEventListener('click',function(){menu(false)})});
 addEventListener('keydown',function(e){ if(e.key==='Escape') menu(false); });
 matchMedia('(min-width:1081px)').addEventListener('change',function(){menu(false)});
+$$('[data-go]').forEach(function(a){a.addEventListener('click',function(e){
+  if(!FILM) return; e.preventDefault(); var f=$('#film');
+  window.scrollTo({top:f.offsetTop+parseFloat(a.dataset.go)*(f.offsetHeight-innerHeight),behavior:'smooth'});
+})});
 function solid(){ nav.classList.toggle('solid',scrollY>24); }
 addEventListener('scroll',solid,{passive:true}); solid();
 
@@ -889,7 +986,43 @@ gsap.registerPlugin(ScrollTrigger);
 
 /* entrada del hero */
 gsap.from('[data-in]',{opacity:0,y:26,duration:.9,ease:'power3.out',stagger:.09,delay:.15});
-gsap.from('.hero-bg img',{scale:1.08,duration:2.2,ease:'power2.out'});
+
+/* película: un solo timeline ligado al scroll; cada escena dura 1 y la foto se acerca despacio */
+(function(){
+  var sc=$$('.scene'), n=sc.length, dots=$$('.fnav li'), cur=0;
+  var rt=$('#f-rt'), mk=$('#f-mk'), L=rt.getTotalLength(), d={p:0,g:46};
+  var places=['Calle 72 con Cra. 7','Calle 72 con Cra. 15','Calle 63 con Cra. 15','Calle 63 con Cra. 24'];
+  var tl=gsap.timeline({defaults:{ease:'none'},scrollTrigger:{trigger:'#film',start:'top top',end:'bottom bottom',scrub:.7,
+    onUpdate:function(self){ var k=clamp(Math.round(self.progress*(n-.5)-.1),0,n-1); if(k!==cur){ cur=k; dots.forEach(function(el,i){el.classList.toggle('on',i===k)}); } }}});
+  sc.forEach(function(el,i){
+    var ph=$('.ph',el), tx=$('.sc-t',el), pn=$('.sc-p',el), strip=$('.hero-strip',el), out=[tx]; if(pn) out.push(pn); if(strip) out.push(strip);
+    tl.fromTo(ph,{scale:1.03,xPercent:i%2?1.2:-1.2},{scale:1.17,xPercent:i%2?-1.2:1.2,duration:1.3},Math.max(0,i-.15));
+    if(i>0){
+      tl.fromTo(el,{autoAlpha:0},{autoAlpha:1,duration:.3},i-.15)
+        .fromTo(tx.children,{y:50,opacity:0},{y:0,opacity:1,duration:.3,stagger:.05,ease:'power2.out'},i+.05);
+      if(pn&&!pn.classList.contains('ntfs')) tl.fromTo(pn,{y:90,opacity:0},{y:0,opacity:1,duration:.34,ease:'power2.out'},i+.16);
+    }
+    if(i<n-1) tl.to(out,{y:-46,opacity:0,duration:.2,ease:'power1.in'},i+.66);
+  });
+  /* escena 2: la ruta se dibuja, el marcador avanza y la velocidad cambia */
+  tl.fromTo(d,{p:0},{p:1,duration:.5,onUpdate:function(){
+    var pt=rt.getPointAtLength(d.p*L); rt.style.strokeDashoffset=1-d.p; mk.setAttribute('transform','translate('+pt.x.toFixed(1)+' '+pt.y.toFixed(1)+')');
+    $('#f-spd').textContent=Math.round(38+34*Math.sin(d.p*Math.PI*.9)+d.p*12); $('#f-km').textContent=(1.2+d.p*3.6).toFixed(1).replace('.',',');
+    $('#f-loc').textContent=places[Math.min(places.length-1,Math.floor(d.p*places.length))];
+  }},1.16);
+  /* escena 3: el velocímetro sube y el historial se llena */
+  tl.fromTo('#f-arc',{strokeDashoffset:100},{strokeDashoffset:42,duration:.4},2.2)
+    .fromTo(d,{g:0},{g:70,duration:.4,onUpdate:function(){ $('#f-gv').textContent=Math.round(d.g); }},2.2)
+    .fromTo('.hst i',{scaleX:0},{scaleX:1,duration:.3,stagger:.06},2.28);
+  /* escena 4: las alertas llegan una por una */
+  tl.fromTo('.ntf',{x:70,opacity:0},{x:0,opacity:1,duration:.18,stagger:.09,ease:'power2.out'},3.14);
+  /* escena 5: los vehículos de la flota aparecen en lista */
+  tl.fromTo('.flt',{x:30,opacity:0},{x:0,opacity:1,duration:.16,stagger:.06,ease:'power2.out'},4.24)
+    .to({}, {duration:.35});
+})();
+
+/* el panel del software se levanta hacia el lector */
+gsap.fromTo('#frame',{rotateX:20,scale:.9,y:70,opacity:.5,transformPerspective:1500},{rotateX:0,scale:1,y:0,opacity:1,ease:'none',scrollTrigger:{trigger:'#frame',start:'top 96%',end:'top 34%',scrub:.6}});
 
 /* aparición al hacer scroll */
 gsap.set('[data-rv]',{opacity:0,y:30});
