@@ -255,6 +255,9 @@ html:not(.film-on) .scene:not(.s1){min-height:0;background:var(--ink);padding:cl
 .d-layer button:hover{color:#fff}
 .d-layer button[aria-pressed=true]{background:var(--blue);color:#fff}
 .d-kpi{z-index:500}
+.d-off{position:absolute;inset:0;z-index:400;display:none;place-content:center;gap:.4rem;padding:2rem;text-align:center;font-size:13px;color:var(--mute);background:radial-gradient(60% 50% at 50% 50%,#151b25,#0f1318)}
+.d-off b{color:var(--text);font-weight:500;font-size:14px}
+.d-map.no-tiles .d-off{display:grid}
 .d-kpi span{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .vm i{position:absolute;left:-8px;top:-8px;width:16px;height:16px;border-radius:50%;background:var(--c);border:2.5px solid #fff;box-shadow:0 0 0 6px var(--g),0 2px 6px rgba(0,0,0,.45)}
 .vm.big i{left:-11px;top:-11px;width:22px;height:22px;border-width:3px;box-shadow:0 0 0 9px var(--g),0 2px 8px rgba(0,0,0,.5)}
@@ -689,6 +692,7 @@ footer{position:relative;z-index:2;background:var(--ink);border-top:1px solid va
           </div>
           <div class="d-map">
             <div class="lmap" id="lmap" role="application" aria-label="Mapa de demostración de Montería con cinco vehículos"></div>
+            <div class="d-off" role="status"><b>El mapa no está disponible en este momento</b>Este navegador o red no permite cargar las imágenes del mapa. Los datos y alertas del panel siguen funcionando.</div>
             <div class="d-kpi" aria-hidden="true"><span><b>3</b>en movimiento</span><span><b>1</b>detenido</span><span><b id="d-al">2</b>alertas hoy</span></div>
             <div class="d-layer" role="group" aria-label="Tipo de mapa"><button type="button" data-l="map" aria-pressed="true">Mapa</button><button type="button" data-l="sat" aria-pressed="false">Satélite</button></div>
           </div>
@@ -986,6 +990,11 @@ var GEO={"A":{"c":[[8.75106,-75.88208],[8.75125,-75.88194],[8.75192,-75.88135],[
       L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Imágenes © Esri, Maxar, Earthstar Geographics'}),
       L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,opacity:.9}),
       L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,opacity:.9})]);
+    /* si las imágenes del mapa no cargan (red o navegador que las bloquea), se avisa en lugar de dejar el fondo vacío */
+    var okT=0, badT=0, mapBox=$('.d-map');
+    function watch(l){ l.on('tileload',function(){ okT++; mapBox.classList.remove('no-tiles'); }); l.on('tileerror',function(){ badT++; }); }
+    watch(lay.map); lay.sat.eachLayer(watch);
+    setTimeout(function(){ if(!okT&&badT) mapBox.classList.add('no-tiles'); },6000);
     lay.map.addTo(map);
     L.control.attribution({prefix:false,position:'bottomright'}).addTo(map);
     L.control.zoom({position:'bottomright',zoomInTitle:'Acercar',zoomOutTitle:'Alejar'}).addTo(map);
