@@ -15,7 +15,10 @@ Proyecto: landing comercial de **J&A TECH** (rastreo y monitoreo GPS vehicular).
   - Postproducción: profundidad de campo (`BokehPass`), brillo de luces (`UnrealBloomPass`), viñeta, grano y leve aberración cromática.
 - Calidad adaptativa: si los cuadros tardan más de ~42 ms se apagan en orden la profundidad de campo, el reflejo, la resolución alta y el brillo. En celular no hay profundidad de campo y el reflejo va a menor resolución. Sin WebGL se muestra `assets/3d/poster.webp`.
 - Después de la película: `#funciones` (seis tarjetas con fotos), `#software` (panel web de demostración interactivo), `#como` (tres pasos), `#beneficios`, `#soluciones` (incluye `#preguntas`), `#contacto` (WhatsApp + formulario) y pie. Fotos en `assets/img/` (Unsplash).
-- Panel de demostración (`#dash`): se dibuja a tamaño fijo y se escala con `transform`. Los botones «Crear zona segura», «Simular exceso de velocidad» y «Mostrar recorrido» actúan sobre ese panel.
+- Panel de demostración (`#dash`): se dibuja a tamaño fijo y se escala con `transform`. Su mapa es un **visor geográfico real** con Leaflet 1.9.4 (CSS incrustado): capa «Mapa» de OpenStreetMap y capa «Satélite» de Esri World Imagery con calles y nombres encima (Esri World Transportation y World Boundaries and Places). No usar mosaicos de Google directamente: sus condiciones lo prohíben fuera de la API oficial.
+  - Los recorridos de los tres vehículos en movimiento son rutas reales por calles de Montería, calculadas una vez con OSRM sobre datos de OpenStreetMap y guardadas en `GEO` (coordenadas y nombre de la calle por tramo). Los vehículos, placas y velocidades son de demostración.
+  - El mapa se crea al acercarse a la sección; sin Leaflet el panel sigue funcionando sin mapa. Rueda del mouse desactivada y arrastre solo en escritorio para no secuestrar el scroll.
+  - Los botones «Crear zona segura», «Simular exceso de velocidad» y «Mostrar recorrido» actúan sobre ese mapa (círculo de zona, alertas al salir o entrar, ruta recorrida).
 - Con `prefers-reduced-motion` o sin GSAP no hay película: se ve una sola imagen fija de la escena detrás del inicio y las demás escenas quedan apiladas.
 - Los datos mostrados (velocidad, placas, direcciones, alertas) son **demostrativos** y así se rotulan.
 
@@ -25,8 +28,9 @@ Proyecto: landing comercial de **J&A TECH** (rastreo y monitoreo GPS vehicular).
 3. **Capturas reales del software:** cuando la plataforma esté lista, sustituir o complementar el panel de demostración con capturas reales.
 4. **Probar en celulares reales** de gama media y baja (la escena 3D es lo más pesado; revisar que la calidad adaptativa responda).
 5. SEO: añadir `og:image`, favicon, `sitemap`/`robots` y datos estructurados (LocalBusiness).
-6. Formulario: hoy abre WhatsApp con el mensaje armado; no guarda en servidor. Decidir si se necesita backend o correo.
-7. Migración opcional a Next.js + TypeScript + Tailwind (stack preferido del brief).
+6. Mosaicos de mapa: OpenStreetMap pide no usar su servidor para tráfico alto. Si el sitio crece, contratar un proveedor de mosaicos (MapTiler, Stadia, Esri con clave) o la API oficial de Google Maps.
+7. Formulario: hoy abre WhatsApp con el mensaje armado; no guarda en servidor. Decidir si se necesita backend o correo.
+8. Migración opcional a Next.js + TypeScript + Tailwind (stack preferido del brief).
 
 ## Reglas del proyecto
 - No presentar datos de demostración como GPS real.

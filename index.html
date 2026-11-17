@@ -213,7 +213,7 @@ html:not(.film-on) .scene:not(.s1){min-height:0;background:var(--ink);padding:cl
 .frame-bar i{width:10px;height:10px;border-radius:50%;background:#2a313c}
 .frame-bar i+i{margin-left:-.5rem}
 .frame-url{flex:1;max-width:24rem;margin-inline:auto;padding:.32rem .8rem;border-radius:7px;background:#0b0e13;border:1px solid var(--line);font:400 .7rem/1.2 var(--mono);color:var(--dim);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dash-fit{position:relative;overflow:hidden}
+.dash-fit{position:relative;overflow:hidden;overflow:clip}
 .dash{width:1180px;height:680px;transform-origin:0 0;display:grid;grid-template-columns:196px 236px minmax(0,1fr) 244px;grid-template-rows:54px minmax(0,1fr);font-size:13px;line-height:1.35;color:var(--text);background:#0b0e13}
 .d-rail{grid-row:1/3;display:flex;flex-direction:column;padding:16px 12px;border-right:1px solid var(--line);background:#0d1117}
 .d-rail .brand{font-size:.95rem;padding:0 6px 16px}
@@ -242,18 +242,30 @@ html:not(.film-on) .scene:not(.s1){min-height:0;background:var(--ink);padding:cl
 .v .spd{grid-row:1/3;grid-column:2;align-self:center;font:500 13px var(--mono);text-align:right}
 .v .spd small{display:block;font-size:10px;color:var(--dim);font-weight:400}
 .v.warn .spd{color:var(--amber)}
-.d-map{position:relative;overflow:hidden;background:#0f1318}
-.d-map svg{position:absolute;inset:0;width:100%;height:100%}
+.d-map{position:relative;overflow:hidden;overflow:clip;background:#0f1318}
 .d-kpi{position:absolute;left:12px;top:12px;display:flex;gap:6px}
 .d-kpi span{padding:6px 9px;border-radius:8px;background:rgba(11,14,19,.86);border:1px solid var(--line-2);font-size:11.5px;color:var(--mute)}
 .d-kpi b{font:500 12px var(--mono);color:#fff;margin-right:5px}
-.d-zoom{position:absolute;right:12px;bottom:12px;display:grid;border-radius:8px;overflow:hidden;border:1px solid var(--line-2);background:rgba(11,14,19,.9)}
-.d-zoom span{display:grid;place-items:center;width:30px;height:30px;color:var(--mute);font-size:16px}
-.d-zoom span+span{border-top:1px solid var(--line)}
-.d-scale{position:absolute;left:12px;bottom:12px;font:400 10px/1 var(--mono);color:var(--dim);padding-bottom:5px;width:74px;border-bottom:1.5px solid var(--dim);text-align:center}
-.vm circle:first-child{opacity:.2}
-.vm text{font:500 12.5px var(--mono);fill:#dfe5ee;paint-order:stroke;stroke:#0b0e13;stroke-width:3px}
-.fence{fill:rgba(53,207,136,.08);stroke:var(--green);stroke-width:1.5;stroke-dasharray:6 6}
+/* visor geográfico real (Leaflet 1.9.4, CSS incrustado) */
+.leaflet-pane,.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-tile-container,.leaflet-pane>svg,.leaflet-pane>canvas,.leaflet-zoom-box,.leaflet-image-layer,.leaflet-layer{position:absolute;left:0;top:0}.leaflet-container{overflow:hidden}.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow{-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-user-drag:none}.leaflet-tile::selection{background:transparent}.leaflet-safari .leaflet-tile{image-rendering:-webkit-optimize-contrast}.leaflet-safari .leaflet-tile-container{width:1600px;height:1600px;-webkit-transform-origin:0 0}.leaflet-marker-icon,.leaflet-marker-shadow{display:block}.leaflet-container .leaflet-overlay-pane svg{max-width:none !important;max-height:none !important}.leaflet-container .leaflet-marker-pane img,.leaflet-container .leaflet-shadow-pane img,.leaflet-container .leaflet-tile-pane img,.leaflet-container img.leaflet-image-layer,.leaflet-container .leaflet-tile{max-width:none !important;max-height:none !important;width:auto;padding:0}.leaflet-container img.leaflet-tile{mix-blend-mode:plus-lighter}.leaflet-container.leaflet-touch-zoom{-ms-touch-action:pan-x pan-y;touch-action:pan-x pan-y}.leaflet-container.leaflet-touch-drag{-ms-touch-action:pinch-zoom;touch-action:none;touch-action:pinch-zoom}.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom{-ms-touch-action:none;touch-action:none}.leaflet-container{-webkit-tap-highlight-color:transparent}.leaflet-container a{-webkit-tap-highlight-color:rgba(51,181,229,0.4)}.leaflet-tile{filter:inherit;visibility:hidden}.leaflet-tile-loaded{visibility:inherit}.leaflet-zoom-box{width:0;height:0;-moz-box-sizing:border-box;box-sizing:border-box;z-index:800}.leaflet-overlay-pane svg{-moz-user-select:none}.leaflet-pane{z-index:400}.leaflet-tile-pane{z-index:200}.leaflet-overlay-pane{z-index:400}.leaflet-shadow-pane{z-index:500}.leaflet-marker-pane{z-index:600}.leaflet-tooltip-pane{z-index:650}.leaflet-popup-pane{z-index:700}.leaflet-map-pane canvas{z-index:100}.leaflet-map-pane svg{z-index:200}.leaflet-vml-shape{width:1px;height:1px}.lvml{behavior:url(#default#VML);display:inline-block;position:absolute}.leaflet-control{position:relative;z-index:800;pointer-events:visiblePainted;pointer-events:auto}.leaflet-top,.leaflet-bottom{position:absolute;z-index:1000;pointer-events:none}.leaflet-top{top:0}.leaflet-right{right:0}.leaflet-bottom{bottom:0}.leaflet-left{left:0}.leaflet-control{float:left;clear:both}.leaflet-right .leaflet-control{float:right}.leaflet-top .leaflet-control{margin-top:10px}.leaflet-bottom .leaflet-control{margin-bottom:10px}.leaflet-left .leaflet-control{margin-left:10px}.leaflet-right .leaflet-control{margin-right:10px}.leaflet-fade-anim .leaflet-popup{opacity:0;-webkit-transition:opacity 0.2s linear;-moz-transition:opacity 0.2s linear;transition:opacity 0.2s linear}.leaflet-fade-anim .leaflet-map-pane .leaflet-popup{opacity:1}.leaflet-zoom-animated{-webkit-transform-origin:0 0;-ms-transform-origin:0 0;transform-origin:0 0}svg.leaflet-zoom-animated{will-change:transform}.leaflet-zoom-anim .leaflet-zoom-animated{-webkit-transition:-webkit-transform 0.25s cubic-bezier(0,0,0.25,1);-moz-transition:-moz-transform 0.25s cubic-bezier(0,0,0.25,1);transition:transform 0.25s cubic-bezier(0,0,0.25,1)}.leaflet-zoom-anim .leaflet-tile,.leaflet-pan-anim .leaflet-tile{-webkit-transition:none;-moz-transition:none;transition:none}.leaflet-zoom-anim .leaflet-zoom-hide{visibility:hidden}.leaflet-interactive{cursor:pointer}.leaflet-grab{cursor:-webkit-grab;cursor:-moz-grab;cursor:grab}.leaflet-crosshair,.leaflet-crosshair .leaflet-interactive{cursor:crosshair}.leaflet-popup-pane,.leaflet-control{cursor:auto}.leaflet-dragging .leaflet-grab,.leaflet-dragging .leaflet-grab .leaflet-interactive,.leaflet-dragging .leaflet-marker-draggable{cursor:move;cursor:-webkit-grabbing;cursor:-moz-grabbing;cursor:grabbing}.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-image-layer,.leaflet-pane>svg path,.leaflet-tile-container{pointer-events:none}.leaflet-marker-icon.leaflet-interactive,.leaflet-image-layer.leaflet-interactive,.leaflet-pane>svg path.leaflet-interactive,svg.leaflet-image-layer.leaflet-interactive path{pointer-events:visiblePainted;pointer-events:auto}.leaflet-container{background:#ddd;outline-offset:1px}.leaflet-container a{color:#0078A8}.leaflet-zoom-box{border:2px dotted #38f;background:rgba(255,255,255,0.5)}.leaflet-container{font-family:"Helvetica Neue",Arial,Helvetica,sans-serif;font-size:12px;font-size:0.75rem;line-height:1.5}.leaflet-bar{box-shadow:0 1px 5px rgba(0,0,0,0.65);border-radius:4px}.leaflet-bar a{background-color:#fff;border-bottom:1px solid #ccc;width:26px;height:26px;line-height:26px;display:block;text-align:center;text-decoration:none;color:black}.leaflet-bar a,.leaflet-control-layers-toggle{background-position:50% 50%;background-repeat:no-repeat;display:block}.leaflet-bar a:hover,.leaflet-bar a:focus{background-color:#f4f4f4}.leaflet-bar a:first-child{border-top-left-radius:4px;border-top-right-radius:4px}.leaflet-bar a:last-child{border-bottom-left-radius:4px;border-bottom-right-radius:4px;border-bottom:none}.leaflet-bar a.leaflet-disabled{cursor:default;background-color:#f4f4f4;color:#bbb}.leaflet-touch .leaflet-bar a{width:30px;height:30px;line-height:30px}.leaflet-touch .leaflet-bar a:first-child{border-top-left-radius:2px;border-top-right-radius:2px}.leaflet-touch .leaflet-bar a:last-child{border-bottom-left-radius:2px;border-bottom-right-radius:2px}.leaflet-control-zoom-in,.leaflet-control-zoom-out{font:bold 18px 'Lucida Console',Monaco,monospace;text-indent:1px}.leaflet-touch .leaflet-control-zoom-in,.leaflet-touch .leaflet-control-zoom-out{font-size:22px}.leaflet-control-layers{box-shadow:0 1px 5px rgba(0,0,0,0.4);background:#fff;border-radius:5px}.leaflet-control-layers-toggle{background-image:none;width:36px;height:36px}.leaflet-retina .leaflet-control-layers-toggle{background-image:none;background-size:26px 26px}.leaflet-touch .leaflet-control-layers-toggle{width:44px;height:44px}.leaflet-control-layers .leaflet-control-layers-list,.leaflet-control-layers-expanded .leaflet-control-layers-toggle{display:none}.leaflet-control-layers-expanded .leaflet-control-layers-list{display:block;position:relative}.leaflet-control-layers-expanded{padding:6px 10px 6px 6px;color:#333;background:#fff}.leaflet-control-layers-scrollbar{overflow-y:scroll;overflow-x:hidden;padding-right:5px}.leaflet-control-layers-selector{margin-top:2px;position:relative;top:1px}.leaflet-control-layers label{display:block;font-size:13px;font-size:1.08333em}.leaflet-control-layers-separator{height:0;border-top:1px solid #ddd;margin:5px -10px 5px -6px}.leaflet-default-icon-path{background-image:none}.leaflet-container .leaflet-control-attribution{background:#fff;background:rgba(255,255,255,0.8);margin:0}.leaflet-control-attribution,.leaflet-control-scale-line{padding:0 5px;color:#333;line-height:1.4}.leaflet-control-attribution a{text-decoration:none}.leaflet-control-attribution a:hover,.leaflet-control-attribution a:focus{text-decoration:underline}.leaflet-attribution-flag{display:inline !important;vertical-align:baseline !important;width:1em;height:0.6669em}.leaflet-left .leaflet-control-scale{margin-left:5px}.leaflet-bottom .leaflet-control-scale{margin-bottom:5px}.leaflet-control-scale-line{border:2px solid #777;border-top:none;line-height:1.1;padding:2px 5px 1px;white-space:nowrap;-moz-box-sizing:border-box;box-sizing:border-box;background:rgba(255,255,255,0.8);text-shadow:1px 1px #fff}.leaflet-control-scale-line:not(:first-child){border-top:2px solid #777;border-bottom:none;margin-top:-2px}.leaflet-control-scale-line:not(:first-child):not(:last-child){border-bottom:2px solid #777}.leaflet-touch .leaflet-control-attribution,.leaflet-touch .leaflet-control-layers,.leaflet-touch .leaflet-bar{box-shadow:none}.leaflet-touch .leaflet-control-layers,.leaflet-touch .leaflet-bar{border:2px solid rgba(0,0,0,0.2);background-clip:padding-box}.leaflet-popup{position:absolute;text-align:center;margin-bottom:20px}.leaflet-popup-content-wrapper{padding:1px;text-align:left;border-radius:12px}.leaflet-popup-content{margin:13px 24px 13px 20px;line-height:1.3;font-size:13px;font-size:1.08333em;min-height:1px}.leaflet-popup-content p{margin:17px 0;margin:1.3em 0}.leaflet-popup-tip-container{width:40px;height:20px;position:absolute;left:50%;margin-top:-1px;margin-left:-20px;overflow:hidden;pointer-events:none}.leaflet-popup-tip{width:17px;height:17px;padding:1px;margin:-10px auto 0;pointer-events:auto;-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-ms-transform:rotate(45deg);transform:rotate(45deg)}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:white;color:#333;box-shadow:0 3px 14px rgba(0,0,0,0.4)}.leaflet-container a.leaflet-popup-close-button{position:absolute;top:0;right:0;border:none;text-align:center;width:24px;height:24px;font:16px/24px Tahoma,Verdana,sans-serif;color:#757575;text-decoration:none;background:transparent}.leaflet-container a.leaflet-popup-close-button:hover,.leaflet-container a.leaflet-popup-close-button:focus{color:#585858}.leaflet-popup-scrolled{overflow:auto}.leaflet-oldie .leaflet-popup-content-wrapper{-ms-zoom:1}.leaflet-oldie .leaflet-popup-tip{width:24px;margin:0 auto;-ms-filter:"progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678,M12=0.70710678,M21=-0.70710678,M22=0.70710678)";filter:progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678,M12=0.70710678,M21=-0.70710678,M22=0.70710678)}.leaflet-oldie .leaflet-control-zoom,.leaflet-oldie .leaflet-control-layers,.leaflet-oldie .leaflet-popup-content-wrapper,.leaflet-oldie .leaflet-popup-tip{border:1px solid #999}.leaflet-div-icon{background:#fff;border:1px solid #666}.leaflet-tooltip{position:absolute;padding:6px;background-color:#fff;border:1px solid #fff;border-radius:3px;color:#222;white-space:nowrap;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;pointer-events:none;box-shadow:0 1px 3px rgba(0,0,0,0.4)}.leaflet-tooltip.leaflet-interactive{cursor:pointer;pointer-events:auto}.leaflet-tooltip-top:before,.leaflet-tooltip-bottom:before,.leaflet-tooltip-left:before,.leaflet-tooltip-right:before{position:absolute;pointer-events:none;border:6px solid transparent;background:transparent;content:""}.leaflet-tooltip-bottom{margin-top:6px}.leaflet-tooltip-top{margin-top:-6px}.leaflet-tooltip-bottom:before,.leaflet-tooltip-top:before{left:50%;margin-left:-6px}.leaflet-tooltip-top:before{bottom:0;margin-bottom:-12px;border-top-color:#fff}.leaflet-tooltip-bottom:before{top:0;margin-top:-12px;margin-left:-6px;border-bottom-color:#fff}.leaflet-tooltip-left{margin-left:-6px}.leaflet-tooltip-right{margin-left:6px}.leaflet-tooltip-left:before,.leaflet-tooltip-right:before{top:50%;margin-top:-6px}.leaflet-tooltip-left:before{right:0;margin-right:-12px;border-left-color:#fff}.leaflet-tooltip-right:before{left:0;margin-left:-12px;border-right-color:#fff}@media print{.leaflet-control{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+.lmap{position:absolute;inset:0;z-index:0;background:#0f1318}
+.lmap.leaflet-container{font:inherit;background:#0f1318}
+.d-layer{position:absolute;right:12px;top:12px;z-index:500;display:flex;gap:3px;padding:3px;border-radius:9px;background:rgba(11,14,19,.88);border:1px solid var(--line-2);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.d-layer button{border:0;border-radius:6px;padding:6px 11px;background:none;color:var(--mute);font:500 11.5px/1 var(--sans);cursor:pointer;transition:background .2s,color .2s}
+.d-layer button:hover{color:#fff}
+.d-layer button[aria-pressed=true]{background:var(--blue);color:#fff}
+.d-kpi{z-index:500}
+.d-kpi span{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.vm i{position:absolute;left:-8px;top:-8px;width:16px;height:16px;border-radius:50%;background:var(--c);border:2.5px solid #fff;box-shadow:0 0 0 6px var(--g),0 2px 6px rgba(0,0,0,.45)}
+.vm.big i{left:-11px;top:-11px;width:22px;height:22px;border-width:3px;box-shadow:0 0 0 9px var(--g),0 2px 8px rgba(0,0,0,.5)}
+.vm b{position:absolute;left:14px;top:-25px;white-space:nowrap;font:500 11px/1 var(--mono);color:#fff;background:rgba(11,14,19,.86);padding:4px 6px;border-radius:5px;border:1px solid rgba(255,255,255,.12)}
+.vm.big b{left:17px;top:-29px}
+.leaflet-bar{border:1px solid var(--line-2)!important;box-shadow:none!important;border-radius:8px!important;overflow:hidden}
+.leaflet-bar a{background:rgba(11,14,19,.9)!important;color:#dfe5ee!important;border-bottom-color:var(--line)!important;width:30px!important;height:30px!important;line-height:30px!important}
+.leaflet-bar a:hover{background:#1e2530!important}
+.leaflet-control-scale-line{background:rgba(11,14,19,.75);color:#cfd6df;border-color:#9aa4b2;font:400 10px var(--mono)}
+.leaflet-control-attribution{background:rgba(11,14,19,.78)!important;color:#9aa4b2!important;font:400 9.5px/1.4 var(--sans);padding:2px 6px!important;border-radius:6px 0 0 0}
+.leaflet-control-attribution a{color:#cfd6df!important}
 .d-side{border-left:1px solid var(--line);padding:14px 14px 0;display:flex;flex-direction:column;min-height:0}
 .d-sel{padding-bottom:12px;border-bottom:1px solid var(--line)}
 .d-sel h5{margin:0;font-size:14px;font-weight:600}
@@ -411,7 +423,7 @@ footer{position:relative;z-index:2;background:var(--ink);border-top:1px solid va
   .ntf .ic{width:30px;height:30px;padding:6px}
   .ben::before{background:linear-gradient(180deg,var(--ink) 0,rgba(10,12,16,.3) 18%,rgba(10,12,16,.45) 34%,rgba(10,12,16,.9) 52%,var(--ink) 100%)}
   .dash{width:540px;height:600px;grid-template-columns:minmax(0,1fr) 236px;grid-template-rows:minmax(0,1fr)}
-  .d-rail,.d-list,.d-top{display:none}
+  .d-rail,.d-list,.d-top,.d-kpi{display:none}
   .cta-row .btn{flex:1 1 100%}
   .hero-strip{grid-template-columns:1fr;margin-top:1rem}
   .hero-strip li{padding:.9rem 0;display:grid;grid-template-columns:7.2rem 1fr;align-items:baseline;border-bottom:1px solid var(--line)}
@@ -516,7 +528,7 @@ footer{position:relative;z-index:2;background:var(--ink);border-top:1px solid va
         <aside class="sc-p glass pnl" aria-label="Ejemplo de datos de localización">
           <div class="lc-top"><span>VEHÍCULO 01 · JKL 908</span><span class="st">En movimiento</span></div>
           <div class="lc-spd"><span id="t-spd">42</span><small>km/h</small></div>
-          <div class="lc-row"><span>Ubicación</span><b id="t-loc">Calle 63 con Carrera 15</b></div>
+          <div class="lc-row"><span>Ubicación</span><b id="t-loc">Avenida Primera con Calle 30</b></div>
           <div class="lc-row"><span>Coordenadas</span><b id="t-coord" class="mono">—</b></div>
           <div class="lc-row x-m"><span>Recorrido</span><b id="t-dist">0,0 km</b></div>
           <div class="lc-row x-m"><span>Última actualización</span><b id="t-upd">hace 1 s</b></div>
@@ -643,12 +655,12 @@ footer{position:relative;z-index:2;background:var(--ink);border-top:1px solid va
     <header class="head head--c">
       <p class="eyebrow" data-rv>Experiencia del software</p>
       <h2 data-rv>Una plataforma hecha para decidir rápido.</h2>
-      <p class="lead" data-rv>Mapa en vivo, lista de vehículos, detalle de cada unidad y actividad reciente. Todo en el navegador, sin instalar nada.</p>
+      <p class="lead" data-rv>Mapa en vivo con calles y satélite, lista de vehículos, detalle de cada unidad y actividad reciente. Todo en el navegador, sin instalar nada.</p>
     </header>
     <div class="frame" id="frame">
       <div class="frame-bar" aria-hidden="true"><i></i><i></i><i></i><span class="frame-url">app.tuempresa.co/mapa</span></div>
       <div class="dash-fit" id="dash-fit">
-        <div class="dash" id="dash" role="img" aria-label="Ejemplo del panel web: mapa con cinco vehículos, lista de vehículos, detalle del vehículo seleccionado y actividad reciente">
+        <div class="dash" id="dash" role="region" aria-label="Ejemplo del panel web: mapa real de Montería con cinco vehículos de demostración, lista de vehículos, detalle del vehículo seleccionado y actividad reciente">
           <div class="d-rail" aria-hidden="true">
             <span class="brand"><svg><use href="#logo"/></svg><span>J&amp;A <span>Tech</span></span></span>
             <div class="d-nav">
@@ -665,7 +677,7 @@ footer{position:relative;z-index:2;background:var(--ink);border-top:1px solid va
           <div class="d-top" aria-hidden="true">
             <h4>Mapa en vivo</h4>
             <span class="d-search"><svg class="ic"><use href="#i-search"/></svg>Buscar placa o vehículo</span>
-            <span class="mono">5 vehículos · 4 en línea</span>
+            <span class="mono">Montería · 5 vehículos · 4 en línea</span>
           </div>
           <div class="d-list" aria-hidden="true">
             <div class="d-t"><span>Vehículos</span><span>5</span></div>
@@ -675,22 +687,10 @@ footer{position:relative;z-index:2;background:var(--ink);border-top:1px solid va
             <div class="v"><b>Sedán 04<span class="mono">SDN 351</span></b><span class="spd">0<small>km/h</small></span><span class="st o">Apagado</span></div>
             <div class="v"><b>Moto 05<span class="mono">MTO 64F</span></b><span class="spd">0<small>km/h</small></span><span class="st a">Detenida</span></div>
           </div>
-          <div class="d-map" aria-hidden="true">
-            <svg viewBox="300 40 640 800" preserveAspectRatio="xMidYMid slice"><g transform="rotate(-14 600 400)"><use href="#map"/>
-              <circle class="fence" id="fence" cx="514" cy="430" r="150" visibility="hidden"/>
-              <path class="rt-b" id="rA" d="M320 661H514V522H750V337" visibility="hidden"/>
-              <path class="rt" id="trail" d="M320 661H514V522H750V337" visibility="hidden"/>
-              <path id="rB" d="M750 600V661H514V790" fill="none"/>
-              <path id="rC" d="M514 337V207H750V150" fill="none"/>
-              <g class="vm" transform="translate(320 522)"><circle r="17" fill="#6b7686"/><circle r="7.500" fill="#6b7686" stroke="#fff" stroke-width="2"/><text transform="rotate(14)" x="12" y="-11">SDN 351</text></g>
-              <g class="vm" transform="translate(320 400)"><circle r="17" fill="#f5a524"/><circle r="7.500" fill="#f5a524" stroke="#fff" stroke-width="2"/><text transform="rotate(14)" x="12" y="-11">MTO 64F</text></g>
-              <g class="vm" id="m0"><circle r="17" fill="#35cf88"/><circle r="7.500" fill="#35cf88" stroke="#fff" stroke-width="2"/><text transform="rotate(14)" x="12" y="-11">TRK 418</text></g>
-              <g class="vm" id="m1"><circle r="17" fill="#35cf88"/><circle r="7.500" fill="#35cf88" stroke="#fff" stroke-width="2"/><text transform="rotate(14)" x="12" y="-11">VAN 207</text></g>
-              <g class="vm" id="m2"><circle r="24" fill="#4c8dff"/><circle r="10" fill="#4c8dff" stroke="#fff" stroke-width="3"/><text transform="rotate(14)" x="15" y="-13">JKL 908</text></g>
-            </g></svg>
-            <div class="d-kpi"><span><b>3</b>en movimiento</span><span><b>1</b>detenido</span><span><b id="d-al">2</b>alertas hoy</span></div>
-            <div class="d-scale">200 m</div>
-            <div class="d-zoom"><span>+</span><span>−</span></div>
+          <div class="d-map">
+            <div class="lmap" id="lmap" role="application" aria-label="Mapa de demostración de Montería con cinco vehículos"></div>
+            <div class="d-kpi" aria-hidden="true"><span><b>3</b>en movimiento</span><span><b>1</b>detenido</span><span><b id="d-al">2</b>alertas hoy</span></div>
+            <div class="d-layer" role="group" aria-label="Tipo de mapa"><button type="button" data-l="map" aria-pressed="true">Mapa</button><button type="button" data-l="sat" aria-pressed="false">Satélite</button></div>
           </div>
           <div class="d-side" aria-hidden="true">
             <div class="d-sel">
@@ -698,7 +698,7 @@ footer{position:relative;z-index:2;background:var(--ink);border-top:1px solid va
               <div class="d-spd" id="d-spd"><span id="d-v">42</span><small>km/h</small></div>
               <div class="d-kv"><span>Estado</span><b id="d-st">En movimiento</b></div>
               <div class="d-kv"><span>Motor</span><b>Encendido</b></div>
-              <div class="d-kv"><span>Ubicación</span><b id="d-loc">Calle 63 con Cra. 15</b></div>
+              <div class="d-kv"><span>Ubicación</span><b id="d-loc">Avenida Primera</b></div>
               <div class="d-kv"><span>Recorrido de hoy</span><b><span id="d-km">14,2</span> km</b></div>
             </div>
             <div class="d-feed">
@@ -719,7 +719,7 @@ footer{position:relative;z-index:2;background:var(--ink);border-top:1px solid va
       <button class="btn btn--ghost btn--s" id="sb-v" type="button">Simular exceso de velocidad</button>
       <button class="btn btn--ghost btn--s" id="sb-t" type="button" aria-pressed="false">Mostrar recorrido</button>
     </div>
-    <p class="demo" id="sim-live" aria-live="polite">Vista de demostración con datos de ejemplo</p>
+    <p class="demo" id="sim-live" aria-live="polite">Vista de demostración: vehículos y recorridos de ejemplo sobre calles reales de Montería</p>
   </div>
 </section>
 
@@ -887,6 +887,7 @@ footer{position:relative;z-index:2;background:var(--ink);border-top:1px solid va
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js"></script>
@@ -945,54 +946,104 @@ if('IntersectionObserver' in window){ var seen={}, fab=$('.wa'); var io=new Inte
 
 /* ---------- panel de demostración: se escala como una captura ---------- */
 var fit=$('#dash-fit'), dash=$('#dash');
-function scale(){ var k=fit.clientWidth/dash.offsetWidth; dash.style.transform='scale('+k+')'; fit.style.height=(dash.offsetHeight*k)+'px'; }
+function scale(){ var k=fit.clientWidth/dash.offsetWidth; dash.style.transform='scale('+k+')'; fit.style.height=(dash.offsetHeight*k)+'px'; if(window.__jaMap&&window.__jaMap()) window.__jaMap().invalidateSize(false); }
 if('ResizeObserver' in window) new ResizeObserver(scale).observe(fit); else addEventListener('resize',scale);
+/* al enfocar un botón del mapa el navegador intenta desplazar el contenedor recortado: se anula */
+[fit,$('.d-map')].forEach(function(el){ el.addEventListener('scroll',function(){ el.scrollLeft=0; el.scrollTop=0; }); });
 scale();
 
-/* ---------- panel de demostración: vehículos en movimiento y órdenes ---------- */
+/* ---------- panel de demostración: visor geográfico real ----------
+   Mapa: OpenStreetMap. Satélite: Esri World Imagery con calles y nombres encima.
+   Los recorridos son rutas reales por calles de Montería, calculadas una vez con OSRM (datos de OpenStreetMap)
+   y guardadas aquí; los vehículos, placas y velocidades son de demostración. */
+var GEO={"A":{"c":[[8.75106,-75.88208],[8.75125,-75.88194],[8.75192,-75.88135],[8.75232,-75.88097],[8.7529,-75.88051],[8.75347,-75.88118],[8.75402,-75.88188],[8.75465,-75.88268],[8.75512,-75.88328],[8.75557,-75.88384],[8.75605,-75.88444],[8.75653,-75.88503],[8.75669,-75.88521],[8.75703,-75.88561],[8.75746,-75.88615],[8.75801,-75.88683],[8.75859,-75.88641],[8.75916,-75.88602],[8.75983,-75.88554],[8.76055,-75.88501],[8.75975,-75.88411],[8.75958,-75.88393],[8.75924,-75.88357],[8.76011,-75.88274],[8.76073,-75.88218],[8.76135,-75.88163],[8.76188,-75.8822],[8.76278,-75.88315],[8.76314,-75.8836],[8.76316,-75.88362],[8.76321,-75.88362],[8.7634,-75.88357],[8.76407,-75.88341],[8.76419,-75.88337],[8.76434,-75.88332],[8.76453,-75.88324],[8.76488,-75.88303],[8.76564,-75.88273],[8.76647,-75.88248],[8.76652,-75.88246],[8.76672,-75.88241],[8.76681,-75.88239],[8.76681,-75.88162],[8.7668,-75.88098],[8.7668,-75.88013],[8.76689,-75.88013],[8.76702,-75.8801],[8.76736,-75.87999],[8.76754,-75.87987],[8.76779,-75.8797],[8.76789,-75.87963],[8.76805,-75.87949],[8.76825,-75.87927],[8.76827,-75.87925],[8.76836,-75.87915],[8.76848,-75.87892],[8.76864,-75.87851],[8.76771,-75.87822],[8.76692,-75.87796],[8.76691,-75.87801],[8.76689,-75.87805],[8.76685,-75.87809],[8.76681,-75.87811],[8.76678,-75.87813],[8.76672,-75.87813],[8.76666,-75.87812],[8.76661,-75.8781],[8.76657,-75.87806],[8.76655,-75.87801],[8.76653,-75.87795],[8.76654,-75.87789],[8.76656,-75.87784],[8.76659,-75.87779],[8.76663,-75.87776],[8.76668,-75.87774],[8.76674,-75.87774],[8.76679,-75.87769],[8.76684,-75.87761],[8.76687,-75.87751],[8.7669,-75.87733],[8.76691,-75.87715],[8.76693,-75.87689],[8.76695,-75.87673],[8.76697,-75.87657],[8.76699,-75.87636],[8.76704,-75.87568],[8.76707,-75.87537],[8.76708,-75.875],[8.76709,-75.87476],[8.76708,-75.87453],[8.76705,-75.87418],[8.76702,-75.87381],[8.76693,-75.87317],[8.76691,-75.8729],[8.76689,-75.87273],[8.76689,-75.87254],[8.76685,-75.87218],[8.76684,-75.87208],[8.76685,-75.87189],[8.76703,-75.87139],[8.76709,-75.87124],[8.76716,-75.87105],[8.76738,-75.87044],[8.76747,-75.87016],[8.76752,-75.87007],[8.76758,-75.86998],[8.76764,-75.8699],[8.76771,-75.86986],[8.76778,-75.86981],[8.76786,-75.86977],[8.76821,-75.86961],[8.76845,-75.86948],[8.76855,-75.86942],[8.76895,-75.86912],[8.76902,-75.86911],[8.76908,-75.86914],[8.76914,-75.86917],[8.76916,-75.86919],[8.76918,-75.86921],[8.76919,-75.86923],[8.7692,-75.86927],[8.7692,-75.8693],[8.7692,-75.86934],[8.76918,-75.86939],[8.76916,-75.86944],[8.769,-75.86949],[8.76821,-75.86975],[8.76784,-75.86989],[8.76773,-75.86998],[8.76762,-75.87011],[8.76752,-75.87017],[8.76749,-75.87019],[8.76744,-75.87024],[8.76741,-75.87026],[8.76736,-75.87028],[8.7673,-75.87029],[8.76719,-75.87027],[8.76708,-75.87026],[8.76697,-75.87026],[8.76684,-75.87031],[8.76644,-75.87052],[8.76635,-75.87057],[8.76539,-75.87106],[8.76531,-75.87111],[8.76513,-75.8712],[8.76488,-75.87133],[8.76463,-75.87146],[8.76443,-75.87157],[8.76362,-75.87198],[8.76347,-75.87206],[8.76204,-75.87281],[8.76177,-75.87294],[8.76163,-75.87301],[8.76088,-75.8734],[8.76026,-75.87372],[8.75951,-75.87412],[8.7594,-75.87419],[8.75937,-75.8742],[8.75931,-75.87409],[8.75923,-75.87398],[8.75914,-75.87382],[8.75898,-75.8736],[8.75877,-75.87334],[8.75773,-75.87217],[8.75738,-75.87176],[8.75713,-75.87145],[8.75733,-75.87148],[8.7574,-75.87156],[8.7575,-75.87167],[8.75779,-75.87117],[8.75823,-75.8705],[8.75858,-75.87001],[8.75901,-75.8693],[8.75907,-75.86919],[8.75964,-75.86999],[8.75991,-75.87039],[8.75999,-75.87051]],"s":[[0,"Carrera 11"],[267,"Calle 30"],[1163,"Avenida Primera"],[1508,"Calle 34"],[1722,"Carrera 3"],[2038,"Calle 37"],[2334,"Avenida Primera"],[2762,"Calle 42"],[3010,"Transversal 1C"],[3295,"Calle 44"],[3495,"Carrera 2"],[4707,"Avenida Circunvalar"],[5901,"Calle 41"],[6312,"Calle 41A"],[6335,"Carrera 14C"],[6688,"Calle 44"]]},"B":{"c":[[8.74278,-75.87919],[8.74289,-75.87932],[8.74339,-75.87976],[8.74341,-75.87978],[8.74343,-75.8798],[8.74346,-75.87982],[8.74374,-75.88006],[8.74393,-75.88021],[8.74429,-75.88045],[8.74441,-75.88052],[8.74531,-75.88095],[8.74544,-75.88103],[8.74553,-75.88111],[8.74577,-75.88141],[8.7461,-75.88182],[8.74661,-75.88153],[8.7467,-75.88147],[8.74717,-75.88118],[8.74737,-75.88106],[8.74765,-75.88089],[8.74766,-75.88089],[8.74802,-75.88067],[8.74839,-75.88046],[8.74861,-75.88032],[8.74887,-75.88018],[8.74893,-75.88014],[8.74934,-75.87989],[8.74953,-75.87978],[8.74975,-75.87965],[8.74982,-75.87959],[8.7499,-75.87951],[8.74997,-75.87941],[8.75007,-75.87927],[8.75018,-75.8791],[8.75025,-75.87899],[8.75037,-75.87887],[8.75056,-75.87876],[8.7518,-75.87803],[8.75205,-75.87788],[8.75233,-75.87773],[8.7526,-75.87758],[8.75201,-75.87664],[8.75144,-75.87596],[8.75184,-75.8756],[8.75211,-75.87591],[8.75244,-75.87629],[8.75303,-75.87698],[8.75324,-75.87725],[8.75377,-75.87698],[8.75408,-75.87682],[8.75439,-75.87666],[8.75478,-75.87646],[8.75508,-75.87631],[8.75569,-75.876],[8.75626,-75.8757],[8.75682,-75.87539],[8.75689,-75.87536],[8.75766,-75.87496],[8.75833,-75.8746],[8.7587,-75.87441],[8.75888,-75.87432],[8.75931,-75.87409],[8.75947,-75.874],[8.75961,-75.87393],[8.75976,-75.87385],[8.76022,-75.8736],[8.76071,-75.87334],[8.76157,-75.87289],[8.76169,-75.87283],[8.76268,-75.87231],[8.76321,-75.87203],[8.76359,-75.87184],[8.76378,-75.87175],[8.76383,-75.87172],[8.76446,-75.87139],[8.76443,-75.87137],[8.76335,-75.87047],[8.76316,-75.87017],[8.76306,-75.86981],[8.76303,-75.86952],[8.76302,-75.86939],[8.76304,-75.86921],[8.76301,-75.86908],[8.7629,-75.86897],[8.76297,-75.86889],[8.76347,-75.86836],[8.76349,-75.8683],[8.76349,-75.86823],[8.76347,-75.86814],[8.76346,-75.86811],[8.76342,-75.86802],[8.76334,-75.86792],[8.76232,-75.86733],[8.76181,-75.86788],[8.76177,-75.86791],[8.76126,-75.8684],[8.76105,-75.86862],[8.76107,-75.86867],[8.76108,-75.86872],[8.76108,-75.86878],[8.76105,-75.86883],[8.76257,-75.87042],[8.76281,-75.87068],[8.76283,-75.8707],[8.76291,-75.87078],[8.763,-75.87087],[8.76311,-75.87099],[8.76369,-75.87158],[8.76376,-75.87165],[8.7638,-75.87169],[8.76383,-75.87172],[8.76446,-75.87139],[8.76464,-75.8713],[8.76588,-75.87068],[8.76629,-75.87047],[8.76639,-75.87042],[8.76703,-75.87011],[8.76759,-75.86984],[8.76778,-75.86973],[8.76814,-75.86956],[8.76843,-75.86942],[8.76857,-75.86933],[8.76869,-75.86924],[8.76917,-75.8689],[8.76933,-75.8688],[8.76946,-75.86871],[8.76971,-75.86853],[8.76981,-75.86845],[8.77046,-75.86804],[8.77054,-75.86799],[8.77108,-75.8677],[8.77113,-75.86767],[8.77176,-75.86729],[8.77197,-75.86717],[8.77268,-75.86673],[8.7727,-75.86672],[8.77276,-75.86669],[8.77281,-75.86666],[8.7729,-75.86661],[8.77299,-75.86655],[8.7736,-75.86621],[8.77366,-75.86631],[8.77372,-75.86639],[8.77387,-75.86665],[8.77403,-75.86693],[8.7742,-75.86727],[8.77461,-75.86795],[8.77514,-75.86772],[8.77585,-75.86743],[8.77659,-75.86708],[8.77739,-75.86675],[8.77743,-75.86686],[8.77793,-75.86803]],"s":[[0,"Calle 22"],[474,"Avenida Circunvalar"],[1339,"Calle 32"],[1559,"Carrera 15B"],[1619,"Calle 33"],[1858,"Avenida Circunvalar"],[3256,"Calle 50"],[3711,"Calle 51"],[4070,"Calle 48A"],[4536,"Avenida Circunvalar"],[5777,"Calle 62B"],[6000,"Carrera 4"],[6334,"Calle 65"]]},"C":{"c":[[8.7481,-75.88611],[8.74818,-75.88604],[8.74843,-75.88581],[8.74787,-75.8851],[8.7478,-75.88502],[8.74774,-75.88495],[8.74803,-75.88473],[8.74852,-75.88435],[8.74871,-75.88449],[8.74889,-75.8845],[8.74927,-75.88448],[8.74942,-75.88447],[8.74991,-75.88441],[8.75015,-75.8844],[8.75065,-75.88433],[8.75089,-75.88429],[8.75135,-75.8839],[8.75191,-75.88345],[8.75236,-75.88315],[8.75298,-75.88263],[8.75338,-75.88233],[8.75402,-75.88188],[8.75459,-75.88144],[8.7552,-75.88098],[8.75566,-75.88065],[8.75645,-75.88004],[8.75607,-75.87965],[8.75572,-75.87927],[8.7551,-75.87983],[8.75496,-75.87995],[8.75461,-75.88022],[8.75408,-75.87953],[8.75459,-75.87913],[8.75514,-75.87861],[8.75591,-75.87795],[8.75657,-75.87742],[8.75719,-75.87688],[8.75751,-75.87659],[8.75783,-75.87636],[8.75739,-75.87587],[8.75708,-75.87551],[8.75707,-75.8755],[8.75703,-75.87545],[8.757,-75.87542],[8.75689,-75.87536],[8.75766,-75.87496],[8.75833,-75.8746],[8.7587,-75.87441],[8.75888,-75.87432],[8.75931,-75.87409],[8.75947,-75.874],[8.75951,-75.87412],[8.75957,-75.87423],[8.7596,-75.87429],[8.76013,-75.87489],[8.76019,-75.87495],[8.76044,-75.87525],[8.76064,-75.87547],[8.76096,-75.87584],[8.76122,-75.87614],[8.76178,-75.87569],[8.76196,-75.87592],[8.76201,-75.87599]],"s":[[0,"Carrera 8B"],[50,"Calle 21"],[172,"Carrera 9"],[1322,"Calle 34"],[1440,"Carrera 10"],[1601,"Calle 32"],[1697,"Carrera 11"],[2239,"Calle 38"],[2377,"Avenida Circunvalar"],[2694,"Calle 41"],[3021,"Carrera 9"],[3100,"Calle 42"]]}};
 (function(){
-  var routes=[$('#rB'),$('#rC'),$('#rA')], marks=[$('#m0'),$('#m1'),$('#m2')], len=routes.map(function(r){return r.getTotalLength()});
+  var feed=$('#feed'), live=$('#sim-live'), alerts=2, boost=0, km=14.2, visible=false, last=0, tick=0, fenceOn=false, inside=true, trailOn=false;
+  var rad=Math.PI/180;
+  function dist(a,b){ var x=(b[1]-a[1])*rad*Math.cos((a[0]+b[0])/2*rad), y=(b[0]-a[0])*rad; return Math.sqrt(x*x+y*y)*6371000; }
+  /* orden de los vehículos: Camión 01, Van 02, Camioneta 03 (seleccionada) */
+  var R=['B','C','A'].map(function(k){ var c=GEO[k].c, d=[0]; for(var i=1;i<c.length;i++) d.push(d[i-1]+dist(c[i-1],c[i])); return {c:c,d:d,L:d[d.length-1],s:GEO[k].s}; });
   var base=[52,38,42], pos=[.18,.3,.42], dir=[1,1,1], spdEl=[$('#v-s0'),$('#v-s1'),$('#v-s2')];
-  var trail=$('#trail'), fence=$('#fence'), feed=$('#feed'), live=$('#sim-live');
-  var L=len[2], fenceOn=false, inside=true, boost=0, km=14.2, alerts=2, last=0, visible=false, tick=0;
-  var places=['Calle 72 con Cra. 7','Calle 72 con Cra. 15','Calle 63 con Cra. 15','Calle 63 con Cra. 24'];
-  trail.style.strokeDasharray=L;
-  function place(i){ var p=routes[i].getPointAtLength(pos[i]*len[i]); marks[i].setAttribute('transform','translate('+p.x.toFixed(1)+' '+p.y.toFixed(1)+')'); return p; }
+  var cols=[['#35cf88','rgba(53,207,136,.25)'],['#35cf88','rgba(53,207,136,.25)'],['#4c8dff','rgba(76,141,255,.28)']], tags=['TRK 418','VAN 207','JKL 908'];
+  var RA=R[2], fc=at(RA,.38), FR=420;
+  function at(r,u){ var x=clamp(u,0,1)*r.L, lo=0, hi=r.d.length-1; while(hi-lo>1){ var m=(lo+hi)>>1; if(r.d[m]<=x) lo=m; else hi=m; } var t=(x-r.d[lo])/((r.d[hi]-r.d[lo])||1), a=r.c[lo], b=r.c[hi]; return {ll:[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t],i:lo,x:x}; }
+  function street(r,x){ var n=r.s[0][1]; for(var i=0;i<r.s.length&&r.s[i][0]<=x;i++) n=r.s[i][1]; return n; }
   function note(txt,warn){
     var d=document.createElement('div'); d.className='ev new'+(warn?' w':''); d.innerHTML='<i></i><span>'+txt+'<small>Camioneta 03 · ahora</small></span>';
     feed.insertBefore(d,feed.firstChild); while(feed.children.length>4) feed.removeChild(feed.lastChild);
     if(warn){ alerts++; $('#d-al').textContent=alerts; $('#d-badge').textContent=alerts; }
     live.textContent='Aviso de demostración: '+txt;
   }
+
+  /* mapa (se crea al acercarse a la sección) */
+  var map=null, mk=[], full=null, done=null, zone=null, lay={};
+  function icon(i,big){ return L.divIcon({className:'vm'+(big?' big':''),iconSize:[0,0],html:'<i style="--c:'+cols[i][0]+';--g:'+cols[i][1]+'"></i><b>'+tags[i]+'</b>'}); }
+  function initMap(){
+    if(map||!window.L) return;
+    map=L.map('lmap',{zoomControl:false,attributionControl:false,scrollWheelZoom:false,dragging:!L.Browser.mobile,tap:false,zoomSnap:.25});
+    lay.map=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'});
+    lay.sat=L.layerGroup([
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Imágenes © Esri, Maxar, Earthstar Geographics'}),
+      L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,opacity:.9}),
+      L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,opacity:.9})]);
+    lay.map.addTo(map);
+    L.control.attribution({prefix:false,position:'bottomright'}).addTo(map);
+    L.control.zoom({position:'bottomright',zoomInTitle:'Acercar',zoomOutTitle:'Alejar'}).addTo(map);
+    L.control.scale({imperial:false,position:'bottomleft'}).addTo(map);
+    var all=[]; R.forEach(function(r){ all=all.concat(r.c); });
+    map.fitBounds(L.latLngBounds(all),{padding:[34,34]});
+    full=L.polyline(RA.c,{color:'#4c8dff',weight:5,opacity:.28,lineJoin:'round'});
+    done=L.polyline([],{color:'#4c8dff',weight:5,opacity:.95,lineJoin:'round'});
+    zone=L.circle(fc.ll,{radius:FR,color:'#35cf88',weight:2,dashArray:'6 6',fillColor:'#35cf88',fillOpacity:.1});
+    L.marker([8.7545,-75.8785],{icon:L.divIcon({className:'vm',iconSize:[0,0],html:'<i style="--c:#6b7686;--g:rgba(107,118,134,.25)"></i><b>SDN 351</b>'}),keyboard:false}).addTo(map);
+    L.marker([8.7465,-75.8735],{icon:L.divIcon({className:'vm',iconSize:[0,0],html:'<i style="--c:#f5a524;--g:rgba(245,165,36,.28)"></i><b>MTO 64F</b>'}),keyboard:false}).addTo(map);
+    for(var i=0;i<3;i++) mk.push(L.marker(at(R[i],pos[i]).ll,{icon:icon(i,i===2),keyboard:false,zIndexOffset:i===2?1000:0}).addTo(map));
+    $$('.d-layer button').forEach(function(b){ b.addEventListener('click',function(){
+      var k=b.dataset.l; if(map.hasLayer(lay[k])) return; map.removeLayer(lay[k==='map'?'sat':'map']); lay[k].addTo(map);
+      $$('.d-layer button').forEach(function(o){ o.setAttribute('aria-pressed',o===b); });
+    }); });
+    if(fenceOn) zone.addTo(map); if(trailOn){ full.addTo(map); done.addTo(map); }
+    paint();
+  }
   function paint(){
-    var p=place(2), v=boost>0?96:Math.round(base[2]+4*Math.sin(tick*.9));
-    place(0); place(1);
-    trail.style.strokeDashoffset=L*(1-pos[2]);
+    var v=boost>0?96:Math.round(base[2]+4*Math.sin(tick*.9)), a=at(RA,pos[2]);
+    if(map){
+      for(var i=0;i<3;i++) mk[i].setLatLng(i===2?a.ll:at(R[i],pos[i]).ll);
+      if(trailOn) done.setLatLngs(RA.c.slice(0,a.i+1).concat([a.ll]));
+    }
     $('#d-v').textContent=v; spdEl[2].textContent=v;
     $('#d-spd').classList.toggle('warn',boost>0); $('#v-sel').classList.toggle('warn',boost>0);
-    $('#d-loc').textContent=places[Math.min(places.length-1,Math.floor(pos[2]*places.length))];
+    $('#d-loc').textContent=street(RA,a.x);
     $('#d-km').textContent=km.toFixed(1).replace('.',',');
-    if(fenceOn){ var dx=p.x-514, dy=p.y-430, now=dx*dx+dy*dy<150*150; if(inside&&!now) note('Salida de zona autorizada',1); if(!inside&&now) note('Ingreso a zona autorizada',0); inside=now; }
+    if(fenceOn){ var now=dist(a.ll,fc.ll)<FR; if(inside&&!now) note('Salida de zona autorizada',1); if(!inside&&now) note('Ingreso a zona autorizada',0); inside=now; }
   }
+  /* los vehículos avanzan a su velocidad mostrada, acelerada para que el movimiento se vea */
   function step(t){
     requestAnimationFrame(step); if(!visible){ last=0; return; }
     var dt=last?Math.min(.05,(t-last)/1000):0; last=t; tick+=dt;
-    for(var i=0;i<3;i++){ var k=(i===2&&boost>0?2.6:1)*base[i]/42*22*dt/len[i]; pos[i]+=dir[i]*k; if(pos[i]>=1){pos[i]=1;dir[i]=-1} if(pos[i]<=0){pos[i]=0;dir[i]=1} }
-    km+=dt*.012*(boost>0?2.6:1); if(boost>0){ boost-=dt; }
+    for(var i=0;i<3;i++){ var ms=base[i]/3.6*(i===2&&boost>0?2.3:1)*9; pos[i]+=dir[i]*ms*dt/R[i].L; if(pos[i]>=1){pos[i]=1;dir[i]=-1} if(pos[i]<=0){pos[i]=0;dir[i]=1} }
+    km+=dt*.012*(boost>0?2.3:1); if(boost>0) boost-=dt;
     spdEl[0].textContent=Math.round(base[0]+3*Math.sin(tick*.7)); spdEl[1].textContent=Math.round(base[1]+3*Math.cos(tick*.8));
     paint();
   }
   $('#sb-f').addEventListener('click',function(){
-    fenceOn=!fenceOn; fence.setAttribute('visibility',fenceOn?'visible':'hidden'); this.setAttribute('aria-pressed',fenceOn); this.textContent=fenceOn?'Quitar zona segura':'Crear zona segura';
-    if(fenceOn){ var p=routes[2].getPointAtLength(pos[2]*L), dx=p.x-514, dy=p.y-430; inside=dx*dx+dy*dy<150*150; note('Zona segura creada',0); if(REDUCED&&!inside) note('Salida de zona autorizada',1); }
+    fenceOn=!fenceOn; this.setAttribute('aria-pressed',fenceOn); this.textContent=fenceOn?'Quitar zona segura':'Crear zona segura';
+    if(map){ if(fenceOn) zone.addTo(map); else map.removeLayer(zone); }
+    if(fenceOn){ inside=dist(at(RA,pos[2]).ll,fc.ll)<FR; note('Zona segura creada',0); if(REDUCED&&!inside) note('Salida de zona autorizada',1); }
   });
   $('#sb-v').addEventListener('click',function(){ if(boost>0) return; boost=4; note('Exceso de velocidad: 96 km/h',1); if(REDUCED){ paint(); boost=0; } });
-  $('#sb-t').addEventListener('click',function(){ var on=this.getAttribute('aria-pressed')!=='true'; this.setAttribute('aria-pressed',on); this.textContent=on?'Ocultar recorrido':'Mostrar recorrido'; trail.setAttribute('visibility',on?'visible':'hidden'); $('#rA').setAttribute('visibility',on?'visible':'hidden'); });
+  $('#sb-t').addEventListener('click',function(){
+    trailOn=this.getAttribute('aria-pressed')!=='true'; this.setAttribute('aria-pressed',trailOn); this.textContent=trailOn?'Ocultar recorrido':'Mostrar recorrido';
+    if(map){ if(trailOn){ full.addTo(map); done.addTo(map); } else { map.removeLayer(full); map.removeLayer(done); } }
+    paint();
+  });
   paint();
-  if(!REDUCED){
-    if('IntersectionObserver' in window) new IntersectionObserver(function(es){visible=es[0].isIntersecting}).observe(dash); else visible=true;
-    requestAnimationFrame(step);
-  }
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){ if(es[0].isIntersecting) initMap(); },{rootMargin:'700px 0px'}).observe(dash);
+    new IntersectionObserver(function(es){ visible=es[0].isIntersecting; }).observe(dash);
+  } else { initMap(); visible=true; }
+  window.__jaMap=function(){ return map; };
+  if(!REDUCED) requestAnimationFrame(step);
 })();
 
 /* =====================================================================
@@ -1007,7 +1058,7 @@ var st={car:0,az:.6,el:.14,dist:8.5,reveal:16,rise:1,dim:1,trail:0,beacon:0,fenc
 var intro={v:FILM?0:1}, pinEl=$('#pin');
 
 /* lecturas demostrativas ligadas al avance del vehículo */
-var LOCS=['Calle 72 con Carrera 7','Calle 63 con Carrera 15','Carrera 15 con Calle 53','Calle 53 con Carrera 24'];
+var LOCS=['Avenida Primera con Calle 30','Calle 41 con Carrera 6','Avenida Circunvalar con Calle 44','Calle 37 con Carrera 3'];
 var cache={};
 function put(id,v){ if(cache[id]!==v){ cache[id]=v; var e=document.getElementById(id); if(e) e.textContent=v; } }
 function co(n){ return n.toFixed(1).replace('.',','); }
@@ -1015,7 +1066,7 @@ function readouts(u,x,z){
   var spd=Math.round(34+16*Math.sin(u*46)+6*Math.sin(u*131));
   put('t-spd',spd); put('f-gv',spd);
   put('t-loc',LOCS[Math.floor(u*9)%LOCS.length]);
-  put('t-coord',(4.65+(-z)*0.00003).toFixed(5)+'° N, '+(74.06-x*0.00003).toFixed(5)+'° O');
+  put('t-coord',(8.752+(-z)*0.00003).toFixed(5)+'° N, '+(75.882-x*0.00003).toFixed(5)+'° O');
   put('t-dist',co(u*18.4)+' km');
   put('t-upd','hace '+(1+Math.floor(u*400)%3)+' s');
   var arc=document.getElementById('f-arc'); if(arc) arc.setAttribute('stroke-dashoffset',(100-spd/80*58).toFixed(1));

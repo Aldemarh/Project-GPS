@@ -31,6 +31,12 @@ En `index.html`, busca `var CFG=` y cambia el WhatsApp y el mensaje. El correo y
 | `assets/3d/city-night.hdr` | Poly Haven, «hansaplatz»; la mitad inferior se reemplazó por asfalto mojado | CC0 |
 | `assets/3d/asphalt*.jpg`, `pavers*.jpg` | Poly Haven, «clean_asphalt» y «concrete_pavers» (en `*-nr.jpg`: normal en R/G y rugosidad en B) | CC0 |
 
+## Mapa del panel
+- Librería: [Leaflet](https://leafletjs.com) 1.9.4 (BSD-2), cargada desde cdnjs; su CSS va incrustado en `index.html`.
+- Capas: OpenStreetMap (© colaboradores de OpenStreetMap, ODbL) y Esri World Imagery con las capas de referencia de transporte y lugares (© Esri y sus proveedores). La atribución se muestra en el mapa y no se debe quitar.
+- Rutas: calles reales de Montería calculadas con [OSRM](https://project-osrm.org) sobre datos de OpenStreetMap y guardadas en la variable `GEO` de `index.html`.
+- Uso: el servidor de mosaicos de OpenStreetMap es para tráfico bajo. Para un sitio con muchas visitas conviene un proveedor con clave.
+
 ## Fotografías
 Vienen de [Unsplash](https://unsplash.com/license) y [Pexels](https://www.pexels.com/license/), ambas con licencia de uso comercial gratuito, sin atribución obligatoria.
 
