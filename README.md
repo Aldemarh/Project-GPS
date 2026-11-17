@@ -1,27 +1,35 @@
 # J&A Tech — Landing de rastreo GPS vehicular
 
-Landing cinematográfica controlada por scroll, con fotografía real y un panel de demostración del software (GSAP + ScrollTrigger).
+Landing cinematográfica controlada por scroll: un carro realista recorre una ciudad de noche en 3D (Three.js + GSAP ScrollTrigger), seguida de secciones comerciales con fotografía real y un panel de demostración del software.
 
 ## Ver en local
-Es un solo `index.html` más las fotos de `assets/img/`. Ábrelo con cualquier servidor estático:
+Es un solo `index.html` más los recursos de `assets/`. Ábrelo con un servidor estático (no con doble clic: el navegador bloquea la carga del modelo 3D desde `file://`):
 
 ```bash
 npx serve .
 ```
 
-Carga GSAP 3.12.5 (cdnjs) y las fuentes Geist y Geist Mono (Google Fonts).
+Carga GSAP 3.12.5 y Three.js r128 (cdnjs), los complementos de Three.js (jsDelivr) y las fuentes Geist y Geist Mono (Google Fonts).
 
 ## Contenido
 - `index.html` — la página completa (HTML + CSS + JS, sin build).
-- `assets/img/` — fotografías en WebP, ya optimizadas.
+- `assets/3d/` — modelo del carro, iluminación HDR, texturas de calle e imagen de respaldo sin WebGL.
+- `assets/img/` — fotografías en WebP de las secciones, ya optimizadas.
 - `docs/brief.md` — el brief original del proyecto.
 - `CLAUDE.md` — contexto y pendientes para continuar con Claude Code.
 
 ## Secciones
-Película de cinco escenas que avanza con el scroll (inicio, tiempo real, control, alertas, flota) · Funcionalidades · Experiencia del software (panel interactivo de demostración) · Cómo funciona · Beneficios · Soluciones y preguntas frecuentes · Contacto · Pie.
+Película 3D de cinco escenas que avanza con el scroll (inicio, tiempo real, control, alertas, flota) · Funcionalidades · Experiencia del software (panel interactivo de demostración) · Cómo funciona · Beneficios · Soluciones y preguntas frecuentes · Contacto · Pie.
 
 ## Configurar
 En `index.html`, busca `var CFG=` y cambia el WhatsApp y el mensaje. El correo y la ciudad/horario están en la sección `#contacto` y en el pie. Los enlaces de Instagram y Facebook del pie (`data-social`) todavía apuntan a `#`.
+
+## Recursos 3D
+| Archivo | Origen | Licencia |
+|---|---|---|
+| `assets/3d/car.glb` | «Car Concept», © 2024 Darmstadt Graphics Group GmbH (Eric Chadwick), adaptado (sin texturas, sin interior, menos polígonos) | CC BY 4.0: la atribución debe quedar en el pie |
+| `assets/3d/city-night.hdr` | Poly Haven, «hansaplatz»; la mitad inferior se reemplazó por asfalto mojado | CC0 |
+| `assets/3d/asphalt*.jpg`, `pavers*.jpg` | Poly Haven, «clean_asphalt» y «concrete_pavers» (en `*-nr.jpg`: normal en R/G y rugosidad en B) | CC0 |
 
 ## Fotografías
 Vienen de [Unsplash](https://unsplash.com/license) y [Pexels](https://www.pexels.com/license/), ambas con licencia de uso comercial gratuito, sin atribución obligatoria.
@@ -30,12 +38,8 @@ Unsplash: el identificador de cada una es el final de su URL `https://unsplash.c
 
 | Archivo | Uso | Foto en Unsplash |
 |---|---|---|
-| `hero.webp`, `hero-m.webp` | Inicio | `photo-1503376780353-7e6692767b70` |
-| `suv.webp` | Escena 3 (control) | `photo-1617469767053-d3b523a0b982` |
-| `night.webp` | Escena 4 (alertas), Seguridad vehicular | `photo-1609521263047-f8f205293f24` |
-| `aerial.webp` | Escena 5 (flota) | `photo-1465447142348-e9952c393450` |
-| `road.webp` | Escena 2 (tiempo real) |
-| `street.webp` | Beneficios | `photo-1493238792000-8113da705763` | `photo-1568605117036-5fe5e7bab0b7` |
+| `night.webp` | Seguridad vehicular | `photo-1609521263047-f8f205293f24` |
+| `street.webp` | Beneficios | `photo-1493238792000-8113da705763` |
 | `sedan.webp` | Particulares | `photo-1619767886558-efdc259cde1a` |
 | `city.webp` | Contacto | `photo-1444723121867-7a241cacace9` |
 
