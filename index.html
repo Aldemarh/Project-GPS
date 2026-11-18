@@ -1101,7 +1101,7 @@ function initThree(){
   var GL2=renderer.capabilities.isWebGL2, ANI=Math.min(8,renderer.capabilities.getMaxAnisotropy());
   var HF=GL2&&!!(renderer.extensions.get('EXT_color_buffer_float')||renderer.extensions.get('EXT_color_buffer_half_float'));
   /* calidad: se ajusta sola si el equipo no alcanza */
-  var Q={dpr:Math.min(window.devicePixelRatio||1,MOB?1.5:1.75), refl:MOB?.34:.5, dof:!MOB, bloom:true};
+  var Q={dpr:Math.min(window.devicePixelRatio||1,MOB?1.5:1.5), refl:MOB?.34:.5, dof:!MOB, bloom:true};
   renderer.setPixelRatio(Q.dpr);
   renderer.outputEncoding=T.sRGBEncoding; renderer.toneMapping=T.ACESFilmicToneMapping; renderer.toneMappingExposure=1.0;
   var FOG=new T.Color(0x0a0f1a), FOGL=FOG.clone().convertSRGBToLinear();
@@ -1386,7 +1386,7 @@ function initThree(){
   if(!MOB) addEventListener('pointermove',function(e){tmx=e.clientX/innerWidth-.5;tmy=e.clientY/innerHeight-.5},{passive:true});
   routeAt(.608,P); U.uFenceC.value.set(P.x,P.z);
   if('IntersectionObserver' in window){ new IntersectionObserver(function(es){ vis=es[0].isIntersecting; if(vis) dirty=2; }).observe($('#film')); }
-  loader.onLoad=function(){ ready=true; dirty=2; if(onReady) onReady(); };
+  loader.onLoad=function(){ if(ready) return; ready=true; dirty=2; if(onReady) onReady(); };
   var onReady=null;
 
   /* llantas: el giro sigue la distancia recorrida en la ruta (avanza y retrocede con el scroll), pero con un tope por cuadro:
@@ -1418,14 +1418,21 @@ function initThree(){
 
   /* si el equipo no alcanza, se apagan los efectos más costosos */
   var ft=[], lastT=0;
-  function guard(now){
-    if(lastT&&now-lastT<200) ft.push(now-lastT); lastT=now;
-    if(ft.length<40) return; ft.sort(function(a,b){return a-b}); var med=ft[20]; ft=[];
-    if(med>42){
+  /* mide el tiempo entre cuadros dibujados seguidos (incluye equipos muy lentos) y baja la calidad
+     hasta que el scroll vuelva a ser fluido */
+  var prevDrew=false;
+  function guard(now,drew){
+    if(!drew){ prevDrew=false; return; }
+    if(prevDrew){ var dt=now-lastT; if(dt>0&&dt<5000) ft.push(dt); }
+    prevDrew=true; lastT=now;
+    if(ft.length<10) return; ft.sort(function(a,b){return a-b}); var med=ft[5]; ft=[];
+    if(med>40){
       if(Q.dof){ Q.dof=false; }
       else if(Q.refl>0){ Q.refl=0; }
       else if(Q.dpr>1){ Q.dpr=1; size(); }
       else if(bloom&&bloom.enabled){ bloom.enabled=false; }
+      else if(Q.dpr>.75){ Q.dpr=.75; size(); }
+      else if(comp){ comp=null; }
     }
   }
 
@@ -1433,7 +1440,7 @@ function initThree(){
   function draw(force){
     var S=st, t=clock.getElapsedTime(), u=clamp(S.car,0,.9995);
     mx+=(tmx-mx)*.05; my+=(tmy-my)*.05;
-    var key=[u,S.az,S.el,S.dist,S.reveal*intro.v,S.rise,S.dim,S.trail,S.fence,S.warn,S.fleet,S.fleetT,S.sx,S.sy,S.dof,W,H,mx.toFixed(3),my.toFixed(3)].join('|');
+    var key=[u,S.az,S.el,S.dist,S.reveal*intro.v,S.rise,S.dim,S.trail,S.fence,S.warn,S.fleet,S.fleetT,S.sx,S.sy,S.dof,W,H,mx.toFixed(2),my.toFixed(2)].join('|');
     var anim=S.beacon>.01||S.warn>.01;
     if(!force&&!dirty&&key===prevKey&&!anim) return false;
     prevKey=key; if(dirty) dirty--;
@@ -1468,7 +1475,8 @@ function initThree(){
     } else renderer.render(scene,cam);
     return true;
   }
-  function loop(now){ requestAnimationFrame(loop); if(vis&&draw()) guard(now); }
+  function loop(now){ requestAnimationFrame(loop); guard(now,vis&&draw()); }
+  setTimeout(function(){ if(!ready){ ready=true; dirty=2; if(onReady) onReady(); } },9000);
   return {draw:draw,loop:loop,size:size,ready:function(f){ if(ready) f(); else onReady=f; }};
 }
 try{ three=initThree(); }catch(e){ three=null; if(window.console) console.warn(e); }
