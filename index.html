@@ -254,6 +254,7 @@ html:not(.film-on) .scene:not(.s1){min-height:0;background:var(--ink);padding:cl
 .d-layer button{border:0;border-radius:6px;padding:6px 11px;background:none;color:var(--mute);font:500 11.5px/1 var(--sans);cursor:pointer;transition:background .2s,color .2s}
 .d-layer button:hover{color:#fff}
 .d-layer button[aria-pressed=true]{background:var(--blue);color:#fff}
+.d-layer button:disabled{opacity:.4;cursor:not-allowed}
 .d-kpi{z-index:500}
 .d-off{position:absolute;inset:0;z-index:400;display:none;place-content:center;gap:.4rem;padding:2rem;text-align:center;font-size:13px;color:var(--mute);background:radial-gradient(60% 50% at 50% 50%,#151b25,#0f1318)}
 .d-off b{color:var(--text);font-weight:500;font-size:14px}
@@ -990,11 +991,21 @@ var GEO={"A":{"c":[[8.75106,-75.88208],[8.75125,-75.88194],[8.75192,-75.88135],[
       L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Imágenes © Esri, Maxar, Earthstar Geographics'}),
       L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,opacity:.9}),
       L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,opacity:.9})]);
-    /* si las imágenes del mapa no cargan (red o navegador que las bloquea), se avisa en lugar de dejar el fondo vacío */
-    var okT=0, badT=0, mapBox=$('.d-map');
-    function watch(l){ l.on('tileload',function(){ okT++; mapBox.classList.remove('no-tiles'); }); l.on('tileerror',function(){ badT++; }); }
+    /* si los mosaicos en vivo no cargan (red o navegador que bloquea servidores externos), se usa una imagen fija
+       del mapa de Montería de OpenStreetMap publicada junto a la página; el satélite queda deshabilitado */
+    var okT=0, badT=0, mapBox=$('.d-map'), fb=false;
+    function watch(l){ l.on('tileload',function(){ okT++; }); l.on('tileerror',function(){ badT++; }); }
     watch(lay.map); lay.sat.eachLayer(watch);
-    setTimeout(function(){ if(!okT&&badT) mapBox.classList.add('no-tiles'); },6000);
+    function fallback(){
+      if(fb||okT) return; fb=true;
+      [lay.map,lay.sat].forEach(function(l){ if(map.hasLayer(l)) map.removeLayer(l); });
+      lay.map=L.imageOverlay('assets/geo/monteria-osm.webp',[[8.722218,-75.915527],[8.798225,-75.838623]],{attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'})
+        .on('error',function(){ mapBox.classList.add('no-tiles'); }).addTo(map);
+      map.setMaxBounds([[8.722218,-75.915527],[8.798225,-75.838623]]).setMinZoom(13).setMaxZoom(16);
+      $$('.d-layer button').forEach(function(o){ var m=o.dataset.l==='map'; o.setAttribute('aria-pressed',m); if(!m){ o.disabled=true; o.title='El satélite no está disponible en esta red'; } });
+    }
+    var fbT=setInterval(function(){ if(okT){ clearInterval(fbT); return; } if(badT>=3){ clearInterval(fbT); fallback(); } },500);
+    setTimeout(function(){ clearInterval(fbT); if(!okT) fallback(); },7000);
     lay.map.addTo(map);
     L.control.attribution({prefix:false,position:'bottomright'}).addTo(map);
     L.control.zoom({position:'bottomright',zoomInTitle:'Acercar',zoomOutTitle:'Alejar'}).addTo(map);

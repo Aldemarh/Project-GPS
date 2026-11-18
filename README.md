@@ -34,6 +34,7 @@ En `index.html`, busca `var CFG=` y cambia el WhatsApp y el mensaje. El correo y
 ## Mapa del panel
 - Librería: [Leaflet](https://leafletjs.com) 1.9.4 (BSD-2), cargada desde cdnjs; su CSS va incrustado en `index.html`.
 - Capas: OpenStreetMap (© colaboradores de OpenStreetMap, ODbL) y Esri World Imagery con las capas de referencia de transporte y lugares (© Esri y sus proveedores). La atribución se muestra en el mapa y no se debe quitar.
+- Respaldo sin conexión a los servidores de mapas: `assets/geo/monteria-osm.webp`, imagen fija de Montería armada una sola vez con 49 mosaicos de OpenStreetMap (zoom 15; © colaboradores de OpenStreetMap, CC BY-SA).
 - Rutas: calles reales de Montería calculadas con [OSRM](https://project-osrm.org) sobre datos de OpenStreetMap y guardadas en la variable `GEO` de `index.html`.
 - Uso: el servidor de mosaicos de OpenStreetMap es para tráfico bajo. Para un sitio con muchas visitas conviene un proveedor con clave.
 
