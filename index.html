@@ -255,6 +255,27 @@ html:not(.film-on) .scene:not(.s1){min-height:0;background:var(--ink);padding:cl
 .d-layer button:hover{color:#fff}
 .d-layer button[aria-pressed=true]{background:var(--blue);color:#fff}
 .d-layer button:disabled{opacity:.4;cursor:not-allowed}
+.d-exp{position:absolute;right:12px;top:54px;z-index:500;display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:9px;border:1px solid var(--line-2);background:rgba(11,14,19,.88);color:#dfe5ee;font:500 11.5px/1 var(--sans);cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:background .2s}
+.d-exp:hover{background:#1e2530}
+.d-exp .ic{width:14px;height:14px}
+.d-hint{position:absolute;left:50%;bottom:44px;z-index:600;transform:translateX(-50%);padding:8px 12px;border-radius:9px;background:rgba(11,14,19,.92);border:1px solid var(--line-2);color:#dfe5ee;font-size:12px;white-space:nowrap;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;pointer-events:none}
+.d-hint.on{opacity:1;visibility:visible}
+.d-hint kbd{font:500 11px var(--mono);padding:1px 5px;border-radius:4px;border:1px solid var(--line-2);background:#1e2530}
+.lmap.leaflet-container.leaflet-grab{cursor:grab}
+/* visor ampliado a pantalla completa */
+.mapx{position:fixed;inset:0;z-index:90;display:grid;grid-template-rows:auto minmax(0,1fr);background:var(--ink);padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
+.mapx[hidden]{display:none}
+.mapx-h{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line);background:#0d1117}
+.mapx-h h3{font-size:15px;font-weight:600;letter-spacing:-.01em}
+.mapx-h .mono{font-size:11px;color:var(--mute)}
+.mapx-h .d-layer{position:static;margin-left:auto}
+.mapx-x{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;border:1px solid var(--line-2);background:none;color:#fff;cursor:pointer}
+.mapx-x:hover{background:#1e2530}
+.mapx-b{position:relative;min-height:0}
+.mapx-b .lmap{position:absolute;inset:0}
+.mapx .leaflet-bar a{width:38px!important;height:38px!important;line-height:38px!important;font-size:18px!important}
+.mapx .vm b{font-size:12px}
+@media (max-width:700px){.mapx-h h3 .mono{display:none}.mapx-h{gap:8px;padding:8px 10px}}
 .d-kpi{z-index:500}
 .d-off{position:absolute;inset:0;z-index:400;display:none;place-content:center;gap:.4rem;padding:2rem;text-align:center;font-size:13px;color:var(--mute);background:radial-gradient(60% 50% at 50% 50%,#151b25,#0f1318)}
 .d-off b{color:var(--text);font-weight:500;font-size:14px}
@@ -470,6 +491,8 @@ footer{position:relative;z-index:2;background:var(--ink);border-top:1px solid va
   <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="9" r="3.2"/><path d="M3.500 19a5.500 5.500 0 0 1 11 0M16 6.200a3 3 0 0 1 0 5.600M17.500 14.500a5 5 0 0 1 3 4.500"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.300-4.300"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.500l4.500 4.500L19 7.500"/></symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
   <symbol id="i-wa" viewBox="0 0 24 24"><path d="M4 20l1.300-4.200A8 8 0 1 1 8.400 19z"/><path d="M9.200 8.800c0 3 2.600 5.600 5.600 5.600l1-1.600-1.900-1-.8.800c-.8-.4-1.500-1.100-1.900-1.900l.8-.8-1-1.900z" fill="currentColor" stroke="none"/></symbol>
   <symbol id="i-ig" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4.500"/><circle cx="12" cy="12" r="3.600"/><path d="M16.800 7.200h.01"/></symbol>
@@ -696,6 +719,8 @@ footer{position:relative;z-index:2;background:var(--ink);border-top:1px solid va
             <div class="d-off" role="status"><b>El mapa no está disponible en este momento</b>Este navegador o red no permite cargar las imágenes del mapa. Los datos y alertas del panel siguen funcionando.</div>
             <div class="d-kpi" aria-hidden="true"><span><b>3</b>en movimiento</span><span><b>1</b>detenido</span><span><b id="d-al">2</b>alertas hoy</span></div>
             <div class="d-layer" role="group" aria-label="Tipo de mapa"><button type="button" data-l="map" aria-pressed="true">Mapa</button><button type="button" data-l="sat" aria-pressed="false">Satélite</button></div>
+            <button class="d-exp" type="button" id="d-exp" aria-label="Ampliar el mapa"><svg class="ic" aria-hidden="true"><use href="#i-expand"/></svg><span>Ampliar</span></button>
+            <div class="d-hint" id="d-hint" aria-hidden="true">Usa <kbd>Ctrl</kbd> + rueda para acercar, o pulsa <b>Ampliar</b> para explorar el mapa</div>
           </div>
           <div class="d-side" aria-hidden="true">
             <div class="d-sel">
@@ -985,24 +1010,27 @@ var GEO={"A":{"c":[[8.75106,-75.88208],[8.75125,-75.88194],[8.75192,-75.88135],[
   function icon(i,big){ return L.divIcon({className:'vm'+(big?' big':''),iconSize:[0,0],html:'<i style="--c:'+cols[i][0]+';--g:'+cols[i][1]+'"></i><b>'+tags[i]+'</b>'}); }
   function initMap(){
     if(map||!window.L) return;
-    map=L.map('lmap',{zoomControl:false,attributionControl:false,scrollWheelZoom:false,dragging:!L.Browser.mobile,tap:false,zoomSnap:.25});
+    map=L.map('lmap',{zoomControl:false,attributionControl:false,scrollWheelZoom:false,dragging:!L.Browser.mobile,tap:false,zoomSnap:.25,zoomDelta:.5,wheelPxPerZoomLevel:140,wheelDebounceTime:30,inertia:true});
     lay.map=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'});
     lay.sat=L.layerGroup([
       L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Imágenes © Esri, Maxar, Earthstar Geographics'}),
       L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,opacity:.9}),
       L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,opacity:.9})]);
-    /* si los mosaicos en vivo no cargan (red o navegador que bloquea servidores externos), se usa una imagen fija
-       del mapa de Montería de OpenStreetMap publicada junto a la página; el satélite queda deshabilitado */
+    /* si los mosaicos en vivo no cargan (red o navegador que bloquea servidores externos), se usan dos imágenes fijas
+       de Montería publicadas junto a la página: el mapa de OpenStreetMap (CC BY-SA) y el satélite Sentinel-2 cloudless 2016
+       de EOX (CC BY 4.0, 10 m por píxel, menos detalle que el satélite en vivo) */
     var okT=0, badT=0, mapBox=$('.d-map'), fb=false;
     function watch(l){ l.on('tileload',function(){ okT++; }); l.on('tileerror',function(){ badT++; }); }
     watch(lay.map); lay.sat.eachLayer(watch);
     function fallback(){
       if(fb||okT) return; fb=true;
+      var wasSat=map.hasLayer(lay.sat);
       [lay.map,lay.sat].forEach(function(l){ if(map.hasLayer(l)) map.removeLayer(l); });
       lay.map=L.imageOverlay('assets/geo/monteria-osm.webp',[[8.722218,-75.915527],[8.798225,-75.838623]],{attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'})
-        .on('error',function(){ mapBox.classList.add('no-tiles'); }).addTo(map);
-      map.setMaxBounds([[8.722218,-75.915527],[8.798225,-75.838623]]).setMinZoom(13).setMaxZoom(16);
-      $$('.d-layer button').forEach(function(o){ var m=o.dataset.l==='map'; o.setAttribute('aria-pressed',m); if(!m){ o.disabled=true; o.title='El satélite no está disponible en esta red'; } });
+        .on('error',function(){ mapBox.classList.add('no-tiles'); });
+      lay.sat=L.imageOverlay('assets/geo/monteria-sat.webp',[[8.711359,-75.915527],[8.798225,-75.827637]],{attribution:'<a href="https://s2maps.eu" target="_blank" rel="noopener">Sentinel-2 cloudless</a> © EOX'});
+      (wasSat?lay.sat:lay.map).addTo(map);
+      map.setMaxBounds([[8.722218,-75.915527],[8.798225,-75.838623]]).setMinZoom(13).setMaxZoom(15.75);
     }
     var fbT=setInterval(function(){ if(okT){ clearInterval(fbT); return; } if(badT>=3){ clearInterval(fbT); fallback(); } },500);
     setTimeout(function(){ clearInterval(fbT); if(!okT) fallback(); },7000);
@@ -1020,8 +1048,44 @@ var GEO={"A":{"c":[[8.75106,-75.88208],[8.75125,-75.88194],[8.75192,-75.88135],[
     for(var i=0;i<3;i++) mk.push(L.marker(at(R[i],pos[i]).ll,{icon:icon(i,i===2),keyboard:false,zIndexOffset:i===2?1000:0}).addTo(map));
     $$('.d-layer button').forEach(function(b){ b.addEventListener('click',function(){
       var k=b.dataset.l; if(map.hasLayer(lay[k])) return; map.removeLayer(lay[k==='map'?'sat':'map']); lay[k].addTo(map);
-      $$('.d-layer button').forEach(function(o){ o.setAttribute('aria-pressed',o===b); });
+      $$('.d-layer button').forEach(function(o){ o.setAttribute('aria-pressed',o.dataset.l===k); });
     }); });
+
+    /* en el panel: arrastrar mueve el mapa (en computador) y Ctrl + rueda acerca; la rueda sola sigue bajando la página */
+    var hint=$('#d-hint'), hintT=0, el=map.getContainer();
+    function showHint(){ hint.classList.add('on'); clearTimeout(hintT); hintT=setTimeout(function(){ hint.classList.remove('on'); },1600); }
+    el.addEventListener('wheel',function(e){
+      if(expanded) return;
+      if(e.ctrlKey||e.metaKey){ e.preventDefault(); var d=e.deltaY>0?-.5:.5; map.setZoomAround(map.mouseEventToContainerPoint(e),map.getZoom()+d); }
+      else showHint();
+    },{passive:false});
+    el.addEventListener('touchstart',function(e){ if(!expanded&&L.Browser.mobile&&e.touches.length===1) showHint(); },{passive:true});
+
+    /* visor ampliado: el mismo mapa a pantalla completa, con arrastre y rueda libres */
+    var expanded=false, home=el.parentNode, homeNext=el.nextSibling, layerEl=$('.d-layer'), layerHome=layerEl.parentNode, layerNext=layerEl.nextSibling, mx=null, opener=null;
+    function buildModal(){
+      mx=document.createElement('div'); mx.className='mapx'; mx.hidden=true; mx.setAttribute('role','dialog'); mx.setAttribute('aria-modal','true'); mx.setAttribute('aria-label','Mapa en vivo ampliado');
+      mx.innerHTML='<div class="mapx-h"><h3>Mapa en vivo <span class="mono">· Montería · vehículos de demostración</span></h3><button class="mapx-x" type="button" aria-label="Cerrar el mapa ampliado"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button></div><div class="mapx-b"></div>';
+      document.body.appendChild(mx);
+      mx.querySelector('.mapx-x').addEventListener('click',collapse);
+      mx.addEventListener('keydown',function(e){ if(e.key==='Escape') collapse(); });
+    }
+    function expand(){
+      if(expanded) return; if(!mx) buildModal(); expanded=true; opener=document.activeElement;
+      var h=mx.querySelector('.mapx-h'); h.insertBefore(layerEl,h.querySelector('.mapx-x'));
+      mx.querySelector('.mapx-b').appendChild(el); mx.hidden=false; document.body.style.overflow='hidden';
+      map.dragging.enable(); map.scrollWheelZoom.enable(); map.touchZoom.enable();
+      setTimeout(function(){ map.invalidateSize(false); },30);
+      mx.querySelector('.mapx-x').focus();
+    }
+    function collapse(){
+      if(!expanded) return; expanded=false;
+      layerHome.insertBefore(layerEl,layerNext); home.insertBefore(el,homeNext); mx.hidden=true; document.body.style.overflow='';
+      map.scrollWheelZoom.disable(); if(L.Browser.mobile) map.dragging.disable();
+      setTimeout(function(){ map.invalidateSize(false); },30);
+      if(opener&&opener.focus) opener.focus();
+    }
+    $('#d-exp').addEventListener('click',expand);
     if(fenceOn) zone.addTo(map); if(trailOn){ full.addTo(map); done.addTo(map); }
     paint();
   }
@@ -1553,7 +1617,7 @@ gsap.from('[data-in]',{opacity:0,y:26,duration:.9,ease:'power3.out',stagger:.09,
 })();
 
 /* el panel del software se levanta hacia el lector */
-gsap.fromTo('#frame',{rotateX:20,scale:.9,y:70,opacity:.5,transformPerspective:1500},{rotateX:0,scale:1,y:0,opacity:1,ease:'none',scrollTrigger:{trigger:'#frame',start:'top 96%',end:'top 34%',scrub:.6}});
+gsap.fromTo('#frame',{rotateX:14,scale:.95,y:50,opacity:.4,transformPerspective:1500},{rotateX:0,scale:1,y:0,opacity:1,duration:1.1,ease:'power3.out',clearProps:'transform,opacity',scrollTrigger:{trigger:'#frame',start:'top 88%',once:true}});
 
 /* aparición al hacer scroll */
 gsap.set('[data-rv]',{opacity:0,y:30});
